@@ -19,40 +19,34 @@ Technical experience with C# / .NET, Python, and PostgreSQL allows me to work be
 **Domain:** Banking systems  
 **Type:** Systems analysis of mobile banking functionality
 
-Design of a funds transfer process between a customer's own bank accounts.
+Conceptual design of an own-account funds transfer capability, from business context and stakeholder requirements through API design, data modeling, NFRs, traceability, and acceptance criteria.
 
 The case includes:
 
-- system context and boundaries;
-    
-- actors and interacting systems;
-    
-- business rules;
-    
-- functional requirements;
-    
-- REST API and JSON contracts;
-    
-- error handling;
-    
-- financial transaction idempotency;
-    
-- UML Sequence Diagram;
-    
-- data model;
-    
+- context, stakeholders, and scope;
+- business and system requirements;
+- use cases and alternative flows;
+- REST API and an OpenAPI contract;
+- error handling and idempotency;
+- logical data model and integrity constraints;
 - non-functional requirements;
-    
-- Acceptance Criteria.
-    
+- requirements traceability;
+- acceptance criteria;
+- specifications for BPMN/UML/ER diagrams.
 
-**Artifacts:**
+**Documentation set:**
 
-`01_Case.pdf` — solution and requirements specification  
-`diagrams/context` — system context diagram  
-`diagrams/sequence` — system interaction diagram  
-`diagrams/er` — data model  
-`api/openapi.yaml` — REST API specification
+- [00 — Case Overview](01_Bank_Transfer/00_Case_Overview.md)
+- [01 — Context and Stakeholder Requirements](01_Bank_Transfer/01_Context_and_Stakeholder_Requirements.md)
+- [02 — Goals and Scope](01_Bank_Transfer/02_Goals_and_Scope.md)
+- [03 — System Requirements](01_Bank_Transfer/03_System_Requirements.md)
+- [04 — Use Cases and Flows](01_Bank_Transfer/04_Use_Cases_and_Flows.md)
+- [05 — Integration and API](01_Bank_Transfer/05_Integration_and_API.md)
+- [06 — Data Model](01_Bank_Transfer/06_Data_Model.md)
+- [07 — Nonfunctional Requirements](01_Bank_Transfer/07_Nonfunctional_Requirements.md)
+- [08 — Traceability and Acceptance](01_Bank_Transfer/08_Traceability_and_Acceptance.md)
+- [OpenAPI contract](01_Bank_Transfer/api/openapi.yaml)
+- [Diagram specifications](01_Bank_Transfer/diagrams/README.md)
 
 ---
 
