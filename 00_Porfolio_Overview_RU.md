@@ -19,40 +19,34 @@
 **Домен:** банковские системы  
 **Тип:** системный анализ функциональности мобильного банка
 
-Проектирование сценария перевода денежных средств между собственными счетами клиента.
+Концептуальная проработка функции перевода денежных средств между собственными счетами клиента — от бизнес-контекста и требований заинтересованных сторон до API, модели данных, NFR и критериев приёмки.
 
 В кейсе представлены:
 
-- контекст и границы системы;
-    
-- участники и взаимодействующие системы;
-    
-- бизнес-правила;
-    
-- функциональные требования;
-    
-- REST API и JSON-контракты;
-    
-- обработка ошибок;
-    
-- идемпотентность финансовой операции;
-    
-- UML Sequence Diagram;
-    
-- модель данных;
-    
+- контекст, stakeholders и Scope;
+- бизнес- и системные требования;
+- Use Cases и альтернативные сценарии;
+- REST API и OpenAPI-контракт;
+- обработка ошибок и идемпотентность;
+- модель данных и ограничения целостности;
 - нефункциональные требования;
-    
-- Acceptance Criteria.
-    
+- трассируемость требований;
+- Acceptance Criteria;
+- спецификации BPMN/UML/ER-диаграмм.
 
-**Артефакты:**
+**Комплект документации:**
 
-`01_Case.pdf` — описание решения и требований  
-`diagrams/context` — контекстная схема  
-`diagrams/sequence` — взаимодействие систем  
-`diagrams/er` — модель данных  
-`api/openapi.yaml` — спецификация REST API
+- [00 — Case Overview](01_Bank_Transfer/00_Case_Overview.md)
+- [01 — Context and Stakeholder Requirements](01_Bank_Transfer/01_Context_and_Stakeholder_Requirements.md)
+- [02 — Goals and Scope](01_Bank_Transfer/02_Goals_and_Scope.md)
+- [03 — System Requirements](01_Bank_Transfer/03_System_Requirements.md)
+- [04 — Use Cases and Flows](01_Bank_Transfer/04_Use_Cases_and_Flows.md)
+- [05 — Integration and API](01_Bank_Transfer/05_Integration_and_API.md)
+- [06 — Data Model](01_Bank_Transfer/06_Data_Model.md)
+- [07 — Nonfunctional Requirements](01_Bank_Transfer/07_Nonfunctional_Requirements.md)
+- [08 — Traceability and Acceptance](01_Bank_Transfer/08_Traceability_and_Acceptance.md)
+- [OpenAPI contract](01_Bank_Transfer/api/openapi.yaml)
+- [Diagram specifications](01_Bank_Transfer/diagrams/README.md)
 
 ---
 
