@@ -7,3 +7,4 @@ public/case-files/
 .DS_Store
 npm-debug.log*
 public/vendor/
+public/data/

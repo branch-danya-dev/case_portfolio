@@ -376,3 +376,101 @@
   definition: Граница между зонами с разным уровнем доверия (сеть, организация, контур безопасности); потоки данных через неё требуют защиты и анализа угроз.
   topic: diagrams
   seeAlso: [dfd]
+
+- id: primary-key
+  term: Первичный ключ
+  en: Primary key (PK)
+  definition: Столбец или набор столбцов, однозначно идентифицирующий строку таблицы; не NULL, один на таблицу.
+  topic: data
+  seeAlso: [foreign-key, surrogate-key]
+
+- id: foreign-key
+  term: Внешний ключ
+  en: Foreign key (FK)
+  definition: Столбец, ссылающийся на первичный ключ другой таблицы; обеспечивает ссылочную целостность.
+  topic: data
+  seeAlso: [primary-key]
+
+- id: surrogate-key
+  term: Суррогатный ключ
+  en: Surrogate key
+  definition: Технический ключ без бизнес-смысла (uuid, последовательность); не меняется. Обычно сочетается с уникальным натуральным ключом.
+  topic: data
+  seeAlso: [natural-key, primary-key]
+
+- id: natural-key
+  term: Натуральный ключ
+  en: Natural key, business key
+  definition: Ключ из предметной области — табельный номер, ИНН, идентификатор из системы-источника. По нему объект узнают в других системах.
+  topic: data
+  seeAlso: [surrogate-key]
+
+- id: normalization
+  term: Нормализация
+  en: Normalization
+  definition: Приведение модели данных к нормальным формам (1НФ, 2НФ, 3НФ…) для устранения дублирования и аномалий изменения.
+  topic: data
+  seeAlso: [primary-key]
+
+- id: cardinality
+  term: Кардинальность
+  en: Cardinality
+  definition: Сколько экземпляров одной сущности может быть связано с экземпляром другой — ноль, один, много; записывается с обеих сторон связи.
+  topic: data
+  seeAlso: [normalization]
+
+- id: join
+  term: Соединение таблиц
+  en: JOIN
+  definition: Операция SQL, объединяющая строки таблиц по условию — INNER (только пары), LEFT, RIGHT, FULL, CROSS.
+  topic: data
+  seeAlso: [window-function]
+
+- id: window-function
+  term: Оконная функция
+  en: Window function
+  definition: Функция SQL, вычисляющая значение по группе связанных строк (окну) без их схлопывания — ROW_NUMBER, RANK, LAG, агрегаты с OVER.
+  topic: data
+  seeAlso: [join]
+
+- id: acid
+  term: ACID
+  en: Atomicity, Consistency, Isolation, Durability
+  definition: Свойства транзакции — атомарность, согласованность, изоляция, долговечность.
+  topic: data
+  seeAlso: [isolation-level]
+
+- id: isolation-level
+  term: Уровень изоляции
+  en: Isolation level
+  definition: Насколько транзакция видит изменения параллельных транзакций — Read Uncommitted, Read Committed, Repeatable Read, Serializable.
+  topic: data
+  seeAlso: [acid]
+
+- id: index
+  term: Индекс
+  en: Index
+  definition: Структура данных (чаще B-дерево) для быстрого поиска строк по значению столбцов; ускоряет чтение, замедляет запись.
+  topic: data
+  seeAlso: [primary-key]
+
+- id: reference-data
+  term: НСИ
+  en: Reference data, master data
+  definition: Нормативно-справочная информация — справочники и классификаторы, общие для многих систем; требует мастер-системы, владельца и правил доставки изменений.
+  topic: data
+  seeAlso: [mdm]
+
+- id: mdm
+  term: MDM
+  en: Master Data Management
+  definition: Управление основными данными так, чтобы во всех системах была согласованная версия; включает правила формирования золотой записи.
+  topic: data
+  seeAlso: [reference-data]
+
+- id: reconciliation
+  term: Сверка
+  en: Reconciliation
+  definition: Сравнение данных двух систем для поиска и исправления расхождений; в кейсе — ежедневная сверка IdM с HRMS (UC-10).
+  topic: data
+  seeAlso: [reference-data]

@@ -20,3 +20,8 @@ await writeFile(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#0f766e"/><text x="8" y="11.5" font-size="9" text-anchor="middle" fill="#fff" font-family="sans-serif">R</text></svg>\n',
 );
 console.log('[vendor] redoc.standalone.js скопирован (логотип — локальный)');
+
+// Учебная БД для раздела «Данные» и SQL-тренажёра — доступна для скачивания
+await mkdir(resolve('public/data'), { recursive: true });
+await writeFile(resolve('public/data/case-db.sql'), await readFile(resolve('src/data/case-db.sql'), 'utf8'));
+console.log('[vendor] case-db.sql скопирован в public/data/');

@@ -1,0 +1,167 @@
+---
+title: "SQL: SELECT и фильтры"
+description: "SQL для аналитика, часть 1: SELECT, WHERE, сравнения и NULL, IN, BETWEEN, LIKE, DISTINCT, CASE, ORDER BY, LIMIT — на учебной БД кейса с реальными результатами."
+trackProgress: true
+sidebar:
+  order: 3
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import DownloadButton from '../../../components/DownloadButton.astro';
+import InterviewQuestions from '../../../components/InterviewQuestions.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+Аналитику SQL нужен, чтобы **самому проверять гипотезы и данные**: сколько записей, какие значения, нет ли дублей и «сирот», совпадают ли данные двух систем.
+Базовый запрос: **`SELECT` столбцы `FROM` таблица `WHERE` условие `ORDER BY` сортировка**. Главная ловушка — **NULL**: с ним нельзя сравнивать через `=`.
+Все примеры раздела выполнены на учебной БД по модели кейса — результаты настоящие.
+
+</Brief>
+
+## Когда применять
+
+| Применять | Не нужно |
+|---|---|
+| Анализ существующей системы: объёмы, заполненность, значения справочников | Запросы к продуктивной БД без согласования с ИБ и владельцем |
+| Проверка требований на реальных данных («сколько бывает совместителей?») | Писать сложную логику отчётов вместо разработки |
+| Сверка данных двух систем, подготовка миграции | Изменять данные (UPDATE, DELETE) без процедуры |
+| Разбор инцидентов и спорных дефектов | — |
+
+## Как делать
+
+<Steps>
+
+1. **Начните с `SELECT * … LIMIT 10`** — посмотрите, что лежит в таблице.
+
+2. **Выберите нужные столбцы** — вместо `*` в итоговом запросе.
+
+3. **Отфильтруйте `WHERE`:** сравнения, `IN`, `BETWEEN`, `LIKE`, `IS NULL`.
+
+4. **Отсортируйте `ORDER BY`** и при необходимости ограничьте `LIMIT`.
+
+5. **Проверьте результат на здравый смысл:** число строк, крайние значения, NULL.
+
+</Steps>
+
+## Нотация: шпаргалка
+
+```sql title="SELECT: основные конструкции"
+SELECT столбец1, столбец2 AS псевдоним  -- что вывести
+FROM таблица                            -- откуда
+WHERE условие                           -- фильтр строк
+ORDER BY столбец1 DESC, столбец2        -- сортировка (ASC по умолчанию)
+LIMIT 10;                               -- первые N строк (в PostgreSQL, SQLite, MySQL)
+
+-- Условия
+WHERE status = 'ACTIVE'                       -- равно (строки — в одинарных кавычках)
+WHERE status <> 'DELETED'                     -- не равно
+WHERE hire_date >= '2027-03-01'               -- больше / меньше
+WHERE status IN ('PLANNED', 'ACTIVE')         -- одно из значений
+WHERE hire_date BETWEEN '2027-03-01' AND '2027-03-31'  -- диапазон, включая границы
+WHERE last_name LIKE 'С%'                     -- шаблон: % — любые символы, _ — один символ
+WHERE middle_name IS NULL                     -- проверка на NULL (не «= NULL»!)
+WHERE a = 1 AND (b = 2 OR c = 3)              -- логика, скобки обязательны при смешении
+
+SELECT DISTINCT org_unit_type FROM org_unit;  -- без повторов
+SELECT COALESCE(middle_name, '—') FROM identity;  -- замена NULL
+SELECT CASE WHEN … THEN … ELSE … END AS col   -- вычисляемое значение
+```
+
+### Примеры на учебной БД
+
+Учебная БД — упрощённая модель кейса IDM-JOINER: идентичности, трудоустройства, подразделения, роли, полномочия, учётные записи, задачи провижининга, заявки. Ключи — целые числа вместо uuid. Диалект — SQLite; запросы работают и в PostgreSQL.
+
+<DownloadButton href="/data/case-db.sql">Скачать case-db.sql</DownloadButton>
+
+**Активные сотрудники по алфавиту:**
+
+```sql
+SELECT last_name, first_name, status
+FROM identity
+WHERE status = 'ACTIVE'
+ORDER BY last_name;
+```
+
+| last_name | first_name | status |
+|---|---|---|
+| Кузнецов | Дмитрий | ACTIVE |
+| Петров | Олег | ACTIVE |
+| Смирнова | Елена | ACTIVE |
+| Щукина | Юлия | ACTIVE |
+
+**Кто выходит в марте 2027-го** (даты хранятся строками ISO 8601 — их можно сравнивать как строки):
+
+```sql
+SELECT employment_id, hire_date, status
+FROM employment
+WHERE hire_date BETWEEN '2027-03-01' AND '2027-03-31'
+ORDER BY hire_date;
+```
+
+| employment_id | hire_date | status |
+|---|---|---|
+| 10 | 2027-03-15 | PLANNED |
+| 17 | 2027-03-20 | CANCELLED |
+| 18 | 2027-03-22 | PLANNED |
+
+**Человекочитаемый статус учётных записей AD** — `CASE`:
+
+```sql
+SELECT login, status,
+       CASE
+         WHEN status = 'ACTIVE' THEN 'работает'
+         WHEN status IN ('PLANNED', 'CREATING', 'CREATED_DISABLED') THEN 'готовится'
+         ELSE 'нет доступа'
+       END AS state
+FROM account
+WHERE system_code = 'AD'
+ORDER BY login;
+```
+
+| login | status | state |
+|---|---|---|
+| ivanov.ap | CREATED_DISABLED | готовится |
+| kuznetsov.da | ACTIVE | работает |
+| morozova.op | PLANNED | готовится |
+| petrov.oi | ACTIVE | работает |
+| shchukina.i | ACTIVE | работает |
+| sidorova.as | DELETED | нет доступа |
+| smirnova.ev | ACTIVE | работает |
+
+## Пример из кейса IDM-JOINER
+
+Запрос, который аналитик пишет при проектировании маппинга: **у каких подразделений нет кода филиала АБС?** Без этого кода IdM не сможет создать пользователя АБС — по <CaseRef href="/case/04-integrations/data-mapping/" id="Маппинг">маппингу кейса</CaseRef> отсутствие значения — бизнес-ошибка и задача в ServiceDesk.
+
+```sql
+SELECT org_unit_code, name
+FROM org_unit
+WHERE abs_branch_code IS NULL;
+```
+
+| org_unit_code | name |
+|---|---|
+| 2502 | Доп. офис «Находка» |
+
+Новый офис ещё не попал в справочник соответствия, а 22 марта туда выходит сотрудник (Морозова, трудоустройство 18). Запрос до даты создания учётных записей превращает будущий инцидент в задачу на заполнение справочника.
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| `WHERE middle_name = NULL` | Никогда не истинно — пустой результат | `IS NULL` |
+| `AND` и `OR` без скобок | Неожиданный приоритет: `AND` выполняется раньше | Скобки |
+| `SELECT *` в итоговом запросе | Лишние данные, ломается при изменении таблицы | Явный список столбцов |
+| Даты в разных форматах | Сравнение строк даёт неверный результат | ISO 8601 или тип даты |
+| `LIKE '%текст%'` по большим таблицам | Не использует обычный индекс — медленно | Точные условия, полнотекстовый поиск |
+| Нет `ORDER BY` | Порядок строк не гарантирован | Явная сортировка |
+
+## Вопросы на собеседовании
+
+<InterviewQuestions topic="data" ids={['data-count', 'data-null']} />
+
+## Связанные темы
+
+<Related pages={['data/sql-joins-aggregates', 'data/sql-subqueries-window', 'elicitation/document-system-analysis']} planned={['SQL-тренажёр (инструмент)']} />

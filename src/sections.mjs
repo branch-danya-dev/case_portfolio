@@ -15,7 +15,7 @@ export const sections = [
   { id: 'processes', label: 'Процессы', description: 'BPMN 2.0, AS-IS / TO-BE, gap-анализ', icon: 'random', ready: true, kind: 'topic' },
   { id: 'diagrams', label: 'UML и архитектурные диаграммы', description: 'Use case, activity, sequence, state, class, component, deployment, C4, DFD', icon: 'analytics', ready: true, kind: 'topic' },
   { id: 'diagram-howto', label: 'Диаграммы: как создавать', description: 'Практикум: алгоритм, синтаксис Mermaid и PlantUML, редакторы, чек-листы, упражнения', icon: 'pencil', ready: true, kind: 'practice' },
-  { id: 'data', label: 'Данные', description: 'Модели данных, ER, нормализация, SQL, транзакции, индексы, НСИ', icon: 'database', ready: false, kind: 'topic' },
+  { id: 'data', label: 'Данные', description: 'Модели данных, ER, нормализация, SQL, транзакции, индексы, НСИ', icon: 'database', ready: true, kind: 'topic' },
   { id: 'integrations', label: 'Интеграции', description: 'REST, SOAP, gRPC, GraphQL, брокеры, паттерны надёжности, контракты, безопасность', icon: 'link', ready: false, kind: 'topic' },
   { id: 'architecture', label: 'Архитектура для аналитика', description: 'Монолит и микросервисы, кэширование, НФТ и ISO/IEC 25010, CAP, ADR', icon: 'server', ready: false, kind: 'topic' },
   { id: 'documentation', label: 'Документирование', description: 'ТЗ по ГОСТ 34, шаблоны, docs-as-code, практики Confluence', icon: 'open-book', ready: false, kind: 'topic' },

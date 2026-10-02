@@ -1,0 +1,199 @@
+---
+title: "SQL: JOIN и агрегаты"
+description: "SQL для аналитика, часть 2: INNER, LEFT, RIGHT, FULL, CROSS и self-join; поиск записей без пары; GROUP BY, HAVING, COUNT, SUM — на учебной БД кейса."
+trackProgress: true
+sidebar:
+  order: 4
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import InterviewQuestions from '../../../components/InterviewQuestions.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+**JOIN** соединяет таблицы по условию: **INNER** — только пары, **LEFT** — все строки слева и пары, если есть. Самая частая задача аналитика — **«найти записи без пары»**: `LEFT JOIN … WHERE правая.id IS NULL`.
+**Агрегаты** (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`) с **`GROUP BY`** считают итоги по группам, **`HAVING`** фильтрует группы.
+Логический порядок выполнения: FROM / JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT.
+
+</Brief>
+
+## Когда применять
+
+| Применять | Не нужно |
+|---|---|
+| Сверка двух систем: что есть в одной и нет в другой | Соединять «на всякий случай» таблицы, которые не нужны результату |
+| Статистика для AS-IS и НФТ: сколько, как часто, по каким группам | Агрегировать в SQL то, что проще посчитать в отчёте |
+| Проверка качества данных: дубли, «сироты» | — |
+
+## Как делать
+
+<Steps>
+
+1. **Начните с главной таблицы** — «о чём» запрос (например, трудоустройства).
+
+2. **Присоединяйте по одной таблице**, каждый раз проверяя число строк. Резкий рост — признак размножения строк из-за связи «многие».
+
+3. **INNER или LEFT?** Нужны ли строки без пары? Если да — LEFT, и условия на правую таблицу — в `ON`.
+
+4. **Группировка:** всё, что в `SELECT` не под агрегатом, — в `GROUP BY`.
+
+5. **Фильтр групп** — `HAVING`, фильтр строк — `WHERE`.
+
+</Steps>
+
+## Нотация: шпаргалка
+
+```sql title="JOIN и агрегаты"
+-- Соединения
+FROM a JOIN b ON b.a_id = a.id               -- INNER: только пары
+FROM a LEFT JOIN b ON b.a_id = a.id          -- все a + пары из b (иначе NULL)
+FROM a RIGHT JOIN b ON …                      -- все b (лучше переписать как LEFT)
+FROM a FULL JOIN b ON …                       -- все из обеих
+FROM a CROSS JOIN b                           -- все сочетания
+FROM employment e JOIN identity m ON m.identity_id = e.manager_identity_id  -- self-join через другую роль
+
+-- Записи без пары (anti-join)
+FROM a LEFT JOIN b ON b.a_id = a.id
+WHERE b.id IS NULL
+
+-- Агрегаты
+SELECT org_unit_code, COUNT(*) AS cnt        -- строки
+       , COUNT(manager_identity_id)          -- не-NULL значения
+       , COUNT(DISTINCT position_code)       -- различные значения
+       , MIN(hire_date), MAX(hire_date)
+FROM employment
+WHERE status = 'ACTIVE'                      -- фильтр строк ДО группировки
+GROUP BY org_unit_code
+HAVING COUNT(*) > 1                          -- фильтр групп ПОСЛЕ
+ORDER BY cnt DESC;
+
+-- Условный подсчёт
+SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) AS active
+```
+
+### Примеры на учебной БД
+
+**Сотрудники с подразделением и должностью** — INNER JOIN трёх таблиц. Петров встречается дважды: у него два трудоустройства (основное и совместительство).
+
+```sql
+SELECT i.last_name, o.name AS org_unit, p.name AS position
+FROM employment e
+JOIN identity  i ON i.identity_id   = e.identity_id
+JOIN org_unit  o ON o.org_unit_code = e.org_unit_code
+JOIN position  p ON p.position_code = e.position_code
+WHERE e.status = 'ACTIVE'
+ORDER BY i.last_name, o.name;
+```
+
+| last_name | org_unit | position |
+|---|---|---|
+| Кузнецов | Доп. офис «Екатеринбург-Центр» | Руководитель офиса |
+| Петров | Бухгалтерия | Бухгалтер |
+| Петров | Доп. офис «Владивосток» | Операционист |
+| Смирнова | Доп. офис «Владивосток» | Руководитель офиса |
+| Щукина | Головной офис, ДИТ | Инженер |
+
+**Учётные записи по системам** — группировка и условный подсчёт:
+
+```sql
+SELECT system_code,
+       COUNT(*) AS total,
+       SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) AS active
+FROM account
+GROUP BY system_code
+ORDER BY system_code;
+```
+
+| system_code | total | active |
+|---|---|---|
+| ABS | 4 | 3 |
+| AD | 7 | 4 |
+| EXCHANGE | 3 | 2 |
+
+**Совместители** — люди с несколькими трудоустройствами, `HAVING`:
+
+```sql
+SELECT i.last_name, COUNT(*) AS employments
+FROM employment e
+JOIN identity i ON i.identity_id = e.identity_id
+GROUP BY i.identity_id, i.last_name
+HAVING COUNT(*) > 1;
+```
+
+| last_name | employments |
+|---|---|
+| Петров | 2 |
+
+**Сотрудник и руководитель** — второе соединение с той же таблицей `identity` под другим псевдонимом, LEFT — чтобы не потерять тех, у кого руководитель не указан:
+
+```sql
+SELECT i.last_name AS employee, m.last_name AS manager
+FROM employment e
+JOIN identity i      ON i.identity_id = e.identity_id
+LEFT JOIN identity m ON m.identity_id = e.manager_identity_id
+WHERE e.status IN ('ACTIVE', 'PLANNED')
+ORDER BY i.last_name;
+```
+
+| employee | manager |
+|---|---|
+| Иванов | Кузнецов |
+| Кузнецов | NULL |
+| Морозова | Смирнова |
+| Петров | Смирнова |
+| Петров | NULL |
+| Смирнова | NULL |
+| Щукина | NULL |
+
+## Пример из кейса IDM-JOINER
+
+**Сверка «кому нужна учётная запись AD, а её нет»** — типичная задача из <CaseRef href="/case/06-rollout/migration-strategy/" id="Миграция">стратегии миграции</CaseRef> и ежедневной сверки (UC-10).
+
+Правильно — условие на систему **в `ON`**:
+
+```sql
+SELECT i.person_id, i.last_name, i.status
+FROM identity i
+LEFT JOIN account a
+       ON a.identity_id = i.identity_id
+      AND a.system_code = 'AD'
+WHERE a.account_id IS NULL;
+```
+
+| person_id | last_name | status |
+|---|---|---|
+| P-100506 | Волков | CANCELLED |
+
+Неправильно — то же условие **в `WHERE`**: для строк без пары `a.system_code` равен NULL, условие ложно, и LEFT JOIN превращается в INNER. Результат пустой — сверка «ничего не нашла».
+
+```sql
+-- ОШИБКА: возвращает пустой результат
+SELECT i.person_id, i.last_name
+FROM identity i
+LEFT JOIN account a ON a.identity_id = i.identity_id
+WHERE a.system_code = 'AD' AND a.account_id IS NULL;
+```
+
+В учебных данных у отменённого приёма (Волков) учётной записи нет — это правильно. В реальной сверке в такой список попали бы и «потерянные» сотрудники, которым учётную запись забыли создать.
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| Условие на правую таблицу LEFT JOIN в `WHERE` | LEFT превращается в INNER, «сироты» не находятся | Условие в `ON` |
+| Соединение по неполному ключу | Размножение строк, завышенные суммы | Проверять число строк после каждого JOIN |
+| Столбец в `SELECT` без агрегата и без `GROUP BY` | Ошибка или случайное значение (зависит от СУБД) | Все неагрегированные столбцы — в `GROUP BY` |
+| Агрегат в `WHERE` | Ошибка: группировки ещё нет | `HAVING` |
+| `COUNT(*)` после LEFT JOIN для подсчёта пар | Считает и строки без пары | `COUNT(правая.id)` |
+| RIGHT JOIN в длинном запросе | Трудно читать | Переписать как LEFT |
+
+## Вопросы на собеседовании
+
+<InterviewQuestions topic="data" ids={['data-join-types', 'data-left-join-where', 'data-where-having']} />
+
+## Связанные темы
+
+<Related pages={['data/sql-select', 'data/sql-subqueries-window', 'data/keys-normalization']} planned={['SQL-тренажёр (инструмент)']} />

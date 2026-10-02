@@ -1,0 +1,225 @@
+---
+title: "SQL: подзапросы и оконные функции"
+description: "SQL для аналитика, часть 3: подзапросы в WHERE и FROM, IN и EXISTS, ловушка NOT IN с NULL, CTE (WITH), оконные функции ROW_NUMBER, RANK, LAG, COUNT OVER — на учебной БД кейса."
+trackProgress: true
+sidebar:
+  order: 5
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import InterviewQuestions from '../../../components/InterviewQuestions.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+**Подзапрос** — запрос внутри запроса: список для `IN`, проверка `EXISTS`, значение для сравнения или временная таблица в `FROM`. **CTE** (`WITH`) — тот же подзапрос с именем, читается сверху вниз.
+**Оконные функции** (`… OVER (PARTITION BY … ORDER BY …)`) считают по группе строк, **не схлопывая** их: последняя запись по объекту, нумерация, сравнение с предыдущей строкой.
+Главная ловушка — **`NOT IN` с NULL в подзапросе** возвращает пусто; используйте `NOT EXISTS`.
+
+</Brief>
+
+## Когда применять
+
+| Применять | Не нужно |
+|---|---|
+| «Последняя запись по каждому объекту» (последнее трудоустройство, последний статус) | Задача решается простым JOIN и GROUP BY |
+| Проверки существования: «есть ли у сотрудника проблемные задачи» | Вкладывать подзапросы на 4–5 уровней — лучше CTE |
+| Сложный запрос, который нужно читать и проверять по шагам — CTE | — |
+| Сравнение со средним или итогом по группе, не теряя строк | — |
+
+## Как делать
+
+<Steps>
+
+1. **Разбейте задачу на шаги** и оформите каждый как CTE: `WITH шаг1 AS (…), шаг2 AS (…) SELECT …`.
+
+2. **Проверяйте каждый шаг отдельно** — запустите CTE как самостоятельный запрос.
+
+3. **Существование — через `EXISTS` / `NOT EXISTS`**, список значений — через `IN`.
+
+4. **«Первая / последняя в группе»** — `ROW_NUMBER() OVER (PARTITION BY … ORDER BY …)` и фильтр `= 1` во внешнем запросе.
+
+5. **Итог по группе рядом со строкой** — агрегат с `OVER (PARTITION BY …)`.
+
+</Steps>
+
+## Нотация: шпаргалка
+
+```sql title="Подзапросы, CTE, оконные функции"
+-- Подзапрос как список
+WHERE org_unit_code IN (SELECT org_unit_code FROM org_unit WHERE org_unit_type = 'RETAIL_OFFICE')
+
+-- Скалярный подзапрос (одно значение)
+WHERE hire_date = (SELECT MAX(hire_date) FROM employment)
+
+-- Коррелированный подзапрос с EXISTS (ссылается на внешнюю строку i)
+WHERE EXISTS (SELECT 1 FROM account a WHERE a.identity_id = i.identity_id)
+
+-- Подзапрос в FROM (производная таблица)
+SELECT … FROM (SELECT … ) AS t WHERE t.rn = 1
+
+-- CTE
+WITH planned AS (
+  SELECT * FROM employment WHERE status = 'PLANNED'
+)
+SELECT … FROM planned …;
+
+-- Оконные функции
+ROW_NUMBER() OVER (PARTITION BY identity_id ORDER BY hire_date DESC)  -- 1, 2, 3 в группе
+RANK()       OVER (ORDER BY score DESC)        -- с пропусками при равенстве: 1, 1, 3
+DENSE_RANK() OVER (ORDER BY score DESC)        -- без пропусков: 1, 1, 2
+LAG(col)  OVER (PARTITION BY … ORDER BY …)     -- значение из предыдущей строки
+LEAD(col) OVER (…)                             -- из следующей
+COUNT(*)  OVER (PARTITION BY org_unit_code)    -- итог группы в каждой строке
+SUM(x)    OVER (ORDER BY dt)                   -- нарастающий итог
+```
+
+### Примеры на учебной БД
+
+**Последнее трудоустройство каждого человека** — `ROW_NUMBER` с разбиением по человеку. У Петрова два трудоустройства, в результат попало более позднее (совместительство с 2026-09-01):
+
+```sql
+SELECT last_name, hire_date, employment_type
+FROM (
+  SELECT i.last_name, e.hire_date, e.employment_type,
+         ROW_NUMBER() OVER (PARTITION BY e.identity_id ORDER BY e.hire_date DESC) AS rn
+  FROM employment e
+  JOIN identity i ON i.identity_id = e.identity_id
+) t
+WHERE rn = 1
+ORDER BY last_name;
+```
+
+| last_name | hire_date | employment_type |
+|---|---|---|
+| Волков | 2027-03-20 | MAIN |
+| Иванов | 2027-03-15 | MAIN |
+| Кузнецов | 2022-01-17 | MAIN |
+| Морозова | 2027-03-22 | MAIN |
+| Петров | 2026-09-01 | PART_TIME |
+| Сидорова | 2023-05-10 | MAIN |
+| Смирнова | 2021-08-02 | MAIN |
+| Щукина | 2025-06-01 | MAIN |
+
+**Численность подразделения рядом с каждым сотрудником** — агрегат как оконная функция, строки не схлопываются:
+
+```sql
+SELECT i.last_name, e.org_unit_code,
+       COUNT(*) OVER (PARTITION BY e.org_unit_code) AS in_unit
+FROM employment e
+JOIN identity i ON i.identity_id = e.identity_id
+WHERE e.status = 'ACTIVE'
+ORDER BY e.org_unit_code, i.last_name;
+```
+
+| last_name | org_unit_code | in_unit |
+|---|---|---|
+| Щукина | 0001 | 1 |
+| Петров | 0102 | 1 |
+| Кузнецов | 1601 | 1 |
+| Петров | 2501 | 2 |
+| Смирнова | 2501 | 2 |
+
+**Предыдущая операция по учётной записи** — `LAG`:
+
+```sql
+SELECT task_id, operation, scheduled_at,
+       LAG(operation) OVER (PARTITION BY account_id ORDER BY scheduled_at) AS prev_operation
+FROM provisioning_task
+WHERE account_id = 1000;
+```
+
+| task_id | operation | scheduled_at | prev_operation |
+|---|---|---|---|
+| 5000 | CREATE | 2027-03-10 09:00 | NULL |
+| 5003 | ENABLE | 2027-03-15 07:00 | CREATE |
+
+**CTE: учётные записи будущих сотрудников:**
+
+```sql
+WITH planned AS (
+  SELECT e.employment_id, e.identity_id, e.hire_date
+  FROM employment e
+  WHERE e.status = 'PLANNED'
+)
+SELECT i.last_name, p.hire_date, COUNT(a.account_id) AS accounts
+FROM planned p
+JOIN identity i ON i.identity_id = p.identity_id
+LEFT JOIN account a ON a.identity_id = p.identity_id
+GROUP BY i.last_name, p.hire_date
+ORDER BY p.hire_date;
+```
+
+| last_name | hire_date | accounts |
+|---|---|---|
+| Иванов | 2027-03-15 | 3 |
+| Морозова | 2027-03-22 | 1 |
+
+## Пример из кейса IDM-JOINER
+
+**Кому грозит не выйти на работу с доступами** — у кого есть задачи провижининга в ручной обработке или в ожидании повтора (статусы из <CaseRef href="/case/03-architecture/state-models/" id="Статусы">статусной модели задачи</CaseRef>). Такой запрос — основа отчёта для сопровождения:
+
+```sql
+SELECT i.last_name
+FROM identity i
+WHERE EXISTS (
+  SELECT 1
+  FROM account a
+  JOIN provisioning_task t ON t.account_id = a.account_id
+  WHERE a.identity_id = i.identity_id
+    AND t.status IN ('MANUAL', 'RETRY_WAIT')
+)
+ORDER BY i.last_name;
+```
+
+| last_name |
+|---|
+| Иванов |
+| Кузнецов |
+
+**Ловушка `NOT IN`.** Задача: «кто не является ничьим руководителем». В столбце `manager_identity_id` есть NULL — и запрос с `NOT IN` возвращает **пустой результат**:
+
+```sql
+-- ОШИБКА: подзапрос содержит NULL → результат всегда пустой
+SELECT last_name FROM identity
+WHERE identity_id NOT IN (SELECT manager_identity_id FROM employment);
+```
+
+Правильно — `NOT EXISTS`:
+
+```sql
+SELECT last_name FROM identity i
+WHERE NOT EXISTS (
+  SELECT 1 FROM employment e WHERE e.manager_identity_id = i.identity_id
+)
+ORDER BY last_name;
+```
+
+| last_name |
+|---|
+| Волков |
+| Иванов |
+| Морозова |
+| Петров |
+| Сидорова |
+| Щукина |
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| `NOT IN` с подзапросом, где возможен NULL | Пустой результат без ошибки | `NOT EXISTS` или фильтр `IS NOT NULL` в подзапросе |
+| Фильтр по оконной функции в том же `WHERE` | Ошибка: окна считаются после WHERE | Внешний запрос или CTE |
+| `ROW_NUMBER` без `ORDER BY` в окне | «Первая» строка случайна | Явный порядок |
+| Скалярный подзапрос вернул несколько строк | Ошибка выполнения | Агрегат или `LIMIT 1` с сортировкой |
+| Вложенность на много уровней | Невозможно читать и проверять | CTE по шагам |
+
+## Вопросы на собеседовании
+
+<InterviewQuestions topic="data" ids={['data-subquery-exists', 'data-window', 'data-null']} />
+
+## Связанные темы
+
+<Related pages={['data/sql-joins-aggregates', 'data/sql-select', 'data/transactions-acid']} planned={['SQL-тренажёр (инструмент)']} />
