@@ -20,7 +20,7 @@ export const sections = [
   { id: 'architecture', label: 'Архитектура для аналитика', description: 'Монолит и микросервисы, кэширование, НФТ и ISO/IEC 25010, CAP, ADR', icon: 'server', ready: true, kind: 'topic' },
   { id: 'documentation', label: 'Документирование', description: 'ТЗ по ГОСТ 34, шаблоны, docs-as-code, практики Confluence', icon: 'open-book', ready: true, kind: 'topic' },
   { id: 'methodologies', label: 'Методологии', description: 'Waterfall, Scrum, Kanban, гибриды и место аналитика в каждой', icon: 'clock', ready: true, kind: 'topic' },
-  { id: 'testing', label: 'Тестирование для аналитика', description: 'Виды тестирования, тест-дизайн, ПМИ, UAT', icon: 'approve-check', ready: false, kind: 'topic' },
+  { id: 'testing', label: 'Тестирование для аналитика', description: 'Виды тестирования, тест-дизайн, ПМИ, UAT', icon: 'approve-check', ready: true, kind: 'topic' },
   { id: 'software', label: 'Каталог ПО', description: 'Jira, Confluence, draw.io, Camunda Modeler, Postman, DBeaver и другие: что, когда, зачем', icon: 'desktop', ready: false, kind: 'reference' },
   { id: 'case', label: 'Кейс IDM-JOINER', description: 'Полный учебный проект: от устава до тест-кейсов, с диаграммами и контрактами', icon: 'star', ready: true, collapsed: true, kind: 'case', sidebar: caseSidebar },
   { id: 'interview', label: 'Собеседование', description: 'Вопросы с ответами по темам и практические задачи', icon: 'question-circle', ready: false, kind: 'practice' },

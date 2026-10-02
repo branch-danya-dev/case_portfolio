@@ -790,3 +790,71 @@
   definition: Фреймворк масштабирования Agile на много команд — поезд команд (ART), планирование инкремента программы (PI Planning), приоритизация WSJF.
   topic: methodologies
   seeAlso: [scrum, wsjf]
+
+- id: test-levels
+  term: Уровни тестирования
+  en: Test levels
+  definition: Модульное, интеграционное, системное и приёмочное тестирование — от отдельных функций до проверки, что система решает задачу заказчика.
+  topic: testing
+  seeAlso: [uat, regression]
+
+- id: regression
+  term: Регрессионное тестирование
+  en: Regression testing
+  definition: Проверка, что изменения не сломали работавшую функциональность.
+  topic: testing
+  seeAlso: [smoke-test]
+
+- id: smoke-test
+  term: Дымовое тестирование
+  en: Smoke testing
+  definition: Быстрая проверка ключевых функций после сборки, чтобы решить, имеет ли смысл тестировать дальше.
+  topic: testing
+  seeAlso: [regression]
+
+- id: equivalence-partitioning
+  term: Классы эквивалентности
+  en: Equivalence partitioning
+  definition: Техника тест-дизайна — входные значения делятся на группы с одинаковым поведением системы; из каждой группы проверяется одно значение.
+  topic: testing
+  seeAlso: [boundary-value-analysis]
+
+- id: boundary-value-analysis
+  term: Анализ граничных значений
+  en: Boundary value analysis
+  definition: Техника тест-дизайна — проверка значений на границах диапазонов и рядом с ними, где чаще всего ошибки.
+  topic: testing
+  seeAlso: [equivalence-partitioning]
+
+- id: decision-table
+  term: Таблица решений
+  en: Decision table
+  definition: Таблица комбинаций условий и соответствующих действий; каждая комбинация (правило) даёт тест и выявляет пропуски в требованиях.
+  topic: testing
+  seeAlso: [equivalence-partitioning]
+
+- id: pairwise
+  term: Попарное тестирование
+  en: Pairwise testing
+  definition: Подбор минимального набора тестов, покрывающего все пары значений любых двух параметров, вместо полного перебора комбинаций.
+  topic: testing
+
+- id: severity-priority
+  term: Серьёзность и приоритет дефекта
+  en: Severity, priority
+  definition: Серьёзность — насколько дефект влияет на работу системы; приоритет — насколько срочно его исправлять с точки зрения бизнеса.
+  topic: testing
+
+- id: pmi
+  term: ПМИ
+  en: Test program and methodology
+  definition: Программа и методика испытаний — документ, по которому заказчик принимает систему; объём, условия, участники, порядок и критерии успешности испытаний.
+  topic: testing
+  seeAlso: [uat]
+
+- id: uat
+  term: UAT
+  en: User acceptance testing
+  definition: Приёмочное тестирование пользователями и заказчиком — проверка, что система решает их задачи в реальном процессе.
+  topic: testing
+  seeAlso: [pmi]
