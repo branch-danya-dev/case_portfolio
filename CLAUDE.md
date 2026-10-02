@@ -23,7 +23,7 @@ src/content/docs/<раздел>/   страницы (MDX); разделы пер
 src/sections.mjs             список разделов: сайдбар и карточки главной; ready:false = скрыт из сайдбара
 src/tools.mjs                список инструментов для главной
 src/data/questions/<тема>.yaml  банк вопросов (коллекция questions)
-src/data/glossary.yaml       глоссарий (коллекция glossary)
+src/data/glossary.yaml       глоссарий (коллекция glossary) → <Glossary> на /glossary/; topic = id раздела или idm
 src/data/software.yaml       каталог ПО (коллекция software) → <SoftwareCatalog group="…">
 src/components/              компоненты шаблона, просмотрщики; overrides/ — переопределения Starlight
 src/plugins/remark-mermaid.mjs  ```mermaid → <figure data-mermaid>, рисует src/scripts/mermaid.ts
@@ -66,6 +66,7 @@ templates/topic-page.mdx     шаблон тематической страни�
 - **MDX:** «<» перед кириллицей и «{» в тексте ломают сборку — экранировать (`\<`, `\{`) или брать в `код`. `scripts/lint-mdx.mjs` (часть `prepare:assets`) ловит это заранее.
 - Когда пишется новая страница, темы из `planned` других страниц переводятся в ссылки: `node scripts/promote-related.mjs "Название=раздел/slug"`.
 - **Ссылки:** только абсолютные (`/processes/bpmn/`), относительные запрещены валидатором. Ссылки на страницы, которых ещё нет, не ставить — использовать `planned` в `<Related>` или текст без ссылки.
+- Валидатор ссылок видит только якоря заголовков MDX, а не id, которые рисуют компоненты (термины глоссария, карточки ПО). Ссылки вида `/glossary/#id` и `/software/api/#postman` в MDX валят сборку — давайте ссылку на страницу или пишите путь кодом.
 - Компоненты с `href`, которые нужно проверять, регистрируются в `astro.config.mjs` → `starlightLinksValidator.components`.
 - Внутри MDX сырой `<pre>` обрабатывается Expressive Code — для «сырого» текста использовать `div` с `white-space: pre`.
 - Страницы кейса с пометкой GENERATED не править руками — править source/ и запускать `npm run import:case`.

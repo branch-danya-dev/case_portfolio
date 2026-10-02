@@ -30,5 +30,5 @@ export const sections = [
   ] },
   { id: 'tools', label: 'Инструменты', description: 'Генераторы, песочницы, калькуляторы, тренажёры — всё работает в браузере', icon: 'setting', ready: true, kind: 'tools' },
   { id: 'cheatsheets', label: 'Шпаргалки для печати', description: 'Каждый раздел на 1–2 листах A4', icon: 'add-document', ready: true, collapsed: true, kind: 'reference' },
-  { id: 'glossary', label: 'Глоссарий', description: 'Термины с английским оригиналом и фильтром', icon: 'magnifier', ready: false, kind: 'reference' },
+  { id: 'glossary', label: 'Глоссарий', description: 'Термины с английским оригиналом и фильтром', icon: 'magnifier', ready: true, kind: 'reference' },
 ];

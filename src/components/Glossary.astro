@@ -1,0 +1,264 @@
+---
+/**
+ * Глоссарий из src/data/glossary.yaml: алфавитный указатель, поиск, фильтр по теме.
+ * У каждого термина якорь = его id (/glossary/#idempotency), «См. также» ведёт на якоря.
+ */
+import { getCollection } from 'astro:content';
+import { sections } from '../sections.mjs';
+
+const TOPIC_EXTRA: Record<string, string> = {
+  idm: 'Кейс: управление доступом (IdM)',
+};
+const topicLabel = (t: string) => TOPIC_EXTRA[t] ?? sections.find((s) => s.id === t)?.label ?? t;
+
+const entries = await getCollection('glossary');
+const byId = new Map(entries.map((e) => [e.id, e.data.term]));
+
+/** Ключ сортировки: без кавычек и знаков в начале; кириллица, затем латиница, затем цифры. */
+const sortKey = (term: string) => term.replace(/^[^\p{L}\p{N}]+/u, '');
+const rank = (s: string) => (/^[а-яё]/i.test(s) ? 0 : /^\p{N}/u.test(s) ? 2 : 1);
+const letterOf = (term: string) => {
+  const ch = sortKey(term).charAt(0).toUpperCase();
+  return /\p{N}/u.test(ch) ? '0–9' : ch === 'Ё' ? 'Е' : ch;
+};
+const sorted = [...entries].sort((a, b) => {
+  const ka = sortKey(a.data.term);
+  const kb = sortKey(b.data.term);
+  if (rank(ka) !== rank(kb)) return rank(ka) - rank(kb);
+  return ka.localeCompare(kb, 'ru');
+});
+
+const groups: { letter: string; items: typeof sorted }[] = [];
+for (const e of sorted) {
+  const l = letterOf(e.data.term);
+  const last = groups.at(-1);
+  if (last && last.letter === l) last.items.push(e);
+  else groups.push({ letter: l, items: [e] });
+}
+const letterId = (l: string) => `letter-${l === '0–9' ? 'num' : l}`;
+
+const topics = [...new Set(entries.map((e) => e.data.topic))].sort(
+  (a, b) => sections.findIndex((s) => s.id === a) - sections.findIndex((s) => s.id === b),
+);
+---
+
+<div class="glossary not-content" data-glossary>
+  <div class="glossary__filter">
+    <input type="search" aria-label="Поиск по глоссарию" placeholder="Термин, английское название или слово из определения" data-g-query />
+    <select aria-label="Тема" data-g-topic>
+      <option value="">Все темы ({entries.length})</option>
+      {
+        topics.map((t) => (
+          <option value={t}>
+            {topicLabel(t)} ({entries.filter((e) => e.data.topic === t).length})
+          </option>
+        ))
+      }
+    </select>
+  </div>
+  <p class="glossary__count" aria-live="polite" data-g-count></p>
+
+  <nav class="glossary__letters" aria-label="Алфавитный указатель">
+    {groups.map((g) => <a href={`#${letterId(g.letter)}`} data-g-letter={g.letter}>{g.letter}</a>)}
+  </nav>
+
+  {
+    groups.map((g) => (
+      <section class="glossary__group" data-g-group>
+        <h2 id={letterId(g.letter)}>{g.letter}</h2>
+        {g.items.map(({ id, data }) => (
+          <article
+            class="glossary__term"
+            id={id}
+            data-topic={data.topic}
+            data-text={[data.term, data.en ?? '', data.definition].join(' ').toLowerCase()}
+          >
+            <h3>
+              {data.term}
+              {data.en && <span class="glossary__en">{data.en}</span>}
+            </h3>
+            <p>{data.definition}</p>
+            {data.notToConfuse && (
+              <p class="glossary__nc">
+                <strong>Не путать:</strong> {data.notToConfuse}
+              </p>
+            )}
+            <p class="glossary__meta">
+              <span class="glossary__topic">{topicLabel(data.topic)}</span>
+              {data.seeAlso.length > 0 && (
+                <span>
+                  См. также:{' '}
+                  {data.seeAlso.map((s, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={`#${s}`}>{byId.get(s)}</a>
+                    </>
+                  ))}
+                </span>
+              )}
+            </p>
+          </article>
+        ))}
+      </section>
+    ))
+  }
+  <p class="glossary__empty" hidden data-g-empty>Ничего не найдено. Попробуйте английское название или другую тему.</p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-glossary]').forEach((root) => {
+    const query = root.querySelector<HTMLInputElement>('[data-g-query]')!;
+    const topic = root.querySelector<HTMLSelectElement>('[data-g-topic]')!;
+    const count = root.querySelector<HTMLElement>('[data-g-count]')!;
+    const empty = root.querySelector<HTMLElement>('[data-g-empty]')!;
+    const groups = [...root.querySelectorAll<HTMLElement>('[data-g-group]')];
+    const letters = new Map([...root.querySelectorAll<HTMLElement>('[data-g-letter]')].map((a) => [a.dataset.gLetter!, a]));
+    const total = root.querySelectorAll('.glossary__term').length;
+
+    const apply = () => {
+      const q = query.value.trim().toLowerCase();
+      const t = topic.value;
+      let shown = 0;
+      for (const g of groups) {
+        let inGroup = 0;
+        for (const el of g.querySelectorAll<HTMLElement>('.glossary__term')) {
+          const ok = (!t || el.dataset.topic === t) && (!q || el.dataset.text!.includes(q));
+          el.hidden = !ok;
+          if (ok) inGroup++;
+        }
+        g.hidden = inGroup === 0;
+        letters.get(g.querySelector('h2')!.textContent!)?.classList.toggle('is-empty', inGroup === 0);
+        shown += inGroup;
+      }
+      empty.hidden = shown > 0;
+      count.textContent = q || t ? `Найдено: ${shown} из ${total}` : `Терминов: ${total}`;
+    };
+    query.addEventListener('input', apply);
+    topic.addEventListener('change', apply);
+
+    // Переход по якорю на скрытый фильтром термин — сбросить фильтр.
+    window.addEventListener('hashchange', () => {
+      const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (el?.closest('[hidden]')) {
+        query.value = '';
+        topic.value = '';
+        apply();
+        el.scrollIntoView();
+      }
+    });
+    apply();
+  });
+</script>
+
+<style>
+  .glossary__filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: 1rem 0.25rem;
+  }
+  .glossary__filter input {
+    flex: 1 1 18rem;
+  }
+  .glossary__filter input,
+  .glossary__filter select {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--sa-border);
+    border-radius: 0.4rem;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-white);
+    font: inherit;
+    max-width: 100%;
+  }
+  .glossary__count {
+    margin: 0.25rem 0 0.75rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+  .glossary__letters {
+    position: sticky;
+    top: var(--sl-nav-height, 3.5rem);
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.35rem;
+    padding: 0.4rem 0;
+    background: var(--sl-color-bg);
+    border-bottom: 1px solid var(--sa-border);
+  }
+  .glossary__letters a {
+    min-width: 1.6rem;
+    text-align: center;
+    padding: 0.1rem 0.25rem;
+    border-radius: 0.3rem;
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--sl-color-accent-high);
+  }
+  .glossary__letters a:hover {
+    background: var(--sl-color-accent-low);
+  }
+  .glossary__letters a.is-empty {
+    color: var(--sl-color-gray-5);
+    pointer-events: none;
+  }
+  .glossary__group h2 {
+    margin: 1.5rem 0 0.5rem;
+    font-size: var(--sl-text-h3);
+    color: var(--sl-color-white);
+    scroll-margin-top: 7rem;
+  }
+  .glossary__term {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--sa-border);
+    scroll-margin-top: 7rem;
+  }
+  .glossary__term:target {
+    background: var(--sl-color-accent-low);
+    border-radius: 0.4rem;
+    padding-inline: 0.6rem;
+  }
+  .glossary__term h3 {
+    margin: 0;
+    font-size: var(--sl-text-lg);
+    color: var(--sl-color-white);
+  }
+  .glossary__en {
+    margin-left: 0.5rem;
+    font-size: var(--sl-text-sm);
+    font-weight: 400;
+    color: var(--sl-color-gray-3);
+  }
+  .glossary__term p {
+    margin: 0.3rem 0 0;
+  }
+  .glossary__nc {
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+  }
+  .glossary__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+  .glossary__topic {
+    border: 1px solid var(--sa-border);
+    border-radius: 999px;
+    padding: 0 0.5rem;
+  }
+  .glossary__empty {
+    color: var(--sl-color-gray-3);
+  }
+  @media print {
+    .glossary__filter,
+    .glossary__count,
+    .glossary__letters {
+      display: none;
+    }
+    .glossary__term {
+      break-inside: avoid;
+    }
+  }
+</style>

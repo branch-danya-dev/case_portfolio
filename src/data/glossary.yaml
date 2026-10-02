@@ -891,3 +891,126 @@
   en: Situation, Task, Action, Result
   definition: Схема ответа на поведенческие вопросы собеседования — ситуация, задача, ваши действия, результат.
   topic: interview
+
+# ── Предметная область кейса: управление доступом (IdM) ────────────
+
+- id: idm
+  term: IdM
+  en: Identity Management
+  definition: Система управления идентичностями и доступом — создаёт учётные записи в целевых системах, выдаёт и отзывает полномочия по ролям и заявкам, ведёт журнал аудита и ресертификацию прав.
+  topic: idm
+  seeAlso: [identity, provisioning, jml]
+
+- id: jml
+  term: Joiner / Mover / Leaver
+  en: Joiner, Mover, Leaver
+  definition: Три базовых кадровых процесса управления доступом — приём, перевод и увольнение сотрудника. В кейсе волна 1 автоматизирует Joiner, Mover и Leaver — волна 2.
+  topic: idm
+  seeAlso: [idm]
+
+- id: identity
+  term: Идентичность
+  en: Identity
+  definition: Запись о физическом лице в IdM, объединяющая все его учётные записи; одна на человека, в кейсе ключ — personId из HRMS.
+  topic: idm
+  seeAlso: [employment, account]
+  notToConfuse: Учётная запись — запись пользователя в конкретной системе; у одной идентичности их несколько.
+
+- id: employment
+  term: Трудоустройство
+  en: Employment
+  definition: Конкретный трудовой договор сотрудника. У совместителя несколько трудоустройств одновременно, у повторно принятого — несколько во времени.
+  topic: idm
+  seeAlso: [identity]
+
+- id: account
+  term: Учётная запись
+  en: Account
+  definition: Запись пользователя в конкретной целевой системе — логин в AD, пользователь АБС.
+  topic: idm
+  seeAlso: [identity, target-system]
+
+- id: target-system
+  term: Целевая система
+  en: Target system, resource
+  definition: Система, в которой IdM создаёт учётные записи и выдаёт права; в кейсе — AD, Exchange, АБС, СЭД.
+  topic: idm
+  notToConfuse: Источник данных (HRMS) — откуда IdM получает сведения о сотрудниках.
+
+- id: entitlement
+  term: Полномочие
+  en: Entitlement
+  definition: Минимальная единица права в целевой системе — группа AD, роль АБС, роль СЭД.
+  topic: idm
+  seeAlso: [business-role]
+  notToConfuse: Бизнес-роль — набор полномочий в разных системах.
+
+- id: business-role
+  term: Бизнес-роль
+  en: Business role
+  definition: Набор полномочий в разных системах, нужный для работы на должности; назначается по правилу «тип подразделения + должность» или по заявке.
+  topic: idm
+  seeAlso: [entitlement, birthright, rbac]
+
+- id: birthright
+  term: Базовая роль
+  en: Birthright role
+  definition: Бизнес-роль, которую каждый сотрудник получает без запроса — например, учётная запись AD, почта, доступ к СЭД.
+  topic: idm
+  seeAlso: [business-role]
+
+- id: rbac
+  term: Ролевая модель доступа
+  en: Role-based access control, RBAC
+  definition: Подход, при котором права выдаются через роли, соответствующие обязанностям, а не каждому пользователю по отдельности.
+  topic: idm
+  seeAlso: [business-role, sod]
+
+- id: sod
+  term: SoD-конфликт
+  en: Segregation of duties
+  definition: Сочетание полномочий, которое нельзя выдавать одному сотруднику, например ввод и подтверждение операции. Принцип разделения обязанностей снижает риск мошенничества и ошибок.
+  topic: idm
+  seeAlso: [rbac]
+
+- id: provisioning
+  term: Провижининг
+  en: Provisioning
+  definition: Создание учётной записи и выдача полномочий в целевой системе; обратная операция — депровижининг (блокировка, удаление, отзыв прав).
+  topic: idm
+  seeAlso: [connector, account]
+
+- id: connector
+  term: Коннектор
+  en: Connector
+  definition: Компонент IdM, который выполняет провижининг в конкретной целевой системе по её протоколу (LDAP, PowerShell, REST).
+  topic: idm
+  notToConfuse: Адаптер АБС в кейсе — отдельный сервис на стороне АБС, который вызывает коннектор IdM.
+
+- id: recertification
+  term: Ресертификация прав
+  en: Access recertification, access review
+  definition: Периодический пересмотр выданных прав руководителями и владельцами ресурсов — подтвердить нужные, отозвать лишние.
+  topic: idm
+  seeAlso: [idm]
+
+- id: orphan-account
+  term: Учётная запись-сирота
+  en: Orphan account
+  definition: Учётная запись в целевой системе, которой не соответствует ни один сотрудник в кадровой системе; кандидат на блокировку или на обоснование (сервисная, тестовая).
+  topic: idm
+  seeAlso: [reconciliation]
+
+- id: resource-owner
+  term: Владелец ресурса
+  en: Resource owner
+  definition: Сотрудник, отвечающий за доступ к целевой системе и согласующий выдачу прав в ней.
+  topic: idm
+  notToConfuse: Администратор ресурса технически исполняет выдачу прав, но не решает, выдавать ли их.
+
+- id: hrms
+  term: HRMS
+  en: Human Resource Management System
+  definition: Кадровая система — источник данных о сотрудниках, должностях, подразделениях и приказах; для IdM — авторитетный источник.
+  topic: idm
+  seeAlso: [identity]
