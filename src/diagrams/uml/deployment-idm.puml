@@ -1,0 +1,30 @@
+@startuml deployment-idm
+' UML deployment: условный пример для кейса (в документации кейса диаграммы развёртывания нет)
+skinparam shadowing false
+
+node "Балансировщик" as lb
+node "Сервер приложений 1" as app1 <<ВМ>> {
+  artifact "idm-core" as core1
+  artifact "idm-provisioning" as prov1
+}
+node "Сервер приложений 2" as app2 <<ВМ>> {
+  artifact "idm-core" as core2
+  artifact "idm-provisioning" as prov2
+}
+database "БД IdM\n(кластер)" as db
+node "Кластер Kafka" as kafka
+cloud "Сегмент АБС" as absnet {
+  node "Сервер адаптера АБС" as absnode {
+    artifact "abs-adapter" as absart
+  }
+}
+
+lb --> app1 : HTTPS
+lb --> app2 : HTTPS
+app1 --> db
+app2 --> db
+app1 --> kafka : TLS
+app2 --> kafka : TLS
+app1 --> absnode : HTTPS + mTLS
+app2 --> absnode : HTTPS + mTLS
+@enduml

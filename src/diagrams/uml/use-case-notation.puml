@@ -1,0 +1,30 @@
+@startuml use-case-notation
+' Нотация use case: акторы, граница системы, include, extend, обобщение актора
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Сотрудник" as emp
+actor "Руководитель" as mgr
+actor "Инженер ИБ" as sec
+actor "HRMS" as hrms <<система>>
+
+emp <|-- mgr
+
+rectangle "IdM" {
+  usecase "Обработать кадровое\nсобытие о приёме" as UC1
+  usecase "Запросить\nдополнительный доступ" as UC3
+  usecase "Проверить SoD" as SOD
+  usecase "Рассмотреть\nSoD-конфликт" as UC4
+  usecase "Получить первичные\nучётные данные" as UC9
+}
+
+hrms --> UC1
+mgr --> UC3
+emp --> UC9
+sec --> UC4
+
+UC1 ..> SOD : <<include>>
+UC3 ..> SOD : <<include>>
+UC4 ..> UC1 : <<extend>>\n[найден конфликт]
+@enduml

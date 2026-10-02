@@ -1,0 +1,24 @@
+@startuml component-idm
+' UML component: компоненты, предоставляемые и требуемые интерфейсы (упрощённо по кейсу)
+skinparam componentStyle uml2
+skinparam shadowing false
+
+package "IdM" {
+  component "Обработчик\nкадровых событий" as EH
+  component "Ядро IdM" as CORE
+  component "Сервис провижининга" as PROV
+}
+interface "REST API IdM" as API
+interface "Внутренний API ядра" as CORE_API
+component "Адаптер АБС" as ABS
+interface "REST /users" as ABS_API
+component "Портал IdM" as PORTAL
+
+CORE -- API
+CORE -- CORE_API
+EH ..> CORE_API : использует
+PROV ..> CORE_API : использует
+PORTAL ..> API : использует
+ABS -- ABS_API
+PROV ..> ABS_API : вызывает
+@enduml

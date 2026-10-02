@@ -1,0 +1,25 @@
+@startuml activity-login
+' Activity: алгоритм генерации логина (FR-06 кейса IDM-JOINER)
+skinparam shadowing false
+start
+:Получить ФИО из кадрового события;
+:Транслитерировать по ICAO Doc 9303;
+if (Есть отчество?) then (да)
+  :Логин = фамилия.ИО;
+else (нет)
+  :Логин = фамилия.И;
+endif
+if (Длиннее 20 символов?) then (да)
+  :Усечь фамилию;
+endif
+while (Логин занят в AD или в резерве?) is (да)
+  if (Есть свободный суффикс 2…9?) then (да)
+    :Добавить следующий суффикс;
+  else (нет)
+    :Создать задачу в ServiceDesk\nадминистратору AD;
+    stop
+  endif
+endwhile (нет)
+:Назначить логин;
+stop
+@enduml

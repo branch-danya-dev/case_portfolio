@@ -318,3 +318,61 @@
   definition: Действия, не добавляющие ценности — ожидание, лишние передачи, переделки, лишние согласования, ручной ввод, поиск информации. Понятие из бережливого производства.
   topic: processes
   seeAlso: [as-is]
+
+- id: uml
+  term: UML
+  en: Unified Modeling Language
+  definition: Унифицированный язык моделирования OMG; версия 2.5 определяет 14 диаграмм — 7 структурных и 7 поведенческих.
+  topic: diagrams
+  seeAlso: [c4, bpmn]
+
+- id: sequence-diagram
+  term: Диаграмма последовательности
+  en: Sequence diagram
+  definition: UML-диаграмма порядка сообщений между участниками во времени в одном сценарии, включая ответы и ошибки. Главный инструмент проектирования интеграций.
+  topic: diagrams
+  seeAlso: [uml]
+
+- id: state-machine
+  term: Статусная модель
+  en: State machine diagram
+  definition: Описание жизненного цикла одного объекта — состояния и переходы «событие [условие] / действие». Каждый переход — тест, каждый запрещённый переход — негативный тест.
+  topic: diagrams
+  seeAlso: [uml]
+
+- id: activity-diagram
+  term: Диаграмма деятельности
+  en: Activity diagram
+  definition: UML-диаграмма алгоритма или потока работ — действия, развилки, параллельность, дорожки.
+  topic: diagrams
+  seeAlso: [bpmn, uml]
+  notToConfuse: BPMN описывает бизнес-процесс с участниками и обменом между организациями.
+
+- id: c4
+  term: C4
+  en: C4 model (Context, Container, Component, Code)
+  definition: Модель архитектурных диаграмм на четырёх уровнях приближения — контекст, контейнеры, компоненты, код. Автор — Simon Brown.
+  topic: diagrams
+  seeAlso: [uml]
+  notToConfuse: Контейнер C4 — любая разворачиваемая часть системы, а не Docker-контейнер.
+
+- id: dfd
+  term: DFD
+  en: Data Flow Diagram
+  definition: Диаграмма потоков данных — внешние сущности, процессы, хранилища и потоки. Применяется для анализа потоков данных и моделирования угроз.
+  topic: diagrams
+  seeAlso: [c4]
+
+- id: actor
+  term: Актор
+  en: Actor
+  definition: Роль внешнего участника, взаимодействующего с системой, — человек, другая система или время (таймер).
+  topic: diagrams
+  seeAlso: [use-case]
+
+- id: trust-boundary
+  term: Граница доверия
+  en: Trust boundary
+  definition: Граница между зонами с разным уровнем доверия (сеть, организация, контур безопасности); потоки данных через неё требуют защиты и анализа угроз.
+  topic: diagrams
+  seeAlso: [dfd]

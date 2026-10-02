@@ -10,5 +10,10 @@
   "source/idm-joiner-docs/04_integrations/diagrams/seq-01-hire.puml": "f48cf301d78a42fbe7b931b9c526afc525b9e11992856abea68610c51e7fbbd9",
   "source/idm-joiner-docs/04_integrations/diagrams/seq-02-abs-failure.puml": "7f475c1abac4f8fbd36c9c60329fb047056193f445c594351b08d134488a4773",
   "source/idm-joiner-docs/04_integrations/diagrams/seq-03-hire-cancelled.puml": "b307cfc8f8869d35407a3fe56a93d1df129f5e9c6415a0dd5e73718076f9a0d6",
-  "source/idm-joiner-docs/04_integrations/diagrams/seq-04-access-request.puml": "0dca29ccd76fc7a36bb3d35b897410cac7a54757f592b6e844a8d21c06d9b18b"
+  "source/idm-joiner-docs/04_integrations/diagrams/seq-04-access-request.puml": "0dca29ccd76fc7a36bb3d35b897410cac7a54757f592b6e844a8d21c06d9b18b",
+  "src/diagrams/uml/activity-activation.puml": "27d5c74c1537f332324abaf1048f2c677b629e8b3eeaa7ae10fdfbc1c1cea6b5",
+  "src/diagrams/uml/activity-login.puml": "9a78990fbccd038ddef439c25defe3fadca671a137780e9fef6962c4261e9940",
+  "src/diagrams/uml/component-idm.puml": "4cba88807b1d5991b13a379d6c5a4c76d49155ef666bf365c3d21ec56d3574d0",
+  "src/diagrams/uml/deployment-idm.puml": "b9670d4c21e909db6298e78220ac4ae993185c457af7d1f93cf2d5f4b05de300",
+  "src/diagrams/uml/use-case-notation.puml": "bb1c2d53a8fd18deb0a02e73502cbfb0eeeb41aa3243ed84ec91c260fd5a1562"
 }
