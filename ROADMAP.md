@@ -17,7 +17,7 @@
 - [x] Проверки: starlight-links-validator, `check-offline.mjs`
 - [x] Эталонная страница **BPMN 2.0** + банк вопросов по BPMN
 - [x] CLAUDE.md, ROADMAP.md, README.md, TODO-CHECK.md, шаблон страницы
-- [ ] Фидбэк пользователя по эталонной странице
+- [x] Фидбэк пользователя: всё устраивает; тёмная тема по умолчанию
 
 ## Этап 2. Кейс IDM-JOINER
 - [ ] `scripts/import-case.mjs`: все 24 .md → MDX без сокращений, пути → ссылки, ID → якоря

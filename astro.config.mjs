@@ -35,6 +35,7 @@ export default defineConfig({
       ],
       components: {
         Head: './src/components/overrides/Head.astro',
+        ThemeProvider: './src/components/overrides/ThemeProvider.astro',
         PageTitle: './src/components/overrides/PageTitle.astro',
       },
       sidebar: [{ label: 'Главная', link: '/' }, ...sidebar],
