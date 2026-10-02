@@ -1,0 +1,161 @@
+---
+title: SOAP, WSDL, XSD
+description: SOAP для аналитика — конверт, заголовок и тело, SOAP Fault; WSDL как контракт сервиса; XSD как схема данных; когда SOAP встречается и чем отличается от REST.
+trackProgress: true
+sidebar:
+  order: 4
+  label: SOAP, WSDL, XSD
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import InterviewQuestions from '../../../components/InterviewQuestions.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+**SOAP** — протокол обмена **XML-сообщениями**: конверт (`Envelope`) с необязательным заголовком (`Header`) и телом (`Body`); ошибки — элементом `Fault`. Обычно передаётся по HTTP методом POST.
+**WSDL** — контракт веб-сервиса: какие операции есть, какие сообщения они принимают и возвращают, где сервис находится. **XSD** — схема XML: типы, обязательность, ограничения.
+SOAP строже и тяжелее REST, но широко живёт в банках, госсистемах и интеграциях с крупными вендорами.
+
+</Brief>
+
+## Когда применять
+
+| Встречается / уместен | Не нужно / лучше другое |
+|---|---|
+| Интеграция с существующими SOAP-сервисами (АБС, госсервисы, вендорские системы) | Новый API для веба и мобильных клиентов → REST |
+| Требуются стандарты WS-* (WS-Security, подписи на уровне сообщения) | Внутренние высоконагруженные вызовы → gRPC |
+| Строгий контракт с генерацией клиентов — обязательное требование партнёра | — |
+
+## Как делать
+
+Аналитик чаще **читает** WSDL чужого сервиса, чем пишет свой:
+
+<Steps>
+
+1. **Найдите операции** (в WSDL 1.1 — `portType` / `operation`) и их входные и выходные сообщения.
+
+2. **Найдите типы** — XSD в разделе `types` или подключённые файлы: обязательные поля (`minOccurs`), повторения (`maxOccurs`), ограничения (`pattern`, `maxLength`, перечисления).
+
+3. **Найдите адрес и привязку** (`binding`, `service`): версия SOAP, стиль (обычно document/literal).
+
+4. **Ошибки:** какие `Fault` описаны, какие коды и детали в них.
+
+5. **Безопасность:** транспорт (TLS, mTLS) и/или WS-Security (подпись, шифрование, токены в заголовке).
+
+6. **Проверьте на практике** — SoapUI или Postman по WSDL генерируют запросы; отправьте тестовый запрос на стенд.
+
+7. **Маппинг** — поля XML ↔ поля вашей модели, форматы дат и чисел, пространства имён.
+
+</Steps>
+
+## Нотация
+
+<Tabs>
+<TabItem label="SOAP-сообщение">
+
+```xml title="Запрос SOAP 1.1 (иллюстрация)"
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:usr="http://bank.local/abs/users">
+  <soapenv:Header>
+    <!-- служебное: безопасность, идентификатор запроса -->
+  </soapenv:Header>
+  <soapenv:Body>
+    <usr:CreateUserRequest>
+      <usr:login>IVANOV.AP</usr:login>
+      <usr:branchCode>066</usr:branchCode>
+    </usr:CreateUserRequest>
+  </soapenv:Body>
+</soapenv:Envelope>
+```
+
+```xml title="Ошибка: SOAP Fault (SOAP 1.1)"
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <soapenv:Body>
+    <soapenv:Fault>
+      <faultcode>soapenv:Client</faultcode>
+      <faultstring>Неизвестный код филиала</faultstring>
+      <detail><code>UNKNOWN_BRANCH</code></detail>
+    </soapenv:Fault>
+  </soapenv:Body>
+</soapenv:Envelope>
+```
+
+</TabItem>
+<TabItem label="WSDL 1.1: структура">
+
+| Раздел | Что описывает |
+|---|---|
+| `types` | Типы данных (XSD) |
+| `message` | Сообщения из частей (`part`) |
+| `portType` | Абстрактный интерфейс: операции с входом и выходом |
+| `binding` | Как операции передаются: протокол SOAP, стиль, кодирование |
+| `service` / `port` | Адрес (endpoint) конкретного сервиса |
+
+В WSDL 2.0 `portType` переименован в `interface`, а `port` — в `endpoint`; на практике чаще встречается WSDL 1.1.
+
+</TabItem>
+<TabItem label="XSD: ограничения">
+
+```xml title="Тип с ограничениями (XSD)"
+<xs:complexType name="User">
+  <xs:sequence>
+    <xs:element name="login" minOccurs="1">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:maxLength value="20"/>
+          <xs:pattern value="[A-Z0-9.\-]+"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:element>
+    <xs:element name="middleName" type="xs:string" minOccurs="0"/>
+    <xs:element name="role" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+```
+
+| Конструкция | Смысл |
+|---|---|
+| `minOccurs="0"` | Необязательный элемент |
+| `maxOccurs="unbounded"` | Может повторяться |
+| `xs:restriction` | Ограничения: `maxLength`, `pattern`, `enumeration`, `minInclusive`… |
+| `xs:sequence` / `xs:choice` | Элементы в порядке / один из |
+
+</TabItem>
+</Tabs>
+
+| | SOAP | REST |
+|---|---|---|
+| Природа | Протокол | Архитектурный стиль |
+| Формат | XML | Любой, обычно JSON |
+| Контракт | WSDL + XSD (обязателен на практике) | OpenAPI (желателен) |
+| Транспорт | Обычно HTTP POST (возможны и другие) | HTTP с семантикой методов |
+| Ошибки | `Fault` (часто с HTTP 500) | Коды HTTP + Problem Details |
+| Безопасность | TLS и/или WS-Security на уровне сообщения | TLS, OAuth 2.0, mTLS |
+| Кэширование | Практически нет | GET кэшируется |
+
+## Пример из кейса IDM-JOINER
+
+В кейсе SOAP нет — все синхронные интеграции на REST. Но выбор показателен: у АБС не было API администрирования пользователей, и <CaseRef href="/case/03-architecture/adr/#adr-003" id="ADR-003">ADR-003</CaseRef> решил сделать **REST-адаптер** над внутренними функциями АБС. Во многих банках у АБС уже есть SOAP-сервисы — тогда аналитик проектирует маппинг к их WSDL, а адаптер может оборачивать SOAP в REST для остальных систем.
+
+Если интеграция идёт через SOAP, в <CaseRef href="/case/04-integrations/integration-map/" id="Карта">карте интеграций</CaseRef> в колонке «Контракт» указывают WSDL (версию и адрес), а в маппинге — XPath-пути к полям.
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| Не читать XSD, а смотреть только пример запроса | Пропущены ограничения длины, обязательность, перечисления | Ограничения из XSD — в маппинг |
+| Игнорировать пространства имён | «Неизвестный элемент» на стенде | Пространства имён из WSDL |
+| Обрабатывать только HTTP-код | SOAP Fault часто приходит с 500 — бизнес-ошибка выглядит как сбой | Разбирать `Fault` и коды в `detail` |
+| Повторять все ошибки | Повторы бизнес-ошибок бессмысленны | Различать Client / Server Fault и коды |
+| Не согласовать версию WSDL | Изменения вендора ломают интеграцию | Версия контракта в карте интеграций |
+
+## Вопросы на собеседовании
+
+<InterviewQuestions topic="integrations" ids={['int-soap']} />
+
+## Связанные темы
+
+<Related pages={['integrations/rest', 'integrations/grpc', 'integrations/styles']} planned={['Форматы и схемы: JSON, XML, JSON Schema', 'Безопасность: mTLS, SSO, Kerberos', 'Каталог ПО: SoapUI']} />

@@ -1,0 +1,141 @@
+---
+title: GraphQL
+description: GraphQL для аналитика — схема типов, query, mutation, subscription, одна точка входа, ошибки в ответе, проблема N+1, лимиты сложности; когда GraphQL лучше REST и когда хуже.
+trackProgress: true
+sidebar:
+  order: 6
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import InterviewQuestions from '../../../components/InterviewQuestions.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+**GraphQL** — язык запросов к API: клиент сам описывает, **какие поля и связанные объекты** ему нужны, и получает ровно их одним запросом через **одну точку входа**.
+API описывается **схемой типов**; операции — **query** (чтение), **mutation** (изменение), **subscription** (подписка).
+Хорош для фронтендов с разными экранами и агрегации данных из многих источников. Цена — сложнее кэшировать, ограничивать тяжёлые запросы и обрабатывать ошибки.
+
+</Brief>
+
+## Когда применять
+
+| Применять | Не нужно / лучше другое |
+|---|---|
+| Много клиентов (веб, мобильное приложение) с разными наборами полей | Простой CRUD для межсистемной интеграции → REST |
+| Экран собирает данные из многих сущностей и сервисов | Файлы и большие выгрузки → REST / файлы |
+| Быстро меняющийся фронтенд без постоянных доработок бэкенда | Нужно HTTP-кэширование ответов |
+| Шлюз (BFF), объединяющий несколько внутренних API | Команда не готова к лимитам сложности и мониторингу запросов |
+
+## Как делать
+
+<Steps>
+
+1. **Схема типов** — объекты предметной области и связи между ними (как доменная модель).
+
+2. **Query** — точки входа для чтения: по идентификатору, списки с фильтрами и пагинацией.
+
+3. **Mutation** — изменения с явными входными типами (`input`) и результатом.
+
+4. **Ошибки:** что в `errors`, какие коды в `extensions`; частичный результат допустим.
+
+5. **Защита:** лимиты глубины и сложности запроса, пагинация обязательна, права на уровне полей.
+
+6. **Производительность:** решить проблему N+1 (пакетная загрузка связанных объектов).
+
+</Steps>
+
+## Нотация
+
+```graphql title="Схема (SDL) — иллюстрация по модели кейса"
+type Employee {
+  personId: ID!               # ! — обязательное
+  lastName: String!
+  employments: [Employment!]!
+  accounts: [Account!]!
+}
+
+type Employment {
+  hireDate: String!
+  orgUnit: OrgUnit!
+  roles: [BusinessRole!]!
+}
+
+type OrgUnit { code: ID!  name: String!  timezone: String! }
+type BusinessRole { id: ID!  name: String! }
+type Account { systemCode: String!  login: String!  status: AccountStatus! }
+
+enum AccountStatus { PLANNED CREATED_DISABLED ACTIVE FAILED DELETED }
+
+type Query {
+  employee(personId: ID!): Employee
+}
+
+input AccessRequestInput { personId: ID!  entitlementIds: [ID!]!  justification: String! }
+
+type Mutation {
+  createAccessRequest(input: AccessRequestInput!): AccessRequest!
+}
+
+type AccessRequest { id: ID!  status: String! }
+```
+
+```graphql title="Запрос: руководитель смотрит готовность доступов нового сотрудника"
+query {
+  employee(personId: "P-100500") {
+    lastName
+    employments { hireDate orgUnit { name timezone } }
+    accounts { systemCode status }
+  }
+}
+```
+
+```json title="Ответ — ровно запрошенные поля"
+{
+  "data": {
+    "employee": {
+      "lastName": "Иванов",
+      "employments": [{ "hireDate": "2027-03-15", "orgUnit": { "name": "Доп. офис «Екатеринбург-Центр»", "timezone": "Asia/Yekaterinburg" } }],
+      "accounts": [
+        { "systemCode": "AD", "status": "CREATED_DISABLED" },
+        { "systemCode": "ABS", "status": "FAILED" }
+      ]
+    }
+  }
+}
+```
+
+| | REST | GraphQL |
+|---|---|---|
+| Точки входа | Много ресурсов | Одна (`/graphql`) |
+| Состав ответа | Определяет сервер | Определяет клиент |
+| Лишние / недостающие данные | Частые (over- / under-fetching) | Нет |
+| Ошибки | Коды HTTP | Обычно 200 + поле `errors`, возможен частичный результат |
+| HTTP-кэширование | Естественное для GET | Сложнее |
+| Контракт | OpenAPI | Схема SDL, интроспекция |
+
+## Пример из кейса IDM-JOINER
+
+В кейсе GraphQL нет. Пример выше показывает, где он уместен: **портал IdM** — руководителю на одном экране нужны сотрудник, его трудоустройства, подразделение и статусы учётных записей (<CaseRef href="/case/02-requirements/functional-requirements/#fr-23" id="FR-23">FR-23</CaseRef>). В REST это несколько запросов или специальный «агрегирующий» ресурс.
+
+Интеграции кейса (АБС, ServiceDesk, SMS) остаются на REST: это операции «сделай», а не гибкие выборки данных.
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| Нет лимитов глубины и сложности | Один запрос кладёт сервер | Лимиты, таймауты, стоимость запроса |
+| Проблема N+1 | Сотни запросов в БД на один запрос клиента | Пакетная загрузка связанных объектов |
+| Мониторинг по HTTP-кодам | Ошибки при коде 200 не видны | Мониторинг поля `errors` |
+| Списки без пагинации | Огромные ответы | Пагинация (часто — курсорная) |
+| GraphQL для межсистемных команд | Лишняя сложность | REST / сообщения |
+
+## Вопросы на собеседовании
+
+<InterviewQuestions topic="integrations" ids={['int-graphql']} />
+
+## Связанные темы
+
+<Related pages={['integrations/rest', 'integrations/grpc', 'integrations/rest-design']} />

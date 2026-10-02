@@ -11,3 +11,4 @@
 | req-02 | `requirements/acceptance-criteria` | Русские ключевые слова Gherkin и их синонимы | cucumber/gherkin, gherkin-languages.json |
 | diag-01 | `diagrams/dfd` | Различия начертания элементов в нотациях Йордона — ДеМарко и Гейна — Сарсона | Учебники по структурному анализу |
 | howto-01 | `diagram-howto/index` | Названия библиотек фигур draw.io (UML, BPMN, Entity Relation, C4, DFD) и наличие вставки Mermaid / PlantUML-текста в актуальной версии | draw.io, документация diagrams.net |
+| int-01 | `integrations/rest-design` | Статус документа IETF о заголовке Idempotency-Key (черновик или RFC) | datatracker.ietf.org |
