@@ -1,0 +1,47 @@
+---
+/** Таблица всех исходных файлов кейса с кнопками скачивания. Список строится из source/ на сборке. */
+import { readdir, stat } from 'node:fs/promises';
+import { join, relative, resolve, sep } from 'node:path';
+import { CASE_LAYERS } from '../../case.mjs';
+
+const ROOT = resolve('source/idm-joiner-docs');
+
+async function walk(dir: string): Promise<string[]> {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const nested = await Promise.all(entries.map((e) => (e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)])));
+  return nested.flat();
+}
+
+const kind = (f: string) =>
+  f.endsWith('.md') ? 'Документ' : f.endsWith('.bpmn') ? 'BPMN' : f.endsWith('.svg') ? 'SVG-превью' : f.endsWith('.puml') ? 'PlantUML' : /openapi/.test(f) ? 'OpenAPI' : /asyncapi/.test(f) ? 'AsyncAPI' : 'Файл';
+
+const files = await Promise.all(
+  (await walk(ROOT)).map(async (abs) => {
+    const rel = relative(ROOT, abs).split(sep).join('/');
+    return { rel, size: (await stat(abs)).size, kind: kind(rel), layer: CASE_LAYERS.find((l) => rel.startsWith(`${l.source}/`))?.label ?? 'Корень' };
+  }),
+);
+files.sort((a, b) => a.rel.localeCompare(b.rel));
+const kb = (n: number) => `${Math.max(1, Math.round(n / 1024))} КБ`;
+---
+
+<table>
+  <thead>
+    <tr><th>Файл</th><th>Тип</th><th>Слой</th><th>Размер</th><th></th></tr>
+  </thead>
+  <tbody>
+    {
+      files.map((f) => (
+        <tr>
+          <td><code>{f.rel}</code></td>
+          <td>{f.kind}</td>
+          <td>{f.layer}</td>
+          <td>{kb(f.size)}</td>
+          <td>
+            <a class="sa-btn" href={`/case-files/idm-joiner-docs/${f.rel}`} download={f.rel.split('/').pop()}>Скачать</a>
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

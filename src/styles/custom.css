@@ -541,3 +541,179 @@ a.home-card:hover {
   bottom: 0.2rem;
   border-inline-start: 2px solid var(--sa-border);
 }
+
+/* ---------- Просмотрщик OpenAPI (Redoc) ---------- */
+/* Страница со спецификацией шире обычной: Redoc нужно место под три колонки */
+:root:has(.openapi-viewer) {
+  --sl-content-width: 100%;
+}
+.openapi-viewer {
+  margin-block: 1rem 2rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  overflow: hidden;
+}
+.openapi-viewer__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--sa-surface);
+  border-bottom: 1px solid var(--sa-border);
+}
+.openapi-viewer__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-white);
+}
+/* Redoc рассчитан на светлый фон — даём ему светлую подложку в обеих темах */
+.openapi-viewer__body {
+  min-height: 12rem;
+  background: #fff;
+  color: #333;
+}
+.openapi-viewer__status {
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  color: #444;
+}
+
+/* ---------- Просмотрщик AsyncAPI ---------- */
+.aa {
+  display: grid;
+  gap: 1.25rem;
+}
+.aa h3 {
+  margin: 0.5rem 0 0.6rem;
+  font-size: var(--sl-text-h4);
+  color: var(--sl-color-white);
+}
+.aa h4 {
+  margin: 0.9rem 0 0.4rem;
+  font-size: var(--sl-text-base);
+  color: var(--sl-color-white);
+}
+.aa p {
+  margin: 0.3rem 0;
+}
+.aa-title {
+  margin: 0;
+  font-size: var(--sl-text-h3);
+  color: var(--sl-color-white);
+}
+.aa-meta,
+.aa-small {
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+.aa code {
+  margin-inline-end: 0.25rem;
+  padding: 0.05rem 0.3rem;
+  font-family: var(--sl-font-mono);
+  font-size: 0.85em;
+  border-radius: 0.25rem;
+  background: var(--sl-color-gray-6);
+}
+.aa-card {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  background: var(--sa-surface);
+}
+.aa-card + .aa-card {
+  margin-top: 0.6rem;
+}
+.aa-card-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--sl-color-white);
+}
+.aa-badge {
+  padding: 0.05rem 0.5rem;
+  font-size: var(--sl-text-xs);
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+.aa-badge--send {
+  color: var(--sl-color-accent-high);
+}
+.aa-badge--receive {
+  color: var(--sa-warn);
+}
+.aa-table-wrap {
+  overflow-x: auto;
+}
+.aa-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--sl-text-sm);
+}
+.aa-table th,
+.aa-table td {
+  padding: 0.4rem 0.6rem;
+  text-align: start;
+  vertical-align: top;
+  border-bottom: 1px solid var(--sa-border);
+}
+.aa-table th {
+  white-space: nowrap;
+  color: var(--sl-color-white);
+}
+.aa-req {
+  color: var(--sa-warn);
+  font-weight: 700;
+}
+.aa-ref {
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-xs);
+}
+.aa-desc > :first-child {
+  margin-top: 0;
+}
+.aa-desc > :last-child {
+  margin-bottom: 0;
+}
+.aa-constraints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.8rem;
+  margin-top: 0.2rem;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+}
+.aa pre {
+  margin: 0.4rem 0 0;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-xs);
+  border-radius: 0.4rem;
+  background: var(--sl-color-gray-6);
+}
+.aa details > summary {
+  cursor: pointer;
+  font-size: var(--sl-text-sm);
+}
+.aa-status {
+  padding: 1rem;
+  color: var(--sl-color-gray-3);
+}
+
+/* ---------- Кейс: ID артефактов не переносятся по дефису ---------- */
+.sl-markdown-content td:has(> .case-anchor),
+.sl-markdown-content td a:not(:has(code)) {
+  white-space: nowrap;
+}
+.case-anchor {
+  scroll-margin-top: calc(var(--sl-nav-height) + 1rem);
+}
+.sl-markdown-content tr:has(.case-anchor:target) {
+  background: var(--sl-color-accent-low);
+}

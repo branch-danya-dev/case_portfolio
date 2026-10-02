@@ -12,7 +12,7 @@ const sidebar = sections
   .map((s) => ({
     label: s.label,
     collapsed: s.collapsed ?? false,
-    items: [{ autogenerate: { directory: s.id } }],
+    items: s.sidebar ?? [{ autogenerate: { directory: s.id } }],
   }));
 
 export default defineConfig({

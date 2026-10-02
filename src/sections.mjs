@@ -1,9 +1,10 @@
 // Единый список разделов: из него строятся сайдбар (astro.config.mjs) и карточки на главной.
 // ready: false — раздел ещё не написан. Он не попадает в сайдбар, а на главной
 // показывается как «в работе». Так в навигации не бывает битых ссылок.
-// Порядок здесь = порядок в сайдбаре.
+// Порядок здесь = порядок в сайдбаре. sidebar — свои элементы вместо автогенерации по папке.
+import { caseSidebar } from './case.mjs';
 
-/** @typedef {{ id: string, label: string, description: string, icon: string, ready: boolean, collapsed?: boolean, kind?: 'topic' | 'case' | 'practice' | 'tools' | 'reference' }} Section */
+/** @typedef {{ id: string, label: string, description: string, icon: string, ready: boolean, collapsed?: boolean, sidebar?: any[], kind?: 'topic' | 'case' | 'practice' | 'tools' | 'reference' }} Section */
 
 /** @type {Section[]} */
 export const sections = [
@@ -21,7 +22,7 @@ export const sections = [
   { id: 'methodologies', label: 'Методологии', description: 'Waterfall, Scrum, Kanban, гибриды и место аналитика в каждой', icon: 'clock', ready: false, kind: 'topic' },
   { id: 'testing', label: 'Тестирование для аналитика', description: 'Виды тестирования, тест-дизайн, ПМИ, UAT', icon: 'approve-check', ready: false, kind: 'topic' },
   { id: 'software', label: 'Каталог ПО', description: 'Jira, Confluence, draw.io, Camunda Modeler, Postman, DBeaver и другие: что, когда, зачем', icon: 'desktop', ready: false, kind: 'reference' },
-  { id: 'case', label: 'Кейс IDM-JOINER', description: 'Полный учебный проект: от устава до тест-кейсов, с диаграммами и контрактами', icon: 'star', ready: false, collapsed: true, kind: 'case' },
+  { id: 'case', label: 'Кейс IDM-JOINER', description: 'Полный учебный проект: от устава до тест-кейсов, с диаграммами и контрактами', icon: 'star', ready: true, collapsed: true, kind: 'case', sidebar: caseSidebar },
   { id: 'interview', label: 'Собеседование', description: 'Вопросы с ответами по темам и практические задачи', icon: 'question-circle', ready: false, kind: 'practice' },
   { id: 'tools', label: 'Инструменты', description: 'Генераторы, песочницы, калькуляторы, тренажёры — всё работает в браузере', icon: 'setting', ready: false, kind: 'tools' },
   { id: 'cheatsheets', label: 'Шпаргалки для печати', description: 'Каждый раздел на 1–2 листах A4', icon: 'add-document', ready: false, collapsed: true, kind: 'reference' },

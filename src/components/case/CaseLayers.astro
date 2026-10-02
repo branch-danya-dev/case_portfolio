@@ -1,0 +1,68 @@
+---
+/** Навигация по слоям кейса: карточка на слой со списком документов. */
+import { getCollection } from 'astro:content';
+import { CASE_LAYERS } from '../../case.mjs';
+
+const docs = await getCollection('docs', (e) => e.id.startsWith('case/'));
+const layers = CASE_LAYERS.map((l) => ({
+  ...l,
+  pages: docs
+    .filter((d) => d.id.startsWith(`case/${l.dir}/`))
+    .sort((a, b) => (a.data.sidebar?.order ?? 99) - (b.data.sidebar?.order ?? 99))
+    .map((d) => ({ href: `/${d.id}/`, label: d.data.sidebar?.label ?? d.data.title })),
+}));
+---
+
+<div class="case-layers not-content">
+  {
+    layers.map((l) => (
+      <section class="case-layer">
+        <h3 class="case-layer__title">{l.label}</h3>
+        <p class="case-layer__q">{l.question}</p>
+        <ul>
+          {l.pages.map((p) => (
+            <li>
+              <a href={p.href}>{p.label}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+<p class="case-layers__more">
+  Также: <a href="/case/cheatsheet/">шпаргалка кейса</a> · <a href="/case/diagrams/">все диаграммы</a> · <a href="/case/downloads/">скачать файлы</a>
+</p>
+
+<style>
+  .case-layers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.9rem;
+    margin-block: 1rem;
+  }
+  .case-layer {
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--sa-border);
+    border-radius: var(--sa-radius);
+    background: var(--sa-surface);
+  }
+  .case-layer__title {
+    margin: 0;
+    font-size: var(--sl-text-base);
+    color: var(--sl-color-white);
+  }
+  .case-layer__q {
+    margin: 0.25rem 0 0.5rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+  .case-layer ul {
+    margin: 0;
+    padding-inline-start: 1.1rem;
+    font-size: var(--sl-text-sm);
+  }
+  .case-layers__more {
+    font-size: var(--sl-text-sm);
+  }
+</style>

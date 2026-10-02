@@ -1,0 +1,39 @@
+---
+/**
+ * Просмотрщик OpenAPI на Redoc (только чтение, без «Try it out» и без сетевых запросов).
+ * Страница с этим компонентом автоматически становится широкой (см. custom.css → :has(.openapi-viewer)).
+ */
+interface Props {
+  /** URL спецификации на этом сайте (.yaml / .json). */
+  src: string;
+  title: string;
+}
+const { src, title } = Astro.props;
+---
+
+<div class="openapi-viewer not-content" data-src={src}>
+  <div class="openapi-viewer__head">
+    <p class="openapi-viewer__title">{title}</p>
+    <a class="sa-btn" href={src} download={src.split('/').pop()}>Скачать спецификацию</a>
+  </div>
+  <div class="openapi-viewer__body">
+    <p class="openapi-viewer__status">Загружаю спецификацию…</p>
+  </div>
+</div>
+
+<script>
+  import { renderRedoc } from '../lib/redoc';
+
+  document.querySelectorAll<HTMLElement>('.openapi-viewer[data-src]').forEach(async (root) => {
+    const body = root.querySelector<HTMLElement>('.openapi-viewer__body')!;
+    try {
+      await renderRedoc(root.dataset.src!, body);
+    } catch (e) {
+      body.innerHTML = '';
+      const p = document.createElement('p');
+      p.className = 'openapi-viewer__status';
+      p.textContent = `Не удалось открыть спецификацию: ${(e as Error).message ?? e}`;
+      body.append(p);
+    }
+  });
+</script>

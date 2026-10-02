@@ -1,0 +1,24 @@
+---
+title: "API: кадровые события (AsyncAPI)"
+description: Контракт кадровых событий HRMS из кейса IDM-JOINER в формате AsyncAPI 3.0 — топики Kafka, сообщение EmployeeEvent, схема, примеры.
+sidebar:
+  order: 12
+  label: "API: кадровые события"
+---
+
+import CaseSourceBar from '../../../../components/case/CaseSourceBar.astro';
+import AsyncApiViewer from '../../../../components/AsyncApiViewer.tsx';
+
+<CaseSourceBar file="04_integrations/api/hr-events.asyncapi.yaml" />
+
+Контракт [INT-01](/case/04-integrations/integration-map/#int-01): HRMS публикует события о приёме в Kafka, IdM их получает. Почему Kafka, а не REST, — [ADR-001](/case/03-architecture/adr/#adr-001).
+
+На что посмотреть при разборе:
+
+- **ключ сообщения `personId`** — все события одного человека попадают в одну партицию и приходят по порядку;
+- **`eventId`** — ключ идемпотентности: доставка at-least-once, поэтому получатель обязан игнорировать повторы ([FR-03](/case/02-requirements/functional-requirements/#fr-03));
+- **версия схемы в имени топика** (`.v1`) — несовместимые изменения идут в новый топик;
+- **DLQ** — отдельный канал для событий, не прошедших валидацию ([FR-02](/case/02-requirements/functional-requirements/#fr-02));
+- **условные правила** `if / then` в схеме: для `HIRE` и `HIRE_CHANGED` блок `person` обязателен, для `HIRE_CANCELLED` — нет.
+
+<AsyncApiViewer client:visible src="/case-files/idm-joiner-docs/04_integrations/api/hr-events.asyncapi.yaml" />

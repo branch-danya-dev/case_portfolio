@@ -1,0 +1,19 @@
+---
+title: "API: IdM API (OpenAPI)"
+description: Спецификация публичного API ядра IdM из кейса IDM-JOINER во встроенном просмотрщике — сотрудники, каталог, заявки, ручные задачи.
+tableOfContents: false
+sidebar:
+  order: 10
+  label: "API: IdM API"
+---
+
+import CaseSourceBar from '../../../../components/case/CaseSourceBar.astro';
+import OpenApiViewer from '../../../../components/OpenApiViewer.astro';
+
+<CaseSourceBar file="04_integrations/api/idm-api.openapi.yaml" />
+
+Публичный API ядра IdM: доступы сотрудника с основаниями, каталог полномочий, заявки на доступ и решения по ним, закрытие ручных задач (webhook от ServiceDesk, [INT-06](/case/04-integrations/integration-map/#int-06)). Ошибки — в формате RFC 7807 (`application/problem+json`).
+
+На что посмотреть при разборе: как описаны ошибки и коды ответов, какие параметры у списков, где нужен ключ идемпотентности, как схемы переиспользуются через `components/schemas`.
+
+<OpenApiViewer src="/case-files/idm-joiner-docs/04_integrations/api/idm-api.openapi.yaml" title="idm-api.openapi.yaml · OpenAPI 3.0.3" />

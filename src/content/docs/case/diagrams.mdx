@@ -1,0 +1,105 @@
+---
+title: Все диаграммы кейса
+description: Все диаграммы IDM-JOINER на одной странице — BPMN AS-IS и TO-BE, use case, C4, ER, статусные модели и sequence — с исходниками для скачивания.
+sidebar:
+  order: 90
+---
+
+import BpmnViewer from '../../../components/BpmnViewer.tsx';
+import PlantUmlDiagram from '../../../components/PlantUmlDiagram.astro';
+
+Все 14 диаграмм кейса. BPMN открываются во встроенном просмотрщике, PlantUML отрисованы в SVG на этапе сборки. Под каждой диаграммой — исходник и кнопки скачивания. Порядок — как в [маршруте чтения](/case/cheatsheet/#1-как-читать-архив): от процесса к интеграциям.
+
+## Бизнес-процессы (BPMN)
+
+<span id="as-is" />
+
+### AS-IS
+
+Документ: [AS-IS](/case/01-business/as-is/).
+
+<BpmnViewer client:visible src="/case-files/idm-joiner-docs/01_business/diagrams/as-is.bpmn" previewSrc="/case-files/idm-joiner-docs/01_business/diagrams/as-is.svg" title="as-is.bpmn — текущий процесс" height={480} />
+
+<span id="to-be" />
+
+### TO-BE
+
+Документ: [TO-BE](/case/01-business/to-be/).
+
+<BpmnViewer client:visible src="/case-files/idm-joiner-docs/01_business/diagrams/to-be.bpmn" previewSrc="/case-files/idm-joiner-docs/01_business/diagrams/to-be.svg" title="to-be.bpmn — целевой процесс" height={480} />
+
+## Требования
+
+<span id="use-case" />
+
+### Use case
+
+Документ: [Use cases](/case/02-requirements/use-cases/).
+
+<PlantUmlDiagram file="02_requirements/diagrams/use-case.puml" title="use-case.puml — варианты использования IdM" />
+
+## Архитектура
+
+<span id="c4-context" />
+
+### C4, уровень 1: контекст
+
+Документ: [Контекст системы](/case/03-architecture/context/).
+
+<PlantUmlDiagram file="03_architecture/diagrams/c4-context.puml" title="c4-context.puml" />
+
+<span id="c4-container" />
+
+### C4, уровень 2: контейнеры
+
+Документ: [Контейнеры решения](/case/03-architecture/containers/).
+
+<PlantUmlDiagram file="03_architecture/diagrams/c4-container.puml" title="c4-container.puml" />
+
+<span id="er-model" />
+
+### ER-модель
+
+Документ: [Логическая модель данных](/case/03-architecture/data-model/).
+
+<PlantUmlDiagram file="03_architecture/diagrams/er-model.puml" title="er-model.puml" />
+
+### Статусные модели
+
+Документ: [Статусные модели](/case/03-architecture/state-models/).
+
+<span id="state-identity" />
+
+<PlantUmlDiagram file="03_architecture/diagrams/state-identity.puml" title="state-identity.puml — идентичность" />
+
+<span id="state-account" />
+
+<PlantUmlDiagram file="03_architecture/diagrams/state-account.puml" title="state-account.puml — учётная запись" />
+
+<span id="state-access-request" />
+
+<PlantUmlDiagram file="03_architecture/diagrams/state-access-request.puml" title="state-access-request.puml — заявка" />
+
+<span id="state-provisioning-task" />
+
+<PlantUmlDiagram file="03_architecture/diagrams/state-provisioning-task.puml" title="state-provisioning-task.puml — задача провижининга" />
+
+## Интеграции (sequence)
+
+Документ: [Сценарии взаимодействия](/case/04-integrations/scenarios/).
+
+<span id="seq-01-hire" />
+
+<PlantUmlDiagram file="04_integrations/diagrams/seq-01-hire.puml" title="seq-01-hire.puml — SEQ-01, приём нового сотрудника" />
+
+<span id="seq-02-abs-failure" />
+
+<PlantUmlDiagram file="04_integrations/diagrams/seq-02-abs-failure.puml" title="seq-02-abs-failure.puml — SEQ-02, сбой АБС" />
+
+<span id="seq-03-hire-cancelled" />
+
+<PlantUmlDiagram file="04_integrations/diagrams/seq-03-hire-cancelled.puml" title="seq-03-hire-cancelled.puml — SEQ-03, отмена приёма" />
+
+<span id="seq-04-access-request" />
+
+<PlantUmlDiagram file="04_integrations/diagrams/seq-04-access-request.puml" title="seq-04-access-request.puml — SEQ-04, заявка на доступ" />

@@ -1,0 +1,41 @@
+---
+/** Плашка над документом кейса: слой, путь к исходнику, кнопка «Скачать .md». */
+import { CASE_LAYERS } from '../../case.mjs';
+
+interface Props {
+  /** Путь относительно source/idm-joiner-docs, например "01_business/01_as-is.md". */
+  file: string;
+}
+const { file } = Astro.props;
+const layer = CASE_LAYERS.find((l) => file.startsWith(`${l.source}/`));
+const href = `/case-files/idm-joiner-docs/${file}`;
+---
+
+<div class="case-source not-content">
+  <span class="case-source__layer">{layer ? layer.label : 'Кейс IDM-JOINER'}</span>
+  <span class="case-source__file">Исходник: <code>{file}</code></span>
+  <a class="sa-btn" href={href} download={file.split('/').pop()}>Скачать .md</a>
+</div>
+
+<style>
+  .case-source {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    margin-block: 0 1.5rem;
+    padding: 0.55rem 0.9rem;
+    font-size: var(--sl-text-sm);
+    border: 1px solid var(--sa-border);
+    border-radius: var(--sa-radius);
+    background: var(--sa-surface);
+  }
+  .case-source__layer {
+    font-weight: 600;
+    color: var(--sl-color-accent-high);
+  }
+  .case-source__file {
+    flex: 1;
+    color: var(--sl-color-gray-3);
+  }
+</style>

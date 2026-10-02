@@ -1,0 +1,28 @@
+---
+title: Скачать файлы кейса
+description: Исходные файлы IDM-JOINER — Markdown, BPMN, PlantUML, OpenAPI, AsyncAPI — по одному или одним архивом.
+sidebar:
+  order: 91
+---
+
+import DownloadButton from '../../../components/DownloadButton.astro';
+import CaseFileList from '../../../components/case/CaseFileList.astro';
+
+Весь комплект одним архивом — так же, как он лежит в репозитории, со структурой папок `00_project` … `07_testing`:
+
+<DownloadButton href="/case-files/idm-joiner-docs.zip">Скачать idm-joiner-docs.zip</DownloadButton>
+
+## Чем открывать
+
+| Формат | Инструменты |
+|---|---|
+| `.md` | VS Code, Obsidian, Typora, GitHub / GitLab, импорт в Confluence |
+| `.bpmn` | Camunda Modeler (бесплатный, десктоп), demo.bpmn.io, BPMN-редактор этого сайта |
+| `.svg` | Любой браузер |
+| `.puml` | VS Code + расширение PlantUML, IntelliJ IDEA, plantuml.com, макрос PlantUML в Confluence |
+| `*.openapi.yaml` | Postman, Swagger Editor, IntelliJ IDEA, просмотрщик на странице API этого сайта |
+| `*.asyncapi.yaml` | AsyncAPI Studio, просмотрщик на странице API этого сайта |
+
+## Все файлы
+
+<CaseFileList />

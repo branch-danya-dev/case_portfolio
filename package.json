@@ -7,7 +7,8 @@
     "dev": "npm run prepare:assets && astro dev",
     "build": "npm run prepare:assets && astro build && node scripts/check-offline.mjs",
     "preview": "astro preview",
-    "prepare:assets": "node scripts/sync-case-files.mjs && node scripts/render-plantuml.mjs",
+    "prepare:assets": "node scripts/sync-case-files.mjs && node scripts/vendor-assets.mjs && node scripts/render-plantuml.mjs",
+    "import:case": "node scripts/import-case.mjs",
     "setup:plantuml": "node scripts/setup-plantuml.mjs",
     "render:puml": "node scripts/render-plantuml.mjs --force"
   },
@@ -24,11 +25,19 @@
     "mermaid": "^12.1.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "redoc": "^2.5.4",
     "starlight-links-validator": "^0.26.0",
     "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0"
+    "@types/react-dom": "^19.3.0",
+    "github-slugger": "^2.0.0",
+    "mdast-util-to-string": "^4.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-mdx": "^3.1.1",
+    "remark-parse": "^11.0.0",
+    "remark-stringify": "^11.0.0",
+    "unified": "^11.0.5"
   }
 }

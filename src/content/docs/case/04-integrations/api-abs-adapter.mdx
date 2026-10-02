@@ -1,0 +1,19 @@
+---
+title: "API: адаптер АБС (OpenAPI)"
+description: Спецификация адаптера администрирования пользователей АБС из кейса IDM-JOINER — идемпотентное создание пользователей, роли, ошибки RFC 7807.
+tableOfContents: false
+sidebar:
+  order: 11
+  label: "API: адаптер АБС"
+---
+
+import CaseSourceBar from '../../../../components/case/CaseSourceBar.astro';
+import OpenApiViewer from '../../../../components/OpenApiViewer.astro';
+
+<CaseSourceBar file="04_integrations/api/abs-adapter.openapi.yaml" />
+
+Контракт [INT-05](/case/04-integrations/integration-map/#int-05): IdM создаёт и блокирует пользователей АБС и выдаёт им роли через адаптер, а не напрямую в БД АБС — см. [ADR-003](/case/03-architecture/adr/#adr-003).
+
+Главное в этом контракте — **идемпотентность**. `POST /users` требует заголовок `Idempotency-Key` (IdM передаёт `taskId`). Повтор с тем же ключом возвращает ранее созданного пользователя, а не ошибку «логин занят». Именно на этом построен сценарий сбоя [SEQ-02](/case/04-integrations/scenarios/#seq-02) и политика повторов [FR-16](/case/02-requirements/functional-requirements/#fr-16): 5xx, 429 и таймауты повторяются, остальные 4xx — нет.
+
+<OpenApiViewer src="/case-files/idm-joiner-docs/04_integrations/api/abs-adapter.openapi.yaml" title="abs-adapter.openapi.yaml · OpenAPI 3.0.3" />
