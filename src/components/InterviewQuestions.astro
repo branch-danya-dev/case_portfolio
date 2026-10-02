@@ -61,6 +61,18 @@ const levelLabel = { junior: 'junior', middle: 'middle', senior: 'senior' } as c
 </div>
 
 <script>
+  // Переход по ссылке на конкретный вопрос (#q-…, например из тренажёра) — раскрыть его.
+  const openFromHash = () => {
+    const el = location.hash.startsWith('#q-') ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+    if (el instanceof HTMLDetailsElement) {
+      el.hidden = false;
+      el.open = true;
+      el.scrollIntoView({ block: 'start' });
+    }
+  };
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+
   document.querySelectorAll<HTMLElement>('[data-questions-toolbar]').forEach((bar) => {
     const list = bar.nextElementSibling as HTMLElement;
     const all = [...list.querySelectorAll<HTMLDetailsElement>('details.question')];

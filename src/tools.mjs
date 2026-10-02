@@ -3,7 +3,7 @@ export const tools = [
   { slug: 'tools/artifact-generator', label: 'Генератор шаблонов артефактов', description: 'User story + Gherkin, use case, ФТ, НФТ, ADR, интеграция → Markdown', ready: false },
   { slug: 'tools/mermaid-sandbox', label: 'Песочница Mermaid', description: 'Редактор с живым превью и экспортом в SVG', ready: true },
   { slug: 'tools/http-reference', label: 'Справочник HTTP', description: 'Методы и коды ответов: когда что возвращать', ready: false },
-  { slug: 'tools/interview-trainer', label: 'Тренажёр для собеседования', description: 'Карточки и квиз по банку вопросов, прогресс', ready: false },
+  { slug: 'tools/interview-trainer', label: 'Тренажёр для собеседования', description: 'Карточки и экзамен по банку вопросов, самооценка, прогресс по темам', ready: true },
   { slug: 'tools/availability', label: 'Калькулятор доступности', description: 'Процент ↔ допустимый простой', ready: false },
   { slug: 'tools/requirements-linter', label: 'Линтер требований', description: 'Размытые формулировки, атомарность, INVEST', ready: false },
   { slug: 'tools/prioritization', label: 'Приоритизация', description: 'MoSCoW-доска, RICE, WSJF', ready: false },

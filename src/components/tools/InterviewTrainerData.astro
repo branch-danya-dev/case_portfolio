@@ -1,0 +1,34 @@
+---
+/**
+ * Данные для тренажёра собеседования: все вопросы банка (src/data/questions), ответы уже в HTML.
+ * Отдаёт их React-острову InterviewTrainer — так в браузер не нужно тянуть парсер Markdown.
+ */
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
+import InterviewTrainer, { type TrainerQuestion, type TrainerTopic } from './InterviewTrainer';
+
+const ORDER = ['role', 'elicitation', 'requirements', 'bpmn', 'processes', 'diagrams', 'data', 'integrations', 'architecture', 'documentation', 'methodologies', 'testing', 'software', 'case'];
+const rank = (id: string) => (ORDER.includes(id) ? ORDER.indexOf(id) : 99);
+const collection = (await getCollection('questions')).sort((a, b) => rank(a.id) - rank(b.id));
+
+/** Где вопрос показан на сайте: страница темы в «Собеседовании» (у кейса — своя страница). */
+const topicHref = (id: string, page?: string) => (id === 'case' && page ? `/${page}/` : `/interview/questions/${id}/`);
+
+const topics: TrainerTopic[] = collection.map((t) => ({
+  id: t.id,
+  title: t.data.title,
+  href: topicHref(t.id, t.data.page),
+}));
+
+const questions: TrainerQuestion[] = collection.flatMap((t) =>
+  t.data.items.map((q) => ({
+    id: q.id,
+    topic: t.id,
+    level: q.level,
+    question: q.question,
+    answerHtml: marked.parse(q.answer, { async: false }) as string,
+  })),
+);
+---
+
+<InterviewTrainer client:load topics={topics} questions={questions} />
