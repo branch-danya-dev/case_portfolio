@@ -11,7 +11,7 @@ export const sections = [
   { id: 'start', label: 'Старт', description: 'Как пользоваться сайтом, карта знаний СА, маршрут изучения', icon: 'rocket', ready: true, kind: 'reference' },
   { id: 'role', label: 'Роль и процесс', description: 'СА и БА, жизненный цикл проекта, артефакты по этапам, RACI', icon: 'notes', ready: true, kind: 'topic' },
   { id: 'elicitation', label: 'Выявление требований', description: 'Источники, интервью, воркшопы, стейкхолдеры, конфликты требований', icon: 'comment', ready: true, kind: 'topic' },
-  { id: 'requirements', label: 'Требования', description: 'Уровни, свойства, user stories, use cases, Gherkin, приоритизация, трассировка', icon: 'document', ready: false, kind: 'topic' },
+  { id: 'requirements', label: 'Требования', description: 'Уровни, свойства, user stories, use cases, Gherkin, приоритизация, трассировка', icon: 'document', ready: true, kind: 'topic' },
   { id: 'processes', label: 'Процессы', description: 'BPMN 2.0, AS-IS / TO-BE, gap-анализ', icon: 'random', ready: true, kind: 'topic' },
   { id: 'diagrams', label: 'UML и архитектурные диаграммы', description: 'Use case, activity, sequence, state, class, component, deployment, C4, DFD', icon: 'analytics', ready: false, kind: 'topic' },
   { id: 'diagram-howto', label: 'Диаграммы: как создавать', description: 'Практикум: алгоритм, синтаксис Mermaid и PlantUML, редакторы, чек-листы, упражнения', icon: 'pencil', ready: false, kind: 'practice' },

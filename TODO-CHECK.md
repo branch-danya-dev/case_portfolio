@@ -7,3 +7,5 @@
 | bpmn-01 | `processes/bpmn` | Какой редакции BPMN соответствует ISO/IEC 19510:2013 (2.0.1 или 2.0.2) и точные даты публикации 2.0.2 | omg.org/spec/BPMN, iso.org (ISO/IEC 19510) |
 | role-01 | `role/sa-vs-ba` | Код и реквизиты профстандарта «Системный аналитик» (06.022), актуальная редакция | profstandart.rosmintrud.ru |
 | role-02 | `role/lifecycle` | Действует ли ГОСТ 34.601-90 или заменён ГОСТ Р 59793-2021; состав стадий в действующей редакции | Росстандарт, тексты стандартов |
+| req-01 | `requirements/quality` | Точный перечень характеристик требования и набора требований в ISO/IEC/IEEE 29148:2018 | Текст стандарта |
+| req-02 | `requirements/acceptance-criteria` | Русские ключевые слова Gherkin и их синонимы | cucumber/gherkin, gherkin-languages.json |

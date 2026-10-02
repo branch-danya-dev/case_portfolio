@@ -169,3 +169,130 @@
   definition: Техника выявления, при которой аналитик наблюдает за реальной работой пользователя, — помогает увидеть шаги, которые люди выполняют «на автомате» и не называют на интервью.
   topic: elicitation
   seeAlso: [elicitation]
+
+- id: business-requirement
+  term: Бизнес-требование (БТ)
+  en: Business requirement
+  definition: Что нужно бизнесу и зачем — без описания реализации и упоминания технологий.
+  topic: requirements
+  seeAlso: [functional-requirement, traceability]
+
+- id: functional-requirement
+  term: Функциональное требование (ФТ)
+  en: Functional requirement
+  definition: Что должна делать система — поведение, атомарное и проверяемое, со ссылкой на БТ.
+  topic: requirements
+  seeAlso: [non-functional-requirement, business-requirement]
+
+- id: non-functional-requirement
+  term: Нефункциональное требование (НФТ)
+  en: Non-functional requirement, quality attribute
+  definition: Насколько хорошо работает система — производительность, надёжность, безопасность, сопровождаемость. Должно быть измеримым.
+  topic: requirements
+  seeAlso: [functional-requirement]
+
+- id: business-rule
+  term: Бизнес-правило
+  en: Business rule
+  definition: Правило бизнеса, которое система должна соблюдать («если…, то…»); ведётся отдельно от ФТ, потому что меняется чаще и используется в нескольких местах.
+  topic: requirements
+  seeAlso: [business-requirement]
+
+- id: user-story
+  term: Пользовательская история
+  en: User story
+  definition: Короткое описание ценности с точки зрения пользователя — «Как <роль>, я хочу <действие>, чтобы <ценность>» плюс критерии приёмки.
+  topic: requirements
+  seeAlso: [invest, acceptance-criteria, epic]
+  notToConfuse: Use case — полное описание взаимодействия с альтернативами.
+
+- id: invest
+  term: INVEST
+  en: Independent, Negotiable, Valuable, Estimable, Small, Testable
+  definition: Критерии хорошей пользовательской истории — независимая, обсуждаемая, ценная, оцениваемая, небольшая, проверяемая.
+  topic: requirements
+  seeAlso: [user-story]
+
+- id: epic
+  term: Эпик
+  en: Epic
+  definition: Крупная цель или функциональность, которая режется на несколько историй и занимает несколько спринтов.
+  topic: requirements
+  seeAlso: [user-story]
+
+- id: use-case
+  term: Вариант использования
+  en: Use case
+  definition: Описание взаимодействия актора с системой ради значимого для актора результата — основной поток, альтернативы, исключения, пред- и постусловия.
+  topic: requirements
+  seeAlso: [user-story]
+
+- id: acceptance-criteria
+  term: Критерии приёмки
+  en: Acceptance criteria
+  definition: Условия, при которых требование или история считаются выполненными; пишутся до разработки и проверяются тестом.
+  topic: requirements
+  seeAlso: [gherkin, user-story]
+
+- id: gherkin
+  term: Gherkin
+  en: Gherkin
+  definition: Формат описания поведения сценариями «Дано / Когда / Тогда» (Given / When / Then), понятный людям и инструментам автотестов.
+  topic: requirements
+  seeAlso: [acceptance-criteria]
+
+- id: moscow
+  term: MoSCoW
+  en: Must, Should, Could, Won't
+  definition: Приоритизация по категориям — обязательно, важно, желательно, не в этот раз.
+  topic: requirements
+  seeAlso: [wsjf, rice]
+
+- id: rice
+  term: RICE
+  en: Reach, Impact, Confidence, Effort
+  definition: Скоринг для приоритизации — (охват × влияние × уверенность) / затраты.
+  topic: requirements
+  seeAlso: [moscow, wsjf]
+
+- id: wsjf
+  term: WSJF
+  en: Weighted Shortest Job First
+  definition: Приоритизация по стоимости задержки — Cost of Delay / Job Size; применяется в SAFe.
+  topic: requirements
+  seeAlso: [moscow, rice]
+
+- id: kano
+  term: Модель Кано
+  en: Kano model
+  definition: Классификация функций по влиянию на удовлетворённость — обязательные, одномерные, привлекательные, безразличные, обратные.
+  topic: requirements
+  seeAlso: [moscow]
+
+- id: traceability
+  term: Трассировка требований
+  en: Requirements traceability
+  definition: Связи между целями, требованиями разных уровней, элементами решения и тестами — для анализа влияния, поиска «сирот» и приёмки.
+  topic: requirements
+  seeAlso: [impact-analysis, change-request]
+
+- id: impact-analysis
+  term: Анализ влияния
+  en: Impact analysis
+  definition: Оценка того, что затронет изменение требования — другие требования, данные, интеграции, тесты, документы, сроки.
+  topic: requirements
+  seeAlso: [traceability, change-request]
+
+- id: change-request
+  term: Запрос на изменение
+  en: Change request (CR)
+  definition: Формальный запрос на изменение согласованного требования или скоупа с анализом влияния и решением владельца.
+  topic: requirements
+  seeAlso: [baseline, impact-analysis]
+
+- id: baseline
+  term: Базовая линия требований
+  en: Requirements baseline
+  definition: Согласованная и зафиксированная версия набора требований, от которой отсчитываются изменения.
+  topic: requirements
+  seeAlso: [change-request]
