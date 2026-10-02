@@ -296,3 +296,25 @@
   definition: Согласованная и зафиксированная версия набора требований, от которой отсчитываются изменения.
   topic: requirements
   seeAlso: [change-request]
+
+- id: business-process
+  term: Бизнес-процесс
+  en: Business process
+  definition: Последовательность действий участников, которая по событию-триггеру приводит к результату, ценному для клиента или организации.
+  topic: processes
+  seeAlso: [bpmn, as-is, to-be]
+
+- id: fit-gap
+  term: Fit-gap анализ
+  en: Fit-gap analysis
+  definition: Сравнение требований с возможностями готового продукта; разрывы закрываются настройкой, доработкой, изменением процесса или отказом от требования.
+  topic: processes
+  seeAlso: [gap-analysis]
+  notToConfuse: Gap-анализ сравнивает AS-IS и TO-BE, а не требования и продукт.
+
+- id: process-waste
+  term: Потери в процессе
+  en: Waste (muda)
+  definition: Действия, не добавляющие ценности — ожидание, лишние передачи, переделки, лишние согласования, ручной ввод, поиск информации. Понятие из бережливого производства.
+  topic: processes
+  seeAlso: [as-is]
