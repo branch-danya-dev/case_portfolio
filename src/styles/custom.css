@@ -291,6 +291,28 @@ body {
   border-color: currentColor;
 }
 
+.questions-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-block: 1rem 0.5rem;
+  font-size: var(--sl-text-sm);
+}
+.questions-toolbar__label {
+  font-weight: 600;
+}
+.questions-toolbar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+@media print {
+  .questions-toolbar {
+    display: none;
+  }
+}
+
 /* ---------- Ссылка на артефакт кейса ---------- */
 .case-ref {
   display: inline-flex;

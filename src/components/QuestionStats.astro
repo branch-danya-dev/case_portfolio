@@ -1,0 +1,52 @@
+---
+/** Сводка банка вопросов: тема → число вопросов по уровням → ссылка на страницу темы в разделе «Собеседование». */
+import { getCollection } from 'astro:content';
+
+const ORDER = ['role', 'elicitation', 'requirements', 'bpmn', 'processes', 'diagrams', 'data', 'integrations', 'architecture', 'documentation', 'methodologies', 'testing', 'software', 'case'];
+/** Темы, у которых нет страницы в interview/questions/: ведём на их собственную страницу. */
+const href = (t: { id: string; data: { page?: string } }) =>
+  t.id === 'case' ? `/${t.data.page}/` : `/interview/questions/${t.id}/`;
+const topics = (await getCollection('questions')).sort((a, b) => {
+  const ia = ORDER.indexOf(a.id);
+  const ib = ORDER.indexOf(b.id);
+  return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+});
+const count = (items: { level: string }[], l: string) => items.filter((q) => q.level === l).length;
+const total = topics.reduce((s, t) => s + t.data.items.length, 0);
+---
+
+<table>
+  <thead>
+    <tr>
+      <th>Тема</th>
+      <th>junior</th>
+      <th>middle</th>
+      <th>senior</th>
+      <th>Всего</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      topics.map((t) => (
+        <tr>
+          <td>
+            <a href={href(t)}>{t.data.title}</a>
+          </td>
+          <td>{count(t.data.items, 'junior')}</td>
+          <td>{count(t.data.items, 'middle')}</td>
+          <td>{count(t.data.items, 'senior')}</td>
+          <td>{t.data.items.length}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>Итого</th>
+      <th>{topics.reduce((s, t) => s + count(t.data.items, 'junior'), 0)}</th>
+      <th>{topics.reduce((s, t) => s + count(t.data.items, 'middle'), 0)}</th>
+      <th>{topics.reduce((s, t) => s + count(t.data.items, 'senior'), 0)}</th>
+      <th>{total}</th>
+    </tr>
+  </tfoot>
+</table>

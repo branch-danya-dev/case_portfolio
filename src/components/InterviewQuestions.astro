@@ -10,8 +10,10 @@ interface Props {
   topic: string;
   /** Показать только эти вопросы (по id) и в этом порядке. По умолчанию — все. */
   ids?: string[];
+  /** Панель над списком: фильтр по уровню и «Раскрыть все» (страницы раздела «Собеседование»). */
+  toolbar?: boolean;
 }
-const { topic, ids } = Astro.props;
+const { topic, ids, toolbar = false } = Astro.props;
 
 const entry = await getEntry('questions', topic);
 if (!entry) throw new Error(`<InterviewQuestions>: нет файла src/data/questions/${topic}.yaml`);
@@ -27,10 +29,25 @@ const items = ids
 const levelLabel = { junior: 'junior', middle: 'middle', senior: 'senior' } as const;
 ---
 
+{
+  toolbar && (
+    <div class="questions-toolbar not-content" data-questions-toolbar>
+      <span class="questions-toolbar__label">Уровень:</span>
+      {(['junior', 'middle', 'senior'] as const).map((l) => (
+        <label>
+          <input type="checkbox" value={l} checked /> {l} ({items.filter((q) => q.level === l).length})
+        </label>
+      ))}
+      <button type="button" class="sa-btn" data-expand>Раскрыть все</button>
+      <button type="button" class="sa-btn" data-collapse>Свернуть все</button>
+    </div>
+  )
+}
+
 <div class="questions">
   {
     items.map((q) => (
-      <details class="question" id={`q-${q.id}`}>
+      <details class="question" id={`q-${q.id}`} data-level={q.level}>
         <summary>
           <span class="q-text">{q.question}</span>
           <span class="level-badge" data-level={q.level} title="Уровень вопроса">
@@ -42,3 +59,18 @@ const levelLabel = { junior: 'junior', middle: 'middle', senior: 'senior' } as c
     ))
   }
 </div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-questions-toolbar]').forEach((bar) => {
+    const list = bar.nextElementSibling as HTMLElement;
+    const all = [...list.querySelectorAll<HTMLDetailsElement>('details.question')];
+    const boxes = [...bar.querySelectorAll<HTMLInputElement>('input[type=checkbox]')];
+    const apply = () => {
+      const on = new Set(boxes.filter((b) => b.checked).map((b) => b.value));
+      for (const d of all) d.hidden = !on.has(d.dataset.level!);
+    };
+    boxes.forEach((b) => b.addEventListener('change', apply));
+    bar.querySelector('[data-expand]')!.addEventListener('click', () => all.forEach((d) => !d.hidden && (d.open = true)));
+    bar.querySelector('[data-collapse]')!.addEventListener('click', () => all.forEach((d) => (d.open = false)));
+  });
+</script>

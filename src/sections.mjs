@@ -23,7 +23,11 @@ export const sections = [
   { id: 'testing', label: 'Тестирование для аналитика', description: 'Виды тестирования, тест-дизайн, ПМИ, UAT', icon: 'approve-check', ready: true, kind: 'topic' },
   { id: 'software', label: 'Каталог ПО', description: 'Jira, Confluence, draw.io, Camunda Modeler, Postman, DBeaver и другие: что, когда, зачем', icon: 'desktop', ready: true, kind: 'reference' },
   { id: 'case', label: 'Кейс IDM-JOINER', description: 'Полный учебный проект: от устава до тест-кейсов, с диаграммами и контрактами', icon: 'star', ready: true, collapsed: true, kind: 'case', sidebar: caseSidebar },
-  { id: 'interview', label: 'Собеседование', description: 'Вопросы с ответами по темам и практические задачи', icon: 'question-circle', ready: false, kind: 'practice' },
+  { id: 'interview', label: 'Собеседование', description: 'Вопросы с ответами по темам и практические задачи', icon: 'question-circle', ready: true, kind: 'practice', sidebar: [
+    { label: 'Как готовиться', link: '/interview/' },
+    { label: 'Вопросы по темам', collapsed: true, items: [{ autogenerate: { directory: 'interview/questions' } }] },
+    { label: 'Практические задачи', items: [{ autogenerate: { directory: 'interview/tasks' } }] },
+  ] },
   { id: 'tools', label: 'Инструменты', description: 'Генераторы, песочницы, калькуляторы, тренажёры — всё работает в браузере', icon: 'setting', ready: true, kind: 'tools' },
   { id: 'cheatsheets', label: 'Шпаргалки для печати', description: 'Каждый раздел на 1–2 листах A4', icon: 'add-document', ready: true, collapsed: true, kind: 'reference' },
   { id: 'glossary', label: 'Глоссарий', description: 'Термины с английским оригиналом и фильтром', icon: 'magnifier', ready: false, kind: 'reference' },

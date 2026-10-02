@@ -1,0 +1,209 @@
+---
+title: "Задача: SQL"
+description: SQL-задачи уровня собеседования аналитика на учебной БД кейса IDM-JOINER — JOIN, LEFT JOIN с проверкой отсутствия, GROUP BY и HAVING, оконные функции; решения проверены на учебной БД.
+trackProgress: true
+sidebar:
+  order: 3
+  label: SQL
+---
+
+import Brief from '../../../../components/Brief.astro';
+import Exercise from '../../../../components/Exercise.astro';
+import DownloadButton from '../../../../components/DownloadButton.astro';
+import Related from '../../../../components/Related.astro';
+
+<Brief>
+
+На собеседовании аналитика SQL проверяют на уровне **SELECT с JOIN, агрегатов и подзапросов**, иногда оконных функций. Типичные ловушки: `LEFT JOIN` и проверка `IS NULL`, условие в `WHERE` или `HAVING`, `COUNT(*)` или `COUNT(поле)`, `NULL` в сравнениях.
+Задачи ниже — на учебной БД по модели данных кейса. Решения проверены на этой БД, результаты приведены.
+Проговаривайте ход решения: «какие таблицы нужны → как связаны → какие фильтры → что выводим».
+
+</Brief>
+
+## Схема учебной БД
+
+| Таблица | Что хранит | Ключевые поля |
+|---|---|---|
+| `identity` | Человек | `identity_id`, `person_id`, ФИО, `status` |
+| `employment` | Трудоустройство | `identity_id`, `org_unit_code`, `position_code`, `employment_type`, `hire_date`, `status` |
+| `org_unit` | Подразделение | `org_unit_code`, `name`, `timezone`, `abs_branch_code` |
+| `account` | Учётная запись в системе | `identity_id`, `system_code`, `login`, `status` |
+| `provisioning_task` | Задача провижининга | `account_id`, `operation`, `status`, `attempts` |
+| `role_assignment` → `role_entitlement` → `entitlement` | Роли и полномочия | `employment_id`, `role_id`, `entitlement_id`, `system_code` |
+| `access_request`, `request_item` | Заявки и их позиции | `request_id`, `entitlement_id`, `status` |
+
+<DownloadButton href="/data/case-db.sql">Скачать case-db.sql</DownloadButton>
+
+## Задачи
+
+<Exercise title="1. Кто выходит в марте 2027">
+
+Выведите фамилию, имя, дату выхода, подразделение и его часовой пояс для запланированных приёмов (`employment.status = 'PLANNED'`) с датой выхода в марте 2027. Отсортируйте по дате.
+
+<Fragment slot="solution">
+
+```sql
+SELECT i.last_name, i.first_name, e.hire_date, o.name AS org_unit, o.timezone
+FROM employment e
+JOIN identity i ON i.identity_id = e.identity_id
+JOIN org_unit o ON o.org_unit_code = e.org_unit_code
+WHERE e.status = 'PLANNED'
+  AND e.hire_date BETWEEN '2027-03-01' AND '2027-03-31'
+ORDER BY e.hire_date;
+```
+
+Результат: Иванов (15.03, Екатеринбург-Центр, Asia/Yekaterinburg), Морозова (22.03, Находка, Asia/Vladivostok). Часовой пояс нужен для активации в 07:00 по FR-08.
+
+</Fragment>
+
+</Exercise>
+
+<Exercise title="2. Проблемные задачи провижининга">
+
+Найдите задачи провижининга, которые ушли на ручное исполнение (`MANUAL`) или ждут повтора (`RETRY_WAIT`). Выведите фамилию сотрудника, систему, статус учётной записи, операцию, статус задачи и число попыток.
+
+<Fragment slot="solution">
+
+```sql
+SELECT i.last_name, a.system_code, a.status AS account_status,
+       t.operation, t.status AS task_status, t.attempts
+FROM provisioning_task t
+JOIN account a  ON a.account_id = t.account_id
+JOIN identity i ON i.identity_id = a.identity_id
+WHERE t.status IN ('MANUAL', 'RETRY_WAIT')
+ORDER BY t.status, i.last_name;
+```
+
+Результат: Иванов — ABS, учётная запись FAILED, CREATE, MANUAL, 3 попытки (картина после TC-12); Кузнецов — ABS, ACTIVE, GRANT, RETRY_WAIT, 1 попытка.
+
+</Fragment>
+
+</Exercise>
+
+<Exercise title="3. Приём в подразделение без кода АБС">
+
+Найдите запланированные приёмы в подразделения, у которых не заполнен код филиала АБС (`abs_branch_code`). Почему это важно для интеграции?
+
+<Fragment slot="solution">
+
+```sql
+SELECT i.last_name, e.hire_date, o.org_unit_code, o.name
+FROM employment e
+JOIN identity i ON i.identity_id = e.identity_id
+JOIN org_unit o ON o.org_unit_code = e.org_unit_code
+WHERE e.status = 'PLANNED'
+  AND o.abs_branch_code IS NULL;
+```
+
+Результат: Морозова, 22.03.2027, 2502 «Находка». Без кода филиала пользователя АБС не создать — адаптер вернёт бизнес-ошибку, и по политике повторов FR-16 задача сразу уйдёт в ServiceDesk. Такой запрос — хорошая проверка качества справочника **до** даты создания. Ловушка: `= NULL` вместо `IS NULL` вернёт пустой результат.
+
+</Fragment>
+
+</Exercise>
+
+<Exercise title="4. Нужна АБС, а учётной записи нет">
+
+Найдите сотрудников с запланированным или действующим трудоустройством, у которых по ролям есть полномочия в АБС, но нет учётной записи АБС или она не в статусе `ACTIVE` / `CREATED_DISABLED`.
+
+<Fragment slot="solution">
+
+```sql
+SELECT DISTINCT i.last_name, i.first_name
+FROM employment e
+JOIN identity i          ON i.identity_id = e.identity_id
+JOIN role_assignment ra  ON ra.employment_id = e.employment_id
+JOIN role_entitlement re ON re.role_id = ra.role_id
+JOIN entitlement en      ON en.entitlement_id = re.entitlement_id
+LEFT JOIN account a      ON a.identity_id = e.identity_id AND a.system_code = 'ABS'
+WHERE e.status IN ('PLANNED', 'ACTIVE')
+  AND en.system_code = 'ABS'
+  AND (a.account_id IS NULL OR a.status NOT IN ('ACTIVE', 'CREATED_DISABLED'));
+```
+
+Результат: Иванов (учётная запись АБС FAILED) и Морозова (учётной записи АБС нет — создание ещё не наступило). Ключевой момент — условие `a.system_code = 'ABS'` стоит в `ON`, а не в `WHERE`: иначе `LEFT JOIN` превратится во внутреннее соединение и Морозова пропадёт.
+
+</Fragment>
+
+</Exercise>
+
+<Exercise title="5. Учётные записи по системам">
+
+Для каждой системы посчитайте общее число учётных записей и число активных. Оставьте только системы, где учётных записей больше трёх.
+
+<Fragment slot="solution">
+
+```sql
+SELECT system_code,
+       COUNT(*) AS total,
+       SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) AS active
+FROM account
+GROUP BY system_code
+HAVING COUNT(*) > 3
+ORDER BY total DESC;
+```
+
+Результат: AD — 7 всего, 4 активных; ABS — 4 и 3. Условие на агрегат — в `HAVING`, а не в `WHERE`.
+
+</Fragment>
+
+</Exercise>
+
+<Exercise title="6. Совместители">
+
+Найдите людей, у которых больше одного запланированного или действующего трудоустройства.
+
+<Fragment slot="solution">
+
+```sql
+SELECT i.last_name, i.first_name, COUNT(*) AS employments
+FROM employment e
+JOIN identity i ON i.identity_id = e.identity_id
+WHERE e.status IN ('PLANNED', 'ACTIVE')
+GROUP BY i.identity_id, i.last_name, i.first_name
+HAVING COUNT(*) > 1;
+```
+
+Результат: Петров Олег — 2 (основное место в Владивостоке и совместительство в бухгалтерии). Отсюда в модели разделение `identity` и `employment`: один человек — одна идентичность, но несколько трудоустройств (FR-04, BRL-07).
+
+</Fragment>
+
+</Exercise>
+
+<Exercise title="7. Последний принятый в каждом подразделении">
+
+Для каждого подразделения выведите сотрудника с самой поздней датой выхода (отменённые приёмы не учитывать).
+
+<Fragment slot="solution">
+
+```sql
+SELECT org_unit_code, last_name, hire_date
+FROM (
+  SELECT e.org_unit_code, i.last_name, e.hire_date,
+         ROW_NUMBER() OVER (PARTITION BY e.org_unit_code ORDER BY e.hire_date DESC) AS rn
+  FROM employment e
+  JOIN identity i ON i.identity_id = e.identity_id
+  WHERE e.status <> 'CANCELLED'
+) x
+WHERE rn = 1
+ORDER BY org_unit_code;
+```
+
+Результат: 0001 — Щукина, 0102 — Петров, 1601 — Иванов, 2501 — Петров, 2502 — Морозова. Без оконных функций задачу решают подзапросом с `MAX(hire_date)` по подразделению, но тогда при одинаковых датах вернётся несколько строк.
+
+</Fragment>
+
+</Exercise>
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| `= NULL` | Всегда ложно, пустой результат | `IS NULL` |
+| Условие на правую таблицу `LEFT JOIN` в `WHERE` | Соединение становится внутренним | Условие в `ON` |
+| Фильтр по агрегату в `WHERE` | Ошибка синтаксиса | `HAVING` |
+| Поля в `SELECT` не в `GROUP BY` | Ошибка или случайные значения | Группировать по всем неагрегированным полям |
+| `COUNT(поле)` вместо `COUNT(*)` | `NULL` не считаются | Понимать разницу и выбирать осознанно |
+
+## Связанные темы
+
+<Related pages={['data/sql-select', 'data/sql-joins-aggregates', 'data/sql-subqueries-window', 'case/03-architecture/data-model']} />
