@@ -1,9 +1,14 @@
 ---
+import { getEntry } from 'astro:content';
 import Default from '@astrojs/starlight/components/PageTitle.astro';
 import StudiedToggle from '../StudiedToggle.astro';
 
 const { entry, id } = Astro.locals.starlightRoute;
 const track = (entry.data as { trackProgress?: boolean }).trackProgress;
+
+// Ссылка на печатную шпаргалку раздела, если она есть: cheatsheets/<раздел>
+const section = id.split('/')[0];
+const cheatsheet = track ? await getEntry('docs', `cheatsheets/${section}`) : undefined;
 ---
 
 <Default />
@@ -11,6 +16,11 @@ const track = (entry.data as { trackProgress?: boolean }).trackProgress;
   track && (
     <div class="page-title-row">
       <StudiedToggle slug={id} />
+      {cheatsheet && (
+        <a class="print-link" href={`/cheatsheets/${section}/`}>
+          Шпаргалка раздела для печати
+        </a>
+      )}
     </div>
   )
 }

@@ -59,3 +59,69 @@
   definition: Перечень изменений, нужных для перехода от AS-IS к TO-BE, — в системах, данных, регламентах и организации.
   topic: processes
   seeAlso: [as-is, to-be]
+
+- id: system-analyst
+  term: Системный аналитик (СА)
+  en: System analyst
+  definition: Специалист, который определяет, что должна делать система и как она обменивается данными, — так, чтобы разработка и тестирование поняли это однозначно. Артефакты — ФТ, НФТ, use cases, модель данных, статусы, интеграции, контракты.
+  topic: role
+  seeAlso: [business-analyst, product-owner]
+  notToConfuse: Бизнес-аналитик описывает работу бизнеса, а не поведение системы.
+
+- id: business-analyst
+  term: Бизнес-аналитик (БА)
+  en: Business analyst
+  definition: Специалист, который выясняет, что и зачем нужно бизнесу — процессы, цели, проблемы, бизнес-требования (AS-IS, TO-BE, gap-анализ, БТ).
+  topic: role
+  seeAlso: [system-analyst, as-is, to-be]
+
+- id: product-owner
+  term: Владелец продукта
+  en: Product Owner (PO)
+  definition: Роль Scrum, отвечающая за ценность продукта — владеет бэклогом, определяет порядок работ и принимает результат.
+  topic: role
+  seeAlso: [system-analyst]
+  notToConfuse: Системный аналитик детализирует требования, но не определяет приоритеты.
+
+- id: stakeholder
+  term: Стейкхолдер
+  en: Stakeholder
+  definition: Любой, кто влияет на проект или кого он затрагивает — заказчик, пользователи, владельцы смежных систем, ИБ, аудит.
+  topic: role
+  seeAlso: [raci]
+
+- id: raci
+  term: RACI
+  en: Responsible, Accountable, Consulted, Informed
+  definition: Матрица ответственности «роли × работы» — кто делает (R), кто отвечает и утверждает (A, ровно один в строке), кто консультирует (C), кого информируют (I).
+  topic: role
+  seeAlso: [stakeholder]
+  notToConfuse: RASCI добавляет S (Supportive), DACI предназначена для принятия решений.
+
+- id: artifact
+  term: Артефакт
+  en: Artifact
+  definition: Результат работы на проекте, который можно передать и утвердить — документ, диаграмма, модель, контракт, бэклог.
+  topic: role
+  seeAlso: [raci]
+
+- id: dor
+  term: DoR
+  en: Definition of Ready
+  definition: Критерии готовности задачи к взятию в работу — описание, критерии приёмки, понятные зависимости, оценка.
+  topic: role
+  seeAlso: [dod]
+
+- id: dod
+  term: DoD
+  en: Definition of Done
+  definition: Критерии готовности задачи к закрытию — реализовано, проверено, протестировано, документация обновлена.
+  topic: role
+  seeAlso: [dor]
+
+- id: babok
+  term: BABOK
+  en: A Guide to the Business Analysis Body of Knowledge
+  definition: Свод знаний по бизнес-анализу от IIBA (версия 3). Шесть областей знаний — от планирования бизнес-анализа до оценки решения.
+  topic: role
+  seeAlso: [business-analyst]

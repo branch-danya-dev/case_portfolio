@@ -25,10 +25,31 @@
     --sa-border: #bbb;
   }
 
+  html,
   body {
     background: #fff !important;
     color: #000;
+  }
+  body {
     font-size: 10.5pt;
+  }
+
+  /* Блоки кода при печати — светлые, независимо от темы сайта */
+  .expressive-code .frame,
+  .expressive-code pre {
+    background: #f4f4f4 !important;
+    border-color: #ccc !important;
+    box-shadow: none !important;
+  }
+  .expressive-code pre,
+  .expressive-code pre * {
+    color: #000 !important;
+    font-size: 8pt !important;
+    line-height: 1.35 !important;
+  }
+  .expressive-code .copy,
+  .expressive-code .header::before {
+    display: none !important;
   }
 
   header.header,
@@ -91,5 +112,90 @@
 
   .mermaid-figure.is-rendered .mermaid-code {
     display: none !important;
+  }
+}
+
+/* ---------- Шпаргалки для печати (cheatsheets/) ----------
+   На экране — обычная страница; при печати — плотная вёрстка в две колонки на A4. */
+.cheatsheet h2 {
+  margin-top: 1.5rem;
+  font-size: var(--sl-text-h4);
+}
+.cheatsheet h3 {
+  font-size: var(--sl-text-lg);
+}
+.cheatsheet-meta {
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+
+@media print {
+  @page {
+    margin: 9mm 9mm 10mm;
+  }
+  body:has(.cheatsheet) {
+    font-size: 8.5pt;
+    line-height: 1.3;
+  }
+  body:has(.cheatsheet) h1 {
+    margin: 0 0 2mm;
+    font-size: 14pt;
+  }
+  .cheatsheet {
+    column-count: 2;
+    column-gap: 6mm;
+    column-rule: 0.3pt solid #bbb;
+  }
+  .cheatsheet > section {
+    break-inside: avoid;
+    margin: 0 0 3mm;
+  }
+  .cheatsheet h2 {
+    margin: 0 0 1.5mm;
+    padding-bottom: 0.5mm;
+    font-size: 10pt;
+    border-bottom: 0.6pt solid #000;
+  }
+  .cheatsheet h3 {
+    margin: 2mm 0 1mm;
+    font-size: 9pt;
+  }
+  .cheatsheet p,
+  .cheatsheet ul,
+  .cheatsheet ol {
+    margin: 0 0 1.2mm;
+  }
+  .cheatsheet li {
+    margin: 0;
+  }
+  .cheatsheet ul,
+  .cheatsheet ol {
+    padding-inline-start: 4mm;
+  }
+  .sl-markdown-content .cheatsheet table {
+    width: 100%;
+    font-size: 7.5pt;
+    margin: 0 0 1.5mm;
+  }
+  .sl-markdown-content .cheatsheet :is(th, td) {
+    padding: 0.4mm 1mm;
+  }
+  .sl-markdown-content .cheatsheet th {
+    white-space: normal;
+  }
+  .cheatsheet .expressive-code pre,
+  .cheatsheet .expressive-code pre * {
+    font-size: 7pt !important;
+  }
+  .cheatsheet .expressive-code pre {
+    padding: 1mm 2mm !important;
+  }
+  .cheatsheet-meta,
+  .print-button {
+    display: none !important;
+  }
+  /* Ссылки в шпаргалке — без подчёркивания, чтобы не шуметь */
+  .cheatsheet a {
+    text-decoration: none;
   }
 }

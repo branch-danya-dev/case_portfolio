@@ -8,8 +8,8 @@ import { caseSidebar } from './case.mjs';
 
 /** @type {Section[]} */
 export const sections = [
-  { id: 'start', label: 'Старт', description: 'Как пользоваться сайтом, карта знаний СА, маршрут изучения', icon: 'rocket', ready: false, kind: 'reference' },
-  { id: 'role', label: 'Роль и процесс', description: 'СА и БА, жизненный цикл проекта, артефакты по этапам, RACI', icon: 'notes', ready: false, kind: 'topic' },
+  { id: 'start', label: 'Старт', description: 'Как пользоваться сайтом, карта знаний СА, маршрут изучения', icon: 'rocket', ready: true, kind: 'reference' },
+  { id: 'role', label: 'Роль и процесс', description: 'СА и БА, жизненный цикл проекта, артефакты по этапам, RACI', icon: 'notes', ready: true, kind: 'topic' },
   { id: 'elicitation', label: 'Выявление требований', description: 'Источники, интервью, воркшопы, стейкхолдеры, конфликты требований', icon: 'comment', ready: false, kind: 'topic' },
   { id: 'requirements', label: 'Требования', description: 'Уровни, свойства, user stories, use cases, Gherkin, приоритизация, трассировка', icon: 'document', ready: false, kind: 'topic' },
   { id: 'processes', label: 'Процессы', description: 'BPMN 2.0, AS-IS / TO-BE, gap-анализ', icon: 'random', ready: true, kind: 'topic' },
@@ -25,6 +25,6 @@ export const sections = [
   { id: 'case', label: 'Кейс IDM-JOINER', description: 'Полный учебный проект: от устава до тест-кейсов, с диаграммами и контрактами', icon: 'star', ready: true, collapsed: true, kind: 'case', sidebar: caseSidebar },
   { id: 'interview', label: 'Собеседование', description: 'Вопросы с ответами по темам и практические задачи', icon: 'question-circle', ready: false, kind: 'practice' },
   { id: 'tools', label: 'Инструменты', description: 'Генераторы, песочницы, калькуляторы, тренажёры — всё работает в браузере', icon: 'setting', ready: true, kind: 'tools' },
-  { id: 'cheatsheets', label: 'Шпаргалки для печати', description: 'Каждый раздел на 1–2 листах A4', icon: 'add-document', ready: false, collapsed: true, kind: 'reference' },
+  { id: 'cheatsheets', label: 'Шпаргалки для печати', description: 'Каждый раздел на 1–2 листах A4', icon: 'add-document', ready: true, collapsed: true, kind: 'reference' },
   { id: 'glossary', label: 'Глоссарий', description: 'Термины с английским оригиналом и фильтром', icon: 'magnifier', ready: false, kind: 'reference' },
 ];
