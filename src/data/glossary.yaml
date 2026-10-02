@@ -699,3 +699,31 @@
   definition: Запись об одном архитектурном решении — статус, контекст, варианты, решение, последствия.
   topic: architecture
   seeAlso: [non-functional-requirement]
+
+- id: tz
+  term: Техническое задание (ТЗ)
+  en: Technical specification, statement of work
+  definition: Документ с целями, требованиями к системе, составом работ и порядком приёмки; для автоматизированных систем — по ГОСТ 34.602, часто часть договора.
+  topic: documentation
+  seeAlso: [gost-34]
+
+- id: gost-34
+  term: ГОСТ 34
+  en: GOST 34 series
+  definition: Комплекс стандартов на автоматизированные системы — стадии создания, виды документов и требования к их содержанию, в том числе к ТЗ (ГОСТ 34.602).
+  topic: documentation
+  seeAlso: [tz]
+
+- id: docs-as-code
+  term: Docs-as-code
+  en: Docs as code
+  definition: Подход, при котором документацию ведут как код — текст в Markdown в git, ревью через pull request, диаграммы текстом, автоматические проверки и сборка.
+  topic: documentation
+  seeAlso: [tz]
+
+- id: confluence-page-properties
+  term: Свойства страницы
+  en: Page Properties (Confluence)
+  definition: Макрос Confluence для структурированной шапки документа (статус, владелец, версия); отчёт по свойствам собирает реестр документов.
+  topic: documentation
+  seeAlso: [docs-as-code]

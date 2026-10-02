@@ -15,3 +15,4 @@
 | int-02 | `integrations/contracts` | Актуальные версии спецификаций OpenAPI и AsyncAPI | spec.openapis.org, asyncapi.com |
 | int-03 | `integrations/security-oauth` | Номер и статус OAuth 2.0 Security BCP (RFC 9700?) и статус OAuth 2.1 | datatracker.ietf.org |
 | arch-01 | `architecture/nfr-iso25010` | Состав характеристик ISO/IEC 25010:2023 (9 характеристик?) и какой редакции соответствует действующий ГОСТ Р ИСО/МЭК 25010 | Тексты стандартов, Росстандарт |
+| doc-01 | `documentation/tz-gost34` | Состав и названия разделов ТЗ в ГОСТ 34.602-2020, дата введения; реквизиты ГОСТ Р 59795-2021 и 59793-2021 | Тексты стандартов, Росстандарт |

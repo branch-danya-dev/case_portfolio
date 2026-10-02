@@ -18,7 +18,7 @@ export const sections = [
   { id: 'data', label: 'Данные', description: 'Модели данных, ER, нормализация, SQL, транзакции, индексы, НСИ', icon: 'database', ready: true, kind: 'topic' },
   { id: 'integrations', label: 'Интеграции', description: 'REST, SOAP, gRPC, GraphQL, брокеры, паттерны надёжности, контракты, безопасность', icon: 'link', ready: true, kind: 'topic' },
   { id: 'architecture', label: 'Архитектура для аналитика', description: 'Монолит и микросервисы, кэширование, НФТ и ISO/IEC 25010, CAP, ADR', icon: 'server', ready: true, kind: 'topic' },
-  { id: 'documentation', label: 'Документирование', description: 'ТЗ по ГОСТ 34, шаблоны, docs-as-code, практики Confluence', icon: 'open-book', ready: false, kind: 'topic' },
+  { id: 'documentation', label: 'Документирование', description: 'ТЗ по ГОСТ 34, шаблоны, docs-as-code, практики Confluence', icon: 'open-book', ready: true, kind: 'topic' },
   { id: 'methodologies', label: 'Методологии', description: 'Waterfall, Scrum, Kanban, гибриды и место аналитика в каждой', icon: 'clock', ready: false, kind: 'topic' },
   { id: 'testing', label: 'Тестирование для аналитика', description: 'Виды тестирования, тест-дизайн, ПМИ, UAT', icon: 'approve-check', ready: false, kind: 'topic' },
   { id: 'software', label: 'Каталог ПО', description: 'Jira, Confluence, draw.io, Camunda Modeler, Postman, DBeaver и другие: что, когда, зачем', icon: 'desktop', ready: false, kind: 'reference' },
