@@ -24,7 +24,7 @@ export const sections = [
   { id: 'software', label: 'Каталог ПО', description: 'Jira, Confluence, draw.io, Camunda Modeler, Postman, DBeaver и другие: что, когда, зачем', icon: 'desktop', ready: false, kind: 'reference' },
   { id: 'case', label: 'Кейс IDM-JOINER', description: 'Полный учебный проект: от устава до тест-кейсов, с диаграммами и контрактами', icon: 'star', ready: true, collapsed: true, kind: 'case', sidebar: caseSidebar },
   { id: 'interview', label: 'Собеседование', description: 'Вопросы с ответами по темам и практические задачи', icon: 'question-circle', ready: false, kind: 'practice' },
-  { id: 'tools', label: 'Инструменты', description: 'Генераторы, песочницы, калькуляторы, тренажёры — всё работает в браузере', icon: 'setting', ready: false, kind: 'tools' },
+  { id: 'tools', label: 'Инструменты', description: 'Генераторы, песочницы, калькуляторы, тренажёры — всё работает в браузере', icon: 'setting', ready: true, kind: 'tools' },
   { id: 'cheatsheets', label: 'Шпаргалки для печати', description: 'Каждый раздел на 1–2 листах A4', icon: 'add-document', ready: false, collapsed: true, kind: 'reference' },
   { id: 'glossary', label: 'Глоссарий', description: 'Термины с английским оригиналом и фильтром', icon: 'magnifier', ready: false, kind: 'reference' },
 ];

@@ -717,3 +717,109 @@ a.home-card:hover {
 .sl-markdown-content tr:has(.case-anchor:target) {
   background: var(--sl-color-accent-low);
 }
+
+/* ---------- Песочница Mermaid ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+:root:has(.sandbox),
+:root:has(.bpmn-editor) {
+  --sl-content-width: 100%;
+}
+.sandbox__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.sandbox__starter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--sl-text-sm);
+}
+.sandbox__starter select,
+.bpmn-editor select {
+  max-width: 100%;
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-white);
+  background: var(--sa-surface);
+  border: 1px solid var(--sa-border);
+  border-radius: 0.4rem;
+  padding: 0.25rem 0.5rem;
+}
+.sandbox__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.sandbox__status {
+  min-height: 1.4em;
+  margin: 0.4rem 0;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-accent-high);
+}
+.sandbox__panes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: 0.9rem;
+  min-height: 32rem;
+}
+@media (max-width: 60rem) {
+  .sandbox__panes {
+    grid-template-columns: 1fr;
+  }
+}
+.sandbox__editor textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 22rem;
+  padding: 0.8rem 1rem;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-sm);
+  line-height: 1.55;
+  tab-size: 4;
+  color: var(--sl-color-white);
+  background: var(--sl-color-black);
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  resize: vertical;
+}
+.sandbox__preview {
+  overflow: auto;
+  padding: 1rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  background: var(--sl-color-black);
+}
+.sandbox__svg {
+  text-align: center;
+}
+.sandbox__svg svg {
+  max-width: 100%;
+  height: auto;
+}
+.sandbox__error {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-xs);
+  color: var(--sa-warn);
+}
+.sandbox__hint {
+  margin-top: 0.6rem;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+}
+.sa-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

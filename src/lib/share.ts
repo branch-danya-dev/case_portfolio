@@ -21,8 +21,8 @@ export function decodeCode(encoded: string): string {
 /** Путь песочницы Mermaid (инструмент 2). */
 export const MERMAID_SANDBOX_PATH = '/tools/mermaid-sandbox/';
 
-/** Песочница появляется на этапе 2; до этого кнопка «Открыть в песочнице» не показывается. */
-export const MERMAID_SANDBOX_READY = false;
+/** Показывать ли у диаграмм кнопку «Открыть в песочнице». */
+export const MERMAID_SANDBOX_READY = true;
 
 export function downloadText(filename: string, text: string, mime = 'text/plain') {
   const url = URL.createObjectURL(new Blob([text], { type: `${mime};charset=utf-8` }));

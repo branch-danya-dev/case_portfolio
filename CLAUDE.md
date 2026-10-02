@@ -11,11 +11,14 @@
 | `npm run preview` | Раздаёт `dist/`; здесь работает поиск Pagefind |
 | `npm run setup:plantuml` | Один раз скачивает `vendor/plantuml.jar` (единственный шаг, которому нужна сеть) |
 | `npm run render:puml` | Принудительно перерисовать все `.puml` |
+| `npm run import:case` | Перегенерировать страницы кейса из `source/` (перезаписывает только файлы с пометкой GENERATED) |
 
 ## Структура
 
 ```
 source/idm-joiner-docs/      исходники кейса — НЕ редактировать (канон; копируются в public/case-files/)
+src/content/docs/case/       кейс: сгенерировано scripts/import-case.mjs (GENERATED) + ручные страницы (diagrams, downloads, api-*)
+src/case.mjs                 слои кейса и сайдбар раздела
 src/content/docs/<раздел>/   страницы (MDX); разделы перечислены в src/sections.mjs
 src/sections.mjs             список разделов: сайдбар и карточки главной; ready:false = скрыт из сайдбара
 src/tools.mjs                список инструментов для главной
@@ -27,6 +30,7 @@ src/diagrams/**.puml         PlantUML-примеры сайта → public/diagr
 public/diagrams/             SVG из PlantUML (коммитятся; сборка работает без Java)
 public/bpmn/examples/        учебные .bpmn сайта
 public/case-files/           генерируется (gitignore): копия кейса + idm-joiner-docs.zip
+public/vendor/               генерируется (gitignore): Redoc standalone (scripts/vendor-assets.mjs)
 templates/topic-page.mdx     шаблон тематической страницы
 ```
 
@@ -61,6 +65,8 @@ templates/topic-page.mdx     шаблон тематической страни�
 - **Ссылки:** только абсолютные (`/processes/bpmn/`), относительные запрещены валидатором. Ссылки на страницы, которых ещё нет, не ставить — использовать `planned` в `<Related>` или текст без ссылки.
 - Компоненты с `href`, которые нужно проверять, регистрируются в `astro.config.mjs` → `starlightLinksValidator.components`.
 - Внутри MDX сырой `<pre>` обрабатывается Expressive Code — для «сырого» текста использовать `div` с `white-space: pre`.
+- Страницы кейса с пометкой GENERATED не править руками — править source/ и запускать `npm run import:case`.
+- Широкие страницы (Redoc, песочница, редактор) расширяют колонку через `:root:has(...)` в custom.css.
 - Острова React — `client:visible` (просмотрщики) или `client:load` (инструменты на отдельной странице).
 - localStorage — только через `src/scripts/storage.ts` (префикс `sa:`).
 - Markdown-процессор — `unified()` из `@astrojs/markdown-remark` (в Astro 7 по умолчанию Sätteri, а нам нужны remark-плагины).

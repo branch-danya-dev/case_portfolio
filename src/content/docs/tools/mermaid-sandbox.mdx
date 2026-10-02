@@ -1,0 +1,15 @@
+---
+title: Песочница Mermaid
+description: Редактор диаграмм Mermaid с живым превью, примерами на материале кейса IDM-JOINER и экспортом в SVG. Работает офлайн.
+tableOfContents: false
+sidebar:
+  order: 2
+---
+
+import MermaidSandbox from '../../../components/tools/MermaidSandbox.tsx';
+
+Пишите код слева — диаграмма справа перерисовывается сама. Начните с примера из списка: все они построены на материале кейса IDM-JOINER. Кнопка «Открыть в песочнице» у любой диаграммы на сайте открывает её код здесь.
+
+<MermaidSandbox client:only="react" />
+
+**Что умеет Mermaid** (для аналитика): flowchart, sequence, class, state, ER, C4 (экспериментальная поддержка), gantt, mindmap, timeline и другие. BPMN и UML use case Mermaid не поддерживает — для BPMN есть [BPMN-редактор](/tools/bpmn-editor/), для use case — PlantUML.
