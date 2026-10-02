@@ -47,7 +47,7 @@ templates/topic-page.mdx     шаблон тематической страни�
 7. `## Вопросы на собеседовании` — `<InterviewQuestions topic="…" />` (ответы в `<details>`).
 8. `## Связанные темы` — `<Related pages={[…]} planned={[…]} />`.
 
-Во frontmatter: `trackProgress: true` (кнопка «Изучено» + общий прогресс), `sidebar.order`.
+Во frontmatter: `trackProgress: true` (кнопка «Изучено» + общий прогресс), `sidebar.order`. Если в `title` или `description` есть «: » — значение в двойных кавычках (иначе YAML ломается).
 
 Страницы практикума `diagram-howto/` используют свой шаблон: алгоритм → синтаксис Mermaid/PlantUML во вкладках → визуальный редактор → чек-лист → «до и после» → упражнение с решением в `<details>`.
 

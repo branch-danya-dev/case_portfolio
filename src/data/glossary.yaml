@@ -125,3 +125,47 @@
   definition: Свод знаний по бизнес-анализу от IIBA (версия 3). Шесть областей знаний — от планирования бизнес-анализа до оценки решения.
   topic: role
   seeAlso: [business-analyst]
+
+- id: elicitation
+  term: Выявление требований
+  en: Requirements elicitation
+  definition: Активная работа по получению требований от стейкхолдеров, из документов, систем и данных — интервью, воркшопы, наблюдение, анкеты, анализ документов и систем, прототипирование.
+  topic: elicitation
+  seeAlso: [stakeholder, workshop]
+  notToConfuse: «Сбор требований» — пассивная запись того, что сказали; выявление предполагает уточнение и проверку.
+
+- id: workshop
+  term: Воркшоп
+  en: Requirements workshop
+  definition: Структурированная групповая встреча с фасилитатором и заранее определённым результатом — согласованной схемой, списком требований, приоритетами.
+  topic: elicitation
+  seeAlso: [elicitation]
+  notToConfuse: Совещание — обсуждение без обязательного артефакта на выходе.
+
+- id: mendelow-matrix
+  term: Матрица Менделоу
+  en: Mendelow's matrix (power/interest grid)
+  definition: Матрица «влияние × интерес» для выбора стратегии работы со стейкхолдером — управлять плотно, держать удовлетворёнными, держать в курсе, наблюдать.
+  topic: elicitation
+  seeAlso: [stakeholder]
+
+- id: five-whys
+  term: «5 почему»
+  en: 5 Whys
+  definition: Техника поиска корневой причины — на каждый ответ задаётся вопрос «почему?», пока не найдена причина, которую можно устранить.
+  topic: elicitation
+  seeAlso: [elicitation]
+
+- id: data-profiling
+  term: Профилирование данных
+  en: Data profiling
+  definition: Анализ фактического содержимого данных — объёмы, заполненность полей, уникальность, распределения, аномалии. Выполняется перед миграцией и интеграцией.
+  topic: elicitation
+  seeAlso: [reconciliation]
+
+- id: shadowing
+  term: Наблюдение
+  en: Observation, job shadowing
+  definition: Техника выявления, при которой аналитик наблюдает за реальной работой пользователя, — помогает увидеть шаги, которые люди выполняют «на автомате» и не называют на интервью.
+  topic: elicitation
+  seeAlso: [elicitation]
