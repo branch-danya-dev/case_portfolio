@@ -727,3 +727,66 @@
   definition: Макрос Confluence для структурированной шапки документа (статус, владелец, версия); отчёт по свойствам собирает реестр документов.
   topic: documentation
   seeAlso: [docs-as-code]
+
+- id: waterfall
+  term: Каскадная модель
+  en: Waterfall
+  definition: Подход с последовательными этапами (требования, проектирование, разработка, тестирование, внедрение), каждый завершается утверждённым результатом.
+  topic: methodologies
+  seeAlso: [scrum, v-model]
+
+- id: v-model
+  term: V-модель
+  en: V-model
+  definition: Вариант каскадной модели, где каждому уровню требований и проектирования соответствует свой уровень тестирования.
+  topic: methodologies
+  seeAlso: [waterfall]
+
+- id: agile
+  term: Agile
+  en: Agile
+  definition: Семейство гибких подходов (Scrum, Kanban и др.), основанных на Agile-манифесте 2001 года — короткие циклы, ранняя обратная связь, готовность к изменениям.
+  topic: methodologies
+  seeAlso: [scrum, kanban]
+
+- id: scrum
+  term: Scrum
+  en: Scrum
+  definition: Фреймворк разработки спринтами до месяца с ответственностями Product Owner, Scrum Master, Developers, пятью событиями и тремя артефактами.
+  topic: methodologies
+  seeAlso: [agile, sprint, dod]
+
+- id: sprint
+  term: Спринт
+  en: Sprint
+  definition: Итерация Scrum фиксированной длины (до месяца), в течение которой команда создаёт инкремент для достижения цели спринта.
+  topic: methodologies
+  seeAlso: [scrum]
+
+- id: refinement
+  term: Рефайнмент
+  en: Backlog refinement
+  definition: Постоянная работа по уточнению, декомпозиции и оценке элементов бэклога, чтобы они были готовы к взятию в спринт.
+  topic: methodologies
+  seeAlso: [dor, scrum]
+
+- id: kanban
+  term: Kanban
+  en: Kanban method
+  definition: Метод управления потоком работы — визуализация, ограничение незавершённой работы (WIP), явные правила и постоянное улучшение.
+  topic: methodologies
+  seeAlso: [wip, agile]
+
+- id: wip
+  term: WIP
+  en: Work in progress
+  definition: Незавершённая работа — число задач, находящихся в работе; в Kanban ограничивается лимитами, чтобы ускорить поток.
+  topic: methodologies
+  seeAlso: [kanban]
+
+- id: safe
+  term: SAFe
+  en: Scaled Agile Framework
+  definition: Фреймворк масштабирования Agile на много команд — поезд команд (ART), планирование инкремента программы (PI Planning), приоритизация WSJF.
+  topic: methodologies
+  seeAlso: [scrum, wsjf]
