@@ -1,0 +1,96 @@
+---
+title: "Шпаргалка: интеграции"
+description: Интеграции на одном-двух листах A4 — стили, REST и коды, проектирование API, SOAP, gRPC, GraphQL, брокеры, надёжность, webhooks, форматы, контракты, безопасность.
+sidebar:
+  order: 8
+  label: Интеграции
+---
+
+import PrintButton from '../../../components/PrintButton.astro';
+
+<p class="cheatsheet-meta">Краткая версия раздела «Интеграции». Подробно — начиная со страницы <a href="/integrations/styles/">Стили интеграции</a>.</p>
+
+<PrintButton />
+
+<div class="cheatsheet">
+
+<section>
+
+## Стили
+
+Файлы · общая БД (почти никогда) · API (REST, SOAP, gRPC) · сообщения (Kafka, RabbitMQ). **Синхронно** — нужен ответ сразу, платим доступностью; **асинхронно** — слабая связность, платим идемпотентностью и мониторингом. **Push / pull.** Карта интеграций: кто → кому, что, протокол, режим, объём, контракт, **ошибки**, владелец.
+
+</section>
+
+<section>
+
+## REST
+
+| Метод | Безопасный | Идемпотентный |
+|---|---|---|
+| GET, HEAD, OPTIONS | да | да |
+| PUT, DELETE | нет | да |
+| POST | нет | **нет** → `Idempotency-Key` |
+| PATCH | нет | не гарантируется |
+
+200 · 201 + Location · 202 асинхронно · 204 · 400 формат · **401 кто ты · 403 нельзя** · 404 · 409 конфликт состояния · 412 версия · 422 бизнес-проверка · 429 лимит · 500 · 503 + Retry-After. Повторять: тайм-ауты, 5xx, 429; не повторять: остальные 4xx. «Уже было так» для PUT / DELETE — успех.
+
+</section>
+
+<section>
+
+## Проектирование API
+
+Ошибки — **Problem Details** (RFC 9457, ранее 7807): `type`, `title`, `status`, `detail`, `instance`. Версия в пути `/v1`; несовместимо: удалить / переименовать поле, сменить тип, сделать обязательным. Клиент игнорирует неизвестные поля. Пагинация: offset (просто) или **курсор** (стабильно). Долгие операции: 202 + ресурс статуса.
+
+</section>
+
+<section>
+
+## SOAP · gRPC · GraphQL
+
+**SOAP:** XML-конверт Envelope / Header / Body, ошибки — Fault; контракт WSDL + XSD; WS-Security. **gRPC:** `.proto`, HTTP/2, бинарный; унарный, серверный, клиентский, двунаправленный поток; статусы (`INVALID_ARGUMENT`, `UNAVAILABLE`, `DEADLINE_EXCEEDED`…); поля по **номерам**, `reserved`. **GraphQL:** одна точка входа, клиент выбирает поля; query / mutation / subscription; ошибки в `errors` при 200; лимиты сложности, N+1.
+
+</section>
+
+<section>
+
+## Брокеры
+
+**Kafka** — журнал: топик → партиции, порядок **внутри партиции** (ключ = объект), offset, retention, consumer groups, перечитывание. **RabbitMQ** — очереди: exchange (direct, topic, fanout, headers) → binding → queue, ack, DLX. Доставка **at-least-once** → получатель **идемпотентен** (eventId, inbox).
+
+</section>
+
+<section>
+
+## Надёжность
+
+Тайм-аут на каждом вызове · повторы только временных ошибок, экспонента + jitter, предел · идемпотентность · после исчерпания — ручная задача / DLQ / алерт · **outbox** (данные + событие в одной транзакции) и **inbox** · **сага** с компенсациями (хореография / оркестрация) · **circuit breaker** (closed → open → half-open) · **сверка** как последняя страховка.
+
+</section>
+
+<section>
+
+## Webhooks
+
+Обратный HTTP-вызов. Аутентификация отправителя (HMAC-подпись / mTLS / OAuth) · метка времени против повторов · идемпотентность по id события · быстрый 2xx, обработка асинхронно · повторы у отправителя · сверка.
+
+</section>
+
+<section>
+
+## Форматы и контракты
+
+JSON Schema: `type`, `required`, `enum`, `pattern`, `maxLength`, `additionalProperties`, `if / then`. Ловушки: время без пояса, деньги как float, коды числами («066» → 66), null ≠ отсутствие, новые enum, длины, «ё». **OpenAPI:** paths, schemas, securitySchemes, все ответы и примеры. **AsyncAPI 3:** servers, channels, operations (send / receive), messages. **Contract-first**; владелец — кто предоставляет API.
+
+</section>
+
+<section>
+
+## Безопасность
+
+**OAuth 2.0** — авторизация: Authorization Code + PKCE (пользователь), Client Credentials (система); Implicit и Password устарели. **OIDC** — аутентификация, ID-токен. **JWT:** iss, sub, aud, exp; проверять подпись (не `none`), iss, aud, время, права; не шифрован — без секретов. **mTLS** — сертификат и у клиента; ротация! **SSO:** Kerberos (AD: KDC, TGT, сервисный билет, SPNEGO), SAML 2.0, OIDC.
+
+</section>
+
+</div>

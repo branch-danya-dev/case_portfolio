@@ -1,0 +1,171 @@
+---
+title: "Форматы и схемы: JSON, XML, JSON Schema"
+description: "JSON, XML, YAML и CSV для аналитика; JSON Schema — типы, обязательность, ограничения, условия; ловушки форматов: даты и часовые пояса, деньги, null и отсутствие поля, кодировка, длины, перечисления."
+trackProgress: true
+sidebar:
+  order: 10
+  label: Форматы и JSON Schema
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import InterviewQuestions from '../../../components/InterviewQuestions.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+**JSON** — основной формат современных API и событий; **XML** — SOAP, госсистемы, банковские стандарты; **YAML** — конфигурации и контракты (OpenAPI, AsyncAPI); **CSV** — выгрузки и обмен файлами.
+Формат без **схемы** — договорённость «на словах». **JSON Schema** (для XML — XSD) описывает типы, обязательность и ограничения так, что их можно проверить автоматически.
+Большинство сбоев интеграций — не в протоколе, а в **деталях данных**: даты и часовые пояса, деньги, null, кодировка, длины полей, новые значения перечислений.
+
+</Brief>
+
+## Когда применять
+
+| Формат | Где встречается | Особенности |
+|---|---|---|
+| JSON | REST, события, конфигурации | Компактный, без схемы по умолчанию; числа без разделения на целые и дробные |
+| XML | SOAP, госсистемы, финансовые сообщения | Пространства имён, атрибуты и элементы, строгие схемы XSD |
+| YAML | OpenAPI, AsyncAPI, CI/CD | Читаем человеком; отступы значимы; ловушки неявной типизации |
+| CSV | Выгрузки, обмен файлами, Excel | Нет типов и вложенности; разделитель, кавычки, кодировка — договорённость |
+
+## Как делать
+
+<Steps>
+
+1. **Опишите сообщение схемой** (JSON Schema / XSD) с примерами — валидный и невалидные.
+
+2. **Обязательность:** какие поля всегда есть, какие могут отсутствовать, разрешён ли `null`.
+
+3. **Ограничения:** длины, шаблоны (`pattern`), перечисления, диапазоны чисел.
+
+4. **Даты и время:** формат и часовой пояс явно (ISO 8601 / RFC 3339 со смещением).
+
+5. **Деньги и точные значения:** не числа с плавающей точкой.
+
+6. **Лишние поля:** запрещены (`additionalProperties: false`) или игнорируются — решите явно (для совместимости приёмник обычно игнорирует неизвестные поля).
+
+7. **Проверяйте автоматически** — валидатором схемы на стенде и в тестах.
+
+</Steps>
+
+## Нотация
+
+<Tabs>
+<TabItem label="JSON Schema">
+
+```json title="Схема кадрового события (упрощённо, по AsyncAPI кейса)"
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventId", "eventType", "occurredAt", "personId", "employment"],
+  "properties": {
+    "eventId":    { "type": "string", "format": "uuid" },
+    "eventType":  { "type": "string", "enum": ["HIRE", "HIRE_CHANGED", "HIRE_CANCELLED"] },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "personId":   { "type": "string", "pattern": "^P-[0-9]{1,10}$" },
+    "person": {
+      "type": "object",
+      "required": ["lastName", "firstName"],
+      "properties": {
+        "lastName":    { "type": "string", "maxLength": 60 },
+        "mobilePhone": { "type": "string", "pattern": "^\\+7[0-9]{10}$" }
+      }
+    },
+    "employment": {
+      "type": "object",
+      "required": ["hrEmploymentId"],
+      "properties": {
+        "hrEmploymentId": { "type": "string" },
+        "hireDate":       { "type": "string", "format": "date" }
+      }
+    }
+  },
+  "if":   { "properties": { "eventType": { "enum": ["HIRE", "HIRE_CHANGED"] } } },
+  "then": { "required": ["person"] }
+}
+```
+
+| Ключевое слово | Смысл |
+|---|---|
+| `type` | `string`, `number`, `integer`, `boolean`, `object`, `array`, `null` |
+| `required` | Обязательные свойства объекта |
+| `properties` / `additionalProperties` | Описание свойств / разрешены ли другие |
+| `enum`, `const` | Допустимые значения |
+| `minLength`, `maxLength`, `pattern` | Ограничения строк |
+| `minimum`, `maximum` | Ограничения чисел |
+| `format` | Семантика строки: `date`, `date-time`, `email`, `uuid` (проверка зависит от валидатора) |
+| `items`, `minItems`, `uniqueItems` | Массивы |
+| `$ref` | Ссылка на другую схему |
+| `oneOf`, `anyOf`, `allOf`, `if` / `then` | Комбинации и условия |
+
+Актуальная редакция спецификации — 2020-12; OpenAPI 3.1 и AsyncAPI используют JSON Schema для описания данных (OpenAPI 3.0 — её подмножество с отличиями).
+
+</TabItem>
+<TabItem label="JSON и XML">
+
+```json title="JSON"
+{
+  "login": "IVANOV.AP",
+  "branchCode": "066",
+  "roles": ["OPERATOR"],
+  "middleName": null
+}
+```
+
+```xml title="XML: то же самое"
+<user xmlns="http://bank.local/abs/users">
+  <login>IVANOV.AP</login>
+  <branchCode>066</branchCode>
+  <roles><role>OPERATOR</role></roles>
+  <middleName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+</user>
+```
+
+Обратите внимание: `"066"` — **строка**. Если передать числом `66`, ведущий ноль потеряется — классическая ошибка с кодами, номерами телефонов и табельными номерами.
+
+</TabItem>
+<TabItem label="Ловушки">
+
+| Ловушка | Пример | Как правильно |
+|---|---|---|
+| Дата без часового пояса | `2027-03-15 07:00` — по Москве или по Екатеринбургу? | `2027-03-15T07:00:00+05:00` или UTC |
+| Дата-время и дата | День выхода — это дата, а не момент | `format: date` для дат |
+| Деньги как float | `0.1 + 0.2 ≠ 0.3` | Строка-десятичное или целое в копейках + валюта |
+| Коды числами | `066` → `66` | Коды и номера — строками |
+| null и отсутствие поля | В PATCH «очистить» ≠ «не менять» | Явное правило в контракте |
+| Новое значение перечисления | Приёмник падает на `HIRE_TRANSFER` | Обрабатывать неизвестные значения |
+| Кодировка и символы | «ё», апострофы, длинные двойные фамилии | UTF-8, тесты на краевые данные |
+| Длина в приёмнике меньше | `sAMAccountName` — до 20 символов | Правило усечения в маппинге |
+| YAML неявные типы | `no` превращается в `false` в некоторых парсерах | Кавычки у строк-значений |
+
+</TabItem>
+</Tabs>
+
+## Пример из кейса IDM-JOINER
+
+- **Схема события** в <CaseRef href="/case/04-integrations/api-hr-events/" id="INT-01">AsyncAPI кейса</CaseRef> — с `required`, `enum`, `pattern`, `additionalProperties: false` и условием `if / then`: для HIRE и HIRE_CHANGED блок `person` обязателен.
+- **Коды строками:** `orgUnit.code: '1601'`, `employeeNumber: '004318'` — в примерах кейса взяты в кавычки.
+- **Время со смещением:** `occurredAt: '2027-03-01T10:15:00+03:00'`; дата выхода — отдельно, как дата (`hireDate`).
+- **Ловушки, проверенные в проекте** — раздел 3 <CaseRef href="/case/04-integrations/data-mapping/" id="Маппинг">маппинга данных</CaseRef>: длина `sAMAccountName` (20) и фамилии в АБС (40), регистр логинов, отсутствующие значения, справочники, буква «ё».
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| Формат описан примером, без схемы | Каждая сторона понимает по-своему | Схема + примеры |
+| Время без пояса | Ошибки на часовые пояса (в кейсе — активация в 07:00 по местному времени) | Смещение или UTC |
+| Числа для кодов и номеров | Потеря ведущих нулей, переполнение | Строки |
+| Не определено поведение для null | Разные реализации у сторон | Правило в контракте |
+| Строгая проверка перечислений у получателя | Падение при расширении | Обработка неизвестных значений |
+| Не тестировать краевые данные | Сбои на реальных ФИО | Тестовые данные: «ё», дефисы, длинные значения |
+
+## Вопросы на собеседовании
+
+<InterviewQuestions topic="integrations" ids={['int-json-schema', 'int-format-pitfalls']} />
+
+## Связанные темы
+
+<Related pages={['integrations/contracts', 'integrations/soap', 'data/reference-data']} planned={['JSON / YAML (инструмент)']} />

@@ -1,0 +1,199 @@
+---
+title: "Контракты: OpenAPI и AsyncAPI"
+description: "Контракт интеграции — OpenAPI для HTTP API и AsyncAPI для событий: структура, версии, contract-first, кто владелец, как ревьюить контракт; разбор трёх контрактов кейса во встроенных просмотрщиках."
+trackProgress: true
+sidebar:
+  order: 11
+  label: OpenAPI и AsyncAPI
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import Brief from '../../../components/Brief.astro';
+import Check from '../../../components/Check.astro';
+import Checklist from '../../../components/Checklist.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import InterviewQuestions from '../../../components/InterviewQuestions.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+**Контракт** — формальное описание интерфейса обмена, по которому обе стороны работают независимо. **OpenAPI** описывает HTTP API (пути, методы, параметры, тела, ответы, ошибки, безопасность), **AsyncAPI** — асинхронный обмен (каналы, операции, сообщения, схемы).
+Лучший подход между командами — **contract-first**: сначала согласовать контракт, потом реализовывать параллельно, клиент работает с заглушкой.
+Владелец контракта — сторона, которая **предоставляет** API; аналитик пишет или ревьюит контракт.
+
+</Brief>
+
+## Когда применять
+
+| Применять | Не нужно |
+|---|---|
+| Любая интеграция между командами или с внешними партнёрами | Вызов внутри одного модуля |
+| Публичный или внутренний API с несколькими клиентами | — |
+| События в шине — особенно когда их читают несколько систем | — |
+| Нужна генерация документации, клиентов, заглушек, тестов | — |
+
+## Как делать
+
+<Steps>
+
+1. **Определите владельца** контракта и согласующих (клиенты, архитектор, ИБ).
+
+2. **Начните с ресурсов / каналов и операций**, затем модели данных в `components/schemas`.
+
+3. **Опишите все ответы**, включая ошибки, — не только «200 OK».
+
+4. **Добавьте примеры** запросов, ответов и сообщений — их проверяют глазами и тестами.
+
+5. **Безопасность:** схемы аутентификации (`securitySchemes`), права (scopes).
+
+6. **Нефункциональное:** лимиты, идемпотентность, пагинация, версия, гарантии доставки — в описаниях.
+
+7. **Проверьте линтером** и по чек-листу ревью (ниже), согласуйте и зафиксируйте версию.
+
+8. **Изменения** — по правилам совместимости, с журналом изменений.
+
+</Steps>
+
+## Нотация
+
+<Tabs>
+<TabItem label="OpenAPI">
+
+```yaml title="OpenAPI: каркас"
+openapi: 3.0.3
+info:
+  title: Адаптер администрирования пользователей АБС
+  version: 1.0.0
+servers:
+  - url: https://abs-adapter.bank.local/api/v1
+paths:
+  /users:
+    post:
+      summary: Создать пользователя АБС
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NewUser' }
+      responses:
+        '201': { description: Пользователь создан }
+        '200': { description: Повтор с тем же Idempotency-Key }
+        '422':
+          description: Бизнес-ошибка
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+components:
+  schemas:
+    NewUser: { type: object, required: [login, branchCode], properties: { login: { type: string }, branchCode: { type: string } } }
+    Problem: { type: object, properties: { type: { type: string }, title: { type: string }, status: { type: integer }, detail: { type: string } } }
+  securitySchemes:
+    mtls: { type: mutualTLS }
+```
+
+| Раздел | Что описывает |
+|---|---|
+| `info`, `servers` | Название, версия контракта, адреса окружений |
+| `paths` | Пути и методы: параметры, тела запросов, ответы |
+| `components/schemas` | Модели данных (переиспользуются через `$ref`) |
+| `components/responses`, `parameters` | Общие ответы (ошибки) и параметры |
+| `components/securitySchemes`, `security` | Как аутентифицироваться и какие права нужны |
+| `tags` | Группировка операций |
+
+Тип `mutualTLS` в `securitySchemes` появился в OpenAPI 3.1; в контракте кейса (3.0.3) mTLS указан в описании.
+
+</TabItem>
+<TabItem label="AsyncAPI">
+
+```yaml title="AsyncAPI 3.0: каркас"
+asyncapi: 3.0.0
+info:
+  title: Кадровые события HRMS
+  version: 1.0.0
+servers:
+  production: { host: 'kafka.bank.local:9093', protocol: kafka-secure }
+channels:
+  employeeEvents:
+    address: hr.employee.events.v1
+    messages:
+      employeeEvent: { $ref: '#/components/messages/EmployeeEvent' }
+operations:
+  sendEmployeeEvent:
+    action: send
+    channel: { $ref: '#/channels/employeeEvents' }
+components:
+  messages:
+    EmployeeEvent:
+      payload: { $ref: '#/components/schemas/EmployeeEvent' }
+  schemas:
+    EmployeeEvent: { type: object, required: [eventId, eventType] }
+```
+
+| Раздел | Что описывает |
+|---|---|
+| `servers` | Брокеры: адрес, протокол |
+| `channels` | Каналы (топики, очереди): адрес и сообщения |
+| `operations` | Кто что делает: `send` или `receive` в каком канале |
+| `components/messages` | Сообщения: заголовки, полезная нагрузка, привязки к протоколу (ключ Kafka), примеры |
+| `components/schemas` | Схемы данных |
+
+В AsyncAPI 3.0 операции вынесены из каналов в отдельный раздел `operations` (в 2.x они задавались внутри канала как `publish` / `subscribe`, что часто путало).
+
+</TabItem>
+</Tabs>
+
+<Check id="int-02">
+Номера актуальных версий спецификаций OpenAPI (3.1.x и более новые) и AsyncAPI проверить на сайтах spec.openapis.org и asyncapi.com перед тем, как ссылаться на них в документах.
+</Check>
+
+### Чек-лист ревью контракта
+
+<Checklist id="contract-review" items={[
+  'У контракта есть версия и владелец; адреса окружений указаны',
+  'Пути — существительные; методы соответствуют семантике',
+  'Для каждой операции описаны все ответы, включая ошибки (единый формат)',
+  'Обязательность, типы, длины, форматы и перечисления полей заданы',
+  'Даты и время — с форматом и часовым поясом',
+  'Есть примеры запросов, ответов, сообщений',
+  'Описана аутентификация и права (scopes)',
+  'Создание идемпотентно (ключ или PUT)',
+  'Коллекции с пагинацией и лимитами',
+  'Для событий: ключ сообщения, гарантии доставки, DLQ, версия схемы',
+  'Изменение совместимо с текущими клиентами или выпущена новая версия',
+]} />
+
+## Пример из кейса IDM-JOINER
+
+Три контракта кейса — во встроенных просмотрщиках:
+
+| Контракт | Формат | Владелец | Что посмотреть |
+|---|---|---|---|
+| <CaseRef href="/case/04-integrations/api-idm/" id="IdM API">IdM API</CaseRef> | OpenAPI 3.0.3 | Команда IdM | Две схемы безопасности (портал — JWT после SSO; системы — OAuth 2.0 client credentials + mTLS), webhook ServiceDesk |
+| <CaseRef href="/case/04-integrations/api-abs-adapter/" id="INT-05">Адаптер АБС</CaseRef> | OpenAPI 3.0.3 | Команда АБС (требования — СА проекта) | Идемпотентность, коды для каждого случая, Problem Details |
+| <CaseRef href="/case/04-integrations/api-hr-events/" id="INT-01">Кадровые события</CaseRef> | AsyncAPI 3.0.0 | Команда HRMS (согласует с IdM и командой интеграции) | Ключ `personId`, `eventId`, DLQ, версия в имени топика, условия в схеме |
+
+Принцип владения из <CaseRef href="/case/04-integrations/integration-map/" id="Карта">карты интеграций</CaseRef>: «контракт описывает та сторона, которая предоставляет API». Исключение показательно: адаптер АБС реализует команда АБС, но **требования к контракту формулирует СА проекта** — потому что именно IdM знает, что ей нужно.
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| Описан только успешный ответ | Ошибки реализуют «как получится» | Все коды и единый формат ошибок |
+| Нет примеров | Разночтения, нечего проверить | Примеры для каждой операции и сообщения |
+| Контракт генерируется из кода «потом» | Клиенты ждут, контракт не согласован | Contract-first |
+| Нет владельца и версии | Изменения ломают клиентов без предупреждения | Владелец, версия, журнал изменений |
+| Контракт в почте или Word | Нет истории и автоматизации | YAML в git, просмотрщик, линтер |
+| Нефункциональное не описано | Лимиты, идемпотентность, порядок — сюрприз | Описания и расширения в контракте |
+
+## Вопросы на собеседовании
+
+<InterviewQuestions topic="integrations" ids={['int-openapi', 'int-contract-first', 'int-versioning']} />
+
+## Связанные темы
+
+<Related pages={['integrations/rest-design', 'integrations/formats', 'integrations/messaging', 'case/04-integrations/api-idm']} planned={['Просмотрщик OpenAPI (инструмент)', 'Каталог ПО: Swagger Editor, Postman']} />

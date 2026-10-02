@@ -12,3 +12,5 @@
 | diag-01 | `diagrams/dfd` | Различия начертания элементов в нотациях Йордона — ДеМарко и Гейна — Сарсона | Учебники по структурному анализу |
 | howto-01 | `diagram-howto/index` | Названия библиотек фигур draw.io (UML, BPMN, Entity Relation, C4, DFD) и наличие вставки Mermaid / PlantUML-текста в актуальной версии | draw.io, документация diagrams.net |
 | int-01 | `integrations/rest-design` | Статус документа IETF о заголовке Idempotency-Key (черновик или RFC) | datatracker.ietf.org |
+| int-02 | `integrations/contracts` | Актуальные версии спецификаций OpenAPI и AsyncAPI | spec.openapis.org, asyncapi.com |
+| int-03 | `integrations/security-oauth` | Номер и статус OAuth 2.0 Security BCP (RFC 9700?) и статус OAuth 2.1 | datatracker.ietf.org |

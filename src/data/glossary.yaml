@@ -474,3 +474,144 @@
   definition: Сравнение данных двух систем для поиска и исправления расхождений; в кейсе — ежедневная сверка IdM с HRMS (UC-10).
   topic: data
   seeAlso: [reference-data]
+
+- id: idempotency
+  term: Идемпотентность
+  en: Idempotency
+  definition: Свойство операции давать тот же результат при повторном вызове, что и при первом. Делает повторы безопасными; для POST обеспечивается ключом идемпотентности.
+  topic: integrations
+  seeAlso: [at-least-once, dlq]
+
+- id: at-least-once
+  term: At-least-once
+  en: At-least-once delivery
+  definition: Гарантия доставки «не менее одного раза» — сообщение не потеряется, но может прийти повторно; требует идемпотентной обработки.
+  topic: integrations
+  seeAlso: [idempotency, exactly-once]
+
+- id: exactly-once
+  term: Exactly-once
+  en: Exactly-once
+  definition: Доставка и обработка ровно один раз; между разными системами на практике достигается как at-least-once плюс идемпотентная обработка.
+  topic: integrations
+  seeAlso: [at-least-once]
+
+- id: dlq
+  term: DLQ
+  en: Dead Letter Queue
+  definition: Очередь или топик для сообщений, которые не удалось обработать; нужен владелец, алерт и процедура разбора.
+  topic: integrations
+  seeAlso: [at-least-once]
+
+- id: outbox
+  term: Transactional outbox
+  en: Transactional outbox
+  definition: Паттерн — событие записывается в таблицу outbox в той же транзакции, что и изменение данных, а затем публикуется в брокер; решает проблему двойной записи.
+  topic: integrations
+  seeAlso: [saga, idempotency]
+
+- id: saga
+  term: Сага
+  en: Saga
+  definition: Длинная бизнес-операция из локальных транзакций в разных сервисах с компенсирующими действиями при ошибке; хореография или оркестрация.
+  topic: integrations
+  seeAlso: [outbox]
+
+- id: circuit-breaker
+  term: Circuit breaker
+  en: Circuit breaker
+  definition: «Автоматический выключатель» вызовов зависимого сервиса — после серии ошибок вызовы сразу отклоняются, через время пропускается пробный вызов.
+  topic: integrations
+  seeAlso: [saga]
+
+- id: webhook
+  term: Webhook
+  en: Webhook
+  definition: Обратный HTTP-вызов — внешняя система сама сообщает о событии, вызывая заранее зарегистрированный адрес.
+  topic: integrations
+  seeAlso: [idempotency]
+
+- id: rest
+  term: REST
+  en: Representational State Transfer
+  definition: Архитектурный стиль HTTP API — ресурсы с адресами, стандартные методы и коды ответов, отсутствие состояния на сервере между запросами.
+  topic: integrations
+  seeAlso: [openapi]
+
+- id: openapi
+  term: OpenAPI
+  en: OpenAPI Specification
+  definition: Формат описания HTTP API в YAML или JSON — пути, методы, параметры, тела, ответы, схемы данных, безопасность.
+  topic: integrations
+  seeAlso: [asyncapi, rest]
+
+- id: asyncapi
+  term: AsyncAPI
+  en: AsyncAPI Specification
+  definition: Формат описания асинхронного обмена — серверы (брокеры), каналы, операции отправки и получения, сообщения и их схемы.
+  topic: integrations
+  seeAlso: [openapi]
+
+- id: json-schema
+  term: JSON Schema
+  en: JSON Schema
+  definition: Язык описания структуры JSON — типы, обязательность, ограничения, условия; используется в OpenAPI 3.1 и AsyncAPI.
+  topic: integrations
+  seeAlso: [openapi]
+
+- id: problem-details
+  term: Problem Details
+  en: Problem Details for HTTP APIs (RFC 9457)
+  definition: Стандартный формат ошибок HTTP API (application/problem+json) с полями type, title, status, detail, instance; RFC 9457 заменил RFC 7807.
+  topic: integrations
+  seeAlso: [rest]
+
+- id: kafka
+  term: Kafka
+  en: Apache Kafka
+  definition: Распределённый журнал событий — топики с партициями, хранение по сроку, чтение по смещению, группы потребителей; порядок гарантирован внутри партиции.
+  topic: integrations
+  seeAlso: [at-least-once, dlq]
+
+- id: oauth2
+  term: OAuth 2.0
+  en: OAuth 2.0 (RFC 6749)
+  definition: Протокол делегированной авторизации — клиент получает токен доступа к API у сервера авторизации, не зная пароля пользователя.
+  topic: integrations
+  seeAlso: [oidc, jwt]
+  notToConfuse: OpenID Connect — аутентификация пользователя поверх OAuth 2.0.
+
+- id: oidc
+  term: OpenID Connect
+  en: OpenID Connect (OIDC)
+  definition: Слой аутентификации поверх OAuth 2.0 — добавляет ID-токен с данными о пользователе, userinfo и discovery.
+  topic: integrations
+  seeAlso: [oauth2, jwt]
+
+- id: jwt
+  term: JWT
+  en: JSON Web Token (RFC 7519)
+  definition: Компактный токен из заголовка, полезной нагрузки (claims) и подписи; обычно подписан, но не зашифрован.
+  topic: integrations
+  seeAlso: [oauth2]
+
+- id: mtls
+  term: mTLS
+  en: Mutual TLS
+  definition: Взаимный TLS — сертификат предъявляет не только сервер, но и клиент; используется для аутентификации систем в интеграциях.
+  topic: integrations
+  seeAlso: [oauth2]
+
+- id: sso
+  term: SSO
+  en: Single Sign-On
+  definition: Единый вход — пользователь аутентифицируется один раз и работает с несколькими системами; технологии — Kerberos, SAML 2.0, OpenID Connect.
+  topic: integrations
+  seeAlso: [kerberos, oidc]
+
+- id: kerberos
+  term: Kerberos
+  en: Kerberos
+  definition: Протокол аутентификации по билетам (TGT и сервисные билеты от KDC); основа единого входа в домене Active Directory.
+  topic: integrations
+  seeAlso: [sso]
