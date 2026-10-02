@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Учебный пример «Справочника СА»: два пула (два участника) и поток сообщений между ними.
+     Строгий вариант того, как в кейсе IDM-JOINER можно было бы показать связь HRMS и IdM. -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Collab" targetNamespace="http://sa-handbook.local/bpmn">
+  <bpmn:collaboration id="Collab">
+    <bpmn:participant id="P_HRMS" name="HRMS" processRef="Process_HRMS" />
+    <bpmn:participant id="P_IDM" name="IdM" processRef="Process_IDM" />
+    <bpmn:messageFlow id="MF_Hire" name="Событие HIRE" sourceRef="Publish" targetRef="IdmStart" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_HRMS" isExecutable="false">
+    <bpmn:startEvent id="HrStart" name="Приказ о приёме подписан">
+      <bpmn:outgoing>H1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sendTask id="Publish" name="Опубликовать событие HIRE">
+      <bpmn:incoming>H1</bpmn:incoming>
+      <bpmn:outgoing>H2</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="HrEnd" name="Событие опубликовано">
+      <bpmn:incoming>H2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="H1" sourceRef="HrStart" targetRef="Publish" />
+    <bpmn:sequenceFlow id="H2" sourceRef="Publish" targetRef="HrEnd" />
+  </bpmn:process>
+  <bpmn:process id="Process_IDM" isExecutable="false">
+    <bpmn:startEvent id="IdmStart" name="Получено событие HIRE">
+      <bpmn:outgoing>I1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MsgDef_Hire" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="CreateIdentity" name="Создать идентичность">
+      <bpmn:incoming>I1</bpmn:incoming>
+      <bpmn:outgoing>I2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="IdmEnd" name="Идентичность создана">
+      <bpmn:incoming>I2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="I1" sourceRef="IdmStart" targetRef="CreateIdentity" />
+    <bpmn:sequenceFlow id="I2" sourceRef="CreateIdentity" targetRef="IdmEnd" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Collab">
+    <bpmndi:BPMNPlane id="Plane_Collab" bpmnElement="Collab">
+      <bpmndi:BPMNShape id="P_HRMS_di" bpmnElement="P_HRMS" isHorizontal="true">
+        <dc:Bounds x="120" y="60" width="640" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="P_IDM_di" bpmnElement="P_IDM" isHorizontal="true">
+        <dc:Bounds x="120" y="280" width="640" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="HrStart_di" bpmnElement="HrStart">
+        <dc:Bounds x="202" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="177" y="165" width="86" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Publish_di" bpmnElement="Publish">
+        <dc:Bounds x="300" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="HrEnd_di" bpmnElement="HrEnd">
+        <dc:Bounds x="472" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="450" y="165" width="80" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IdmStart_di" bpmnElement="IdmStart">
+        <dc:Bounds x="332" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="306" y="385" width="88" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CreateIdentity_di" bpmnElement="CreateIdentity">
+        <dc:Bounds x="430" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IdmEnd_di" bpmnElement="IdmEnd">
+        <dc:Bounds x="602" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="580" y="385" width="80" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="H1_di" bpmnElement="H1">
+        <di:waypoint x="238" y="140" /><di:waypoint x="300" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="H2_di" bpmnElement="H2">
+        <di:waypoint x="400" y="140" /><di:waypoint x="472" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="I1_di" bpmnElement="I1">
+        <di:waypoint x="368" y="360" /><di:waypoint x="430" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="I2_di" bpmnElement="I2">
+        <di:waypoint x="530" y="360" /><di:waypoint x="602" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MF_Hire_di" bpmnElement="MF_Hire">
+        <di:waypoint x="350" y="180" /><di:waypoint x="350" y="342" />
+        <bpmndi:BPMNLabel><dc:Bounds x="358" y="245" width="72" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

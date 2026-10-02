@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2270" height="960" viewBox="0 0 2270 960" font-family="Arial, Helvetica, sans-serif" font-size="11">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+<rect x="0" y="0" width="2270" height="960" fill="#fff"/>
+<rect x="20" y="20" width="2190" height="800" fill="none" stroke="#333" stroke-width="1.5"/>
+<text x="35" y="420" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 35 420)" font-weight="bold">TO-BE: предоставление доступов новому сотруднику</text>
+<rect x="50" y="20" width="2160" height="160" fill="#f7f9fc" stroke="#333"/>
+<line x1="80" y1="20" x2="80" y2="180" stroke="#333"/>
+<text x="65" y="100" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 65 100)">HR-специалист</text>
+<rect x="50" y="180" width="2160" height="160" fill="#ffffff" stroke="#333"/>
+<line x1="80" y1="180" x2="80" y2="340" stroke="#333"/>
+<text x="65" y="260" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 65 260)">Руководитель</text>
+<rect x="50" y="340" width="2160" height="160" fill="#f7f9fc" stroke="#333"/>
+<line x1="80" y1="340" x2="80" y2="500" stroke="#333"/>
+<text x="65" y="420" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 65 420)">IdM (автоматически)</text>
+<rect x="50" y="500" width="2160" height="160" fill="#ffffff" stroke="#333"/>
+<line x1="80" y1="500" x2="80" y2="660" stroke="#333"/>
+<text x="65" y="580" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 65 580)">Инженер ИБ</text>
+<rect x="50" y="660" width="2160" height="160" fill="#f7f9fc" stroke="#333"/>
+<line x1="80" y1="660" x2="80" y2="820" stroke="#333"/>
+<text x="65" y="740" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 65 740)">Администраторы</text>
+<polyline points="188,100 260,100" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="380,100 395,100 395,420 410,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="530,420 560,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="680,420 710,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="830,420 860,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="980,420 1045,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="1095,420 1160,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<text x="1101" y="414" fill="#b03a2e" font-weight="bold">Нет</text>
+<polyline points="1070,445 1070,540" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<text x="1076" y="455" fill="#b03a2e" font-weight="bold">Да</text>
+<polyline points="1130,580 1220,580 1220,460" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="1280,420 1345,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="1395,420 1502,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<text x="1401" y="414" fill="#b03a2e" font-weight="bold">Нет</text>
+<polyline points="1370,445 1370,700" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<text x="1376" y="455" fill="#b03a2e" font-weight="bold">Да</text>
+<polyline points="1430,740 1520,740 1520,438" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="1538,420 1610,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="1730,420 1760,420" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="1880,420 1895,420 1895,260 1910,260" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<polyline points="2030,260 2102,260" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arr)"/>
+<circle cx="170" cy="100" r="18.0" fill="#fff" stroke="#333" stroke-width="1.5"/>
+<text x="170" y="132" text-anchor="middle">Кандидат принял</text><text x="170" y="145" text-anchor="middle">оффер</text>
+<rect x="260" y="60" width="120" height="80" rx="10" fill="#fff8e1" stroke="#333" stroke-width="1.5"/>
+<circle cx="272.0" cy="70.0" r="3" fill="none" stroke="#333"/><path d="M266.0,79.0 Q272.0,71.0 278.0,79.0" fill="none" stroke="#333"/>
+<text x="320" y="98" text-anchor="middle">T1 Оформить приказ</text><text x="320" y="110" text-anchor="middle">о приёме в HRMS</text>
+<rect x="410" y="380" width="120" height="80" rx="10" fill="#e3f2fd" stroke="#333" stroke-width="1.5"/>
+<circle cx="422.0" cy="392.0" r="5" fill="none" stroke="#333"/><circle cx="422.0" cy="392.0" r="2" fill="#333"/>
+<text x="470" y="411" text-anchor="middle">T2 Принять и</text><text x="470" y="424" text-anchor="middle">проверить кадровое</text><text x="470" y="437" text-anchor="middle">событие</text>
+<rect x="560" y="380" width="120" height="80" rx="10" fill="#e3f2fd" stroke="#333" stroke-width="1.5"/>
+<circle cx="572.0" cy="392.0" r="5" fill="none" stroke="#333"/><circle cx="572.0" cy="392.0" r="2" fill="#333"/>
+<text x="620" y="411" text-anchor="middle">T3 Создать</text><text x="620" y="424" text-anchor="middle">идентичность,</text><text x="620" y="437" text-anchor="middle">сгенерировать логин</text>
+<rect x="710" y="380" width="120" height="80" rx="10" fill="#e3f2fd" stroke="#333" stroke-width="1.5"/>
+<circle cx="722.0" cy="392.0" r="5" fill="none" stroke="#333"/><circle cx="722.0" cy="392.0" r="2" fill="#333"/>
+<text x="770" y="418" text-anchor="middle">T4 Определить</text><text x="770" y="430" text-anchor="middle">бизнес-роли</text>
+<rect x="860" y="380" width="120" height="80" rx="10" fill="#e3f2fd" stroke="#333" stroke-width="1.5"/>
+<circle cx="872.0" cy="392.0" r="5" fill="none" stroke="#333"/><circle cx="872.0" cy="392.0" r="2" fill="#333"/>
+<text x="920" y="424" text-anchor="middle">T5 Проверить SoD</text>
+<polygon points="1070.0,395.0 1095.0,420.0 1070.0,445.0 1045.0,420.0" fill="#fff" stroke="#333" stroke-width="1.5"/>
+<path d="M1061.0,411.0 L1079.0,429.0 M1079.0,411.0 L1061.0,429.0" stroke="#333" stroke-width="3"/>
+<text x="1070" y="373" text-anchor="middle">Есть SoD-конфликт?</text>
+<rect x="1010" y="540" width="120" height="80" rx="10" fill="#fff8e1" stroke="#333" stroke-width="1.5"/>
+<circle cx="1022.0" cy="550.0" r="3" fill="none" stroke="#333"/><path d="M1016.0,559.0 Q1022.0,551.0 1028.0,559.0" fill="none" stroke="#333"/>
+<text x="1070" y="578" text-anchor="middle">T6 Рассмотреть SoD-</text><text x="1070" y="590" text-anchor="middle">конфликт</text>
+<rect x="1160" y="380" width="120" height="80" rx="10" fill="#e3f2fd" stroke="#333" stroke-width="1.5"/>
+<circle cx="1172.0" cy="392.0" r="5" fill="none" stroke="#333"/><circle cx="1172.0" cy="392.0" r="2" fill="#333"/>
+<text x="1220" y="411" text-anchor="middle">T7 Создать учётные</text><text x="1220" y="424" text-anchor="middle">записи</text><text x="1220" y="437" text-anchor="middle">(заблокированы)</text>
+<polygon points="1370.0,395.0 1395.0,420.0 1370.0,445.0 1345.0,420.0" fill="#fff" stroke="#333" stroke-width="1.5"/>
+<path d="M1361.0,411.0 L1379.0,429.0 M1379.0,411.0 L1361.0,429.0" stroke="#333" stroke-width="3"/>
+<text x="1370" y="373" text-anchor="middle">Нужны ручные задачи?</text>
+<rect x="1310" y="700" width="120" height="80" rx="10" fill="#f3e5f5" stroke="#333" stroke-width="1.5"/>
+<path d="M1316.0,716.0 L1320.0,708.0 L1328.0,708.0" fill="none" stroke="#333"/>
+<text x="1370" y="738" text-anchor="middle">T8 Исполнить задачу</text><text x="1370" y="750" text-anchor="middle">вручную (СЭД, сбои)</text>
+<circle cx="1520" cy="420" r="18.0" fill="#fff" stroke="#333" stroke-width="1.5"/>
+<circle cx="1520" cy="420" r="14.0" fill="none" stroke="#333"/>
+<circle cx="1520" cy="420" r="9.0" fill="none" stroke="#333"/>
+<path d="M1520,420 L1520,413 M1520,420 L1525,420" stroke="#333"/>
+<text x="1520" y="368" text-anchor="middle">День выхода, 07:00</text><text x="1520" y="381" text-anchor="middle">по времени</text><text x="1520" y="394" text-anchor="middle">подразделения</text>
+<rect x="1610" y="380" width="120" height="80" rx="10" fill="#e3f2fd" stroke="#333" stroke-width="1.5"/>
+<circle cx="1622.0" cy="392.0" r="5" fill="none" stroke="#333"/><circle cx="1622.0" cy="392.0" r="2" fill="#333"/>
+<text x="1670" y="418" text-anchor="middle">T9 Активировать</text><text x="1670" y="430" text-anchor="middle">учётные записи</text>
+<rect x="1760" y="380" width="120" height="80" rx="10" fill="#e3f2fd" stroke="#333" stroke-width="1.5"/>
+<circle cx="1772.0" cy="392.0" r="5" fill="none" stroke="#333"/><circle cx="1772.0" cy="392.0" r="2" fill="#333"/>
+<text x="1820" y="411" text-anchor="middle">T10 Отправить OTP</text><text x="1820" y="424" text-anchor="middle">по SMS, уведомить</text><text x="1820" y="437" text-anchor="middle">руководителя</text>
+<rect x="1910" y="220" width="120" height="80" rx="10" fill="#fff8e1" stroke="#333" stroke-width="1.5"/>
+<circle cx="1922.0" cy="230.0" r="3" fill="none" stroke="#333"/><path d="M1916.0,239.0 Q1922.0,231.0 1928.0,239.0" fill="none" stroke="#333"/>
+<text x="1970" y="238" text-anchor="middle">T11 Получить</text><text x="1970" y="251" text-anchor="middle">уведомление, при</text><text x="1970" y="264" text-anchor="middle">необходимости</text><text x="1970" y="277" text-anchor="middle">запросить доп.</text><text x="1970" y="290" text-anchor="middle">доступы</text>
+<circle cx="2120" cy="260" r="18.0" fill="#fff" stroke="#333" stroke-width="4"/>
+<text x="2120" y="292" text-anchor="middle">Сотрудник работает с</text><text x="2120" y="305" text-anchor="middle">09:00 первого дня</text>
+<line x1="320" y1="140" x2="320" y2="850" stroke="#777" stroke-dasharray="4,3"/>
+<path d="M322,850 L310,850 L310,906 L322,906" fill="none" stroke="#777"/>
+<rect x="311" y="850" width="138" height="56" fill="#fffdf2" stroke="none"/>
+<path d="M322,850 L310,850 L310,906 L322,906" fill="none" stroke="#777"/>
+<text x="316" y="864" fill="#444">Не позднее чем за 2</text>
+<text x="316" y="877" fill="#444">раб. дня до выхода</text>
+<text x="316" y="890" fill="#444">(риск R-01)</text>
+<line x1="1250" y1="460" x2="1250" y2="850" stroke="#777" stroke-dasharray="4,3"/>
+<path d="M1252,850 L1240,850 L1240,906 L1252,906" fill="none" stroke="#777"/>
+<rect x="1241" y="850" width="138" height="56" fill="#fffdf2" stroke="none"/>
+<path d="M1252,850 L1240,850 L1240,906 L1252,906" fill="none" stroke="#777"/>
+<text x="1246" y="864" fill="#444">BRL-01: за 3 раб. дня</text>
+<text x="1246" y="877" fill="#444">до выхода, в</text>
+<text x="1246" y="890" fill="#444">заблокированном</text>
+<text x="1246" y="903" fill="#444">состоянии</text>
+<text x="20" y="946" fill="#666" font-size="10">Превью для чтения. Исходник: to-be.bpmn (Camunda Modeler / demo.bpmn.io). Цвет задач: жёлтый — пользовательская, голубой — сервисная (система), сиреневый — ручная.</text>
+</svg>

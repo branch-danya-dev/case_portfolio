@@ -1,0 +1,44 @@
+---
+/**
+ * Вопросы на собеседовании из банка src/data/questions/<topic>.yaml.
+ * Ответы спрятаны в раскрывающиеся блоки. Те же записи использует тренажёр.
+ */
+import { getEntry } from 'astro:content';
+import { marked } from 'marked';
+
+interface Props {
+  topic: string;
+  /** Показать только эти вопросы (по id) и в этом порядке. По умолчанию — все. */
+  ids?: string[];
+}
+const { topic, ids } = Astro.props;
+
+const entry = await getEntry('questions', topic);
+if (!entry) throw new Error(`<InterviewQuestions>: нет файла src/data/questions/${topic}.yaml`);
+
+const items = ids
+  ? ids.map((id) => {
+      const q = entry.data.items.find((i) => i.id === id);
+      if (!q) throw new Error(`<InterviewQuestions>: в теме «${topic}» нет вопроса «${id}»`);
+      return q;
+    })
+  : entry.data.items;
+
+const levelLabel = { junior: 'junior', middle: 'middle', senior: 'senior' } as const;
+---
+
+<div class="questions">
+  {
+    items.map((q) => (
+      <details class="question" id={`q-${q.id}`}>
+        <summary>
+          <span class="q-text">{q.question}</span>
+          <span class="level-badge" data-level={q.level} title="Уровень вопроса">
+            {levelLabel[q.level]}
+          </span>
+        </summary>
+        <div class="answer" set:html={marked.parse(q.answer, { async: false })} />
+      </details>
+    ))
+  }
+</div>

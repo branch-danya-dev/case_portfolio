@@ -1,0 +1,46 @@
+---
+/** Общий прогресс по всем тематическим страницам (trackProgress: true). Данные — localStorage. */
+import { getCollection } from 'astro:content';
+
+const tracked = (await getCollection('docs', (e) => e.data.trackProgress)).map((e) => e.id);
+---
+
+<section class="home-progress not-content" aria-label="Общий прогресс" data-tracked={JSON.stringify(tracked)}>
+  <span class="home-progress__label">Изучено тем: <strong class="home-progress__count">0</strong> из {tracked.length}</span>
+  <div class="home-progress__bar" role="progressbar" aria-valuemin="0" aria-valuemax={tracked.length} aria-valuenow="0" aria-label="Изучено тем">
+    <div class="home-progress__fill"></div>
+  </div>
+  <button type="button" class="sa-btn home-progress__reset" hidden>Сбросить прогресс</button>
+</section>
+
+<script>
+  import { STUDIED_KEY, getStudied, save } from '../../scripts/storage';
+
+  const root = document.querySelector<HTMLElement>('.home-progress');
+  if (root) {
+    const tracked: string[] = JSON.parse(root.dataset.tracked ?? '[]');
+    const count = root.querySelector('.home-progress__count')!;
+    const bar = root.querySelector<HTMLElement>('.home-progress__bar')!;
+    const fill = root.querySelector<HTMLElement>('.home-progress__fill')!;
+    const reset = root.querySelector<HTMLButtonElement>('.home-progress__reset')!;
+    const render = () => {
+      const studied = new Set(getStudied());
+      const done = tracked.filter((s) => studied.has(s)).length;
+      count.textContent = String(done);
+      bar.setAttribute('aria-valuenow', String(done));
+      fill.style.width = tracked.length ? `${(done / tracked.length) * 100}%` : '0';
+      reset.hidden = studied.size === 0;
+    };
+    reset.addEventListener('click', () => {
+      if (confirm('Сбросить отметки «Изучено» на всех страницах?')) save(STUDIED_KEY, []);
+    });
+    window.addEventListener('sa-storage', render);
+    render();
+  }
+</script>
+
+<style>
+  .home-progress__reset {
+    justify-self: start;
+  }
+</style>

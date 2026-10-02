@@ -1,0 +1,61 @@
+# Глоссарий. Поля: id (латиницей), term, en, definition, topic, seeAlso (id других терминов), notToConfuse.
+# topic — раздел сайта (processes, requirements, integrations…). Список будет расти с каждым разделом.
+
+- id: bpmn
+  term: BPMN
+  en: Business Process Model and Notation
+  definition: Стандарт OMG для графического описания бизнес-процессов. Показывает участников, шаги, развилки, события и обмен сообщениями.
+  topic: processes
+  seeAlso: [as-is, to-be, token]
+  notToConfuse: UML Activity — алгоритм внутри системы, а не бизнес-процесс с участниками.
+
+- id: token
+  term: Токен
+  en: Token
+  definition: Воображаемая метка, которая движется по потокам операций BPMN-схемы и показывает, какой шаг выполняется. AND-шлюз размножает токены и на слиянии ждёт их все.
+  topic: processes
+  seeAlso: [bpmn]
+
+- id: pool
+  term: Пул
+  en: Pool
+  definition: Графическое представление участника (participant) BPMN — организации или системы со своим процессом. Работа между пулами передаётся только сообщениями.
+  topic: processes
+  seeAlso: [lane, message-flow]
+  notToConfuse: Дорожка — подразделение внутри одного пула.
+
+- id: lane
+  term: Дорожка
+  en: Lane
+  definition: Полоса внутри пула BPMN — роль, подразделение или система, выполняющие часть одного процесса.
+  topic: processes
+  seeAlso: [pool]
+
+- id: message-flow
+  term: Поток сообщений
+  en: Message flow
+  definition: Пунктирная стрелка BPMN с кружком в начале. Обмен между разными пулами; внутри одного пула не используется.
+  topic: processes
+  seeAlso: [pool]
+  notToConfuse: Поток операций (sequence flow) — порядок шагов внутри пула.
+
+- id: as-is
+  term: AS-IS
+  en: As-is
+  definition: Описание того, как процесс или система работают сейчас, на самом деле, с проблемами и цифрами.
+  topic: processes
+  seeAlso: [to-be, gap-analysis]
+
+- id: to-be
+  term: TO-BE
+  en: To-be
+  definition: Целевое состояние процесса или системы после проекта, вместе с бизнес-правилами.
+  topic: processes
+  seeAlso: [as-is, gap-analysis]
+
+- id: gap-analysis
+  term: Gap-анализ
+  en: Gap analysis
+  definition: Перечень изменений, нужных для перехода от AS-IS к TO-BE, — в системах, данных, регламентах и организации.
+  topic: processes
+  seeAlso: [as-is, to-be]

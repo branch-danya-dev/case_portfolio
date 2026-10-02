@@ -1,0 +1,42 @@
+---
+/**
+ * «Связанные темы»: последний блок тематической страницы.
+ * pages   — слаги готовых страниц (проверяются на сборке: несуществующий слаг = ошибка).
+ * planned — темы, которые ещё не написаны: показываются без ссылки с пометкой «скоро».
+ *           Когда страница появится, перенесите её из planned в pages.
+ */
+import { getEntry } from 'astro:content';
+
+interface Props {
+  pages?: string[];
+  planned?: string[];
+}
+const { pages = [], planned = [] } = Astro.props;
+
+const links = await Promise.all(
+  pages.map(async (slug) => {
+    const entry = await getEntry('docs', slug);
+    if (!entry) throw new Error(`<Related>: страница «${slug}» не найдена`);
+    return { href: `/${slug}/`, title: entry.data.title };
+  }),
+);
+---
+
+<ul class="related">
+  {
+    links.map((l) => (
+      <li>
+        <a href={l.href}>{l.title}</a>
+      </li>
+    ))
+  }
+  {
+    planned.map((title) => (
+      <li>
+        <span class="related-planned" title="Раздел в работе">
+          {title} <small>· скоро</small>
+        </span>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,14 @@
+---
+/** Кнопка скачивания локального файла (исходники кейса и т. п.). */
+interface Props {
+  href: string;
+  /** Имя файла при сохранении; по умолчанию — последний сегмент href. */
+  filename?: string;
+}
+const { href, filename } = Astro.props;
+---
+
+<a class="sa-btn" href={href} download={filename ?? href.split('/').pop()}>
+  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"></path></svg>
+  <slot />
+</a>

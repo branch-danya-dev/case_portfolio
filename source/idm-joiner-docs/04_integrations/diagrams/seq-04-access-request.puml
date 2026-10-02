@@ -1,0 +1,45 @@
+@startuml seq-04-access-request
+title SEQ-04. Заявка на дополнительный доступ (критичное полномочие)
+autonumber
+skinparam responseMessageBelowArrow true
+
+actor "Руководитель" as MGR
+participant "Портал IdM" as UI
+participant "Ядро IdM" as CORE
+database "БД IdM" as DB
+actor "Владелец ресурса" as OWN
+actor "Инженер ИБ" as SEC
+participant "Сервис\nпровижининга" as PROV
+participant "AD" as AD
+
+MGR -> UI : Выбрать сотрудника, полномочие ENT-AD-07 (VPN),\nуказать обоснование
+UI -> CORE : POST /access-requests\nIdempotency-Key: <uuid формы>
+CORE -> DB : Текущие полномочия сотрудника
+CORE -> CORE : Проверить SoD: конфликтов нет
+CORE -> CORE : Маршрут: OWNER → SECURITY (is_critical = true)
+CORE -> DB : access_request (ON_APPROVAL), request_item, approval × 2
+CORE --> UI : 201 Created { requestId, status: ON_APPROVAL }
+CORE ->> OWN : E-mail: заявка на согласование (срок 1 раб. день)
+
+OWN -> UI : Открыть заявку, согласовать
+UI -> CORE : POST /access-requests/{id}/items/{itemId}/decisions\n{ decision: APPROVED }
+CORE -> DB : approval OWNER = APPROVED
+CORE ->> SEC : E-mail: заявка на согласование
+
+alt ИБ согласует
+  SEC -> UI : Согласовать
+  UI -> CORE : POST …/decisions { decision: APPROVED }
+  CORE -> DB : access_request → APPROVED → PROVISIONING
+  CORE -> PROV : GRANT ENT-AD-07
+  PROV -> AD : Добавить в группу G_VPN
+  AD --> PROV : OK
+  PROV -> CORE : DONE
+  CORE -> DB : account_entitlement (basis = REQUEST, requestId);\naccess_request → COMPLETED
+  CORE ->> MGR : E-mail: доступ выдан
+else ИБ отклоняет
+  SEC -> UI : Отклонить с комментарием
+  UI -> CORE : POST …/decisions { decision: REJECTED, comment }
+  CORE -> DB : access_request → REJECTED
+  CORE ->> MGR : E-mail: заявка отклонена, комментарий ИБ
+end
+@enduml

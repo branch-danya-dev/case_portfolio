@@ -1,0 +1,79 @@
+---
+/**
+ * Карточки разделов на главной. Список — src/sections.mjs.
+ * Готовый раздел ведёт на свою первую страницу и показывает прогресс «изучено X из N».
+ */
+import { getCollection } from 'astro:content';
+import { Icon } from '@astrojs/starlight/components';
+import { sections } from '../../sections.mjs';
+
+interface Props {
+  /** Какие виды разделов показывать. */
+  kinds?: string[];
+}
+const { kinds } = Astro.props;
+
+const docs = await getCollection('docs');
+const order = (e: (typeof docs)[number]) => e.data.sidebar?.order ?? Number.MAX_SAFE_INTEGER;
+
+const cards = sections
+  .filter((s) => !kinds || kinds.includes(s.kind ?? 'topic'))
+  .map((s) => {
+    const pages = docs
+      .filter((d) => d.id.startsWith(`${s.id}/`) || d.id === s.id)
+      .sort((a, b) => order(a) - order(b) || a.data.title.localeCompare(b.data.title, 'ru'));
+    const tracked = pages.filter((p) => p.data.trackProgress).map((p) => p.id);
+    return { ...s, href: s.ready && pages[0] ? `/${pages[0].id}/` : undefined, tracked };
+  });
+---
+
+<div class="home-sections not-content">
+  {
+    cards.map((c) =>
+      c.href ? (
+        <a class="home-card" href={c.href} data-tracked={JSON.stringify(c.tracked)}>
+          <span class="home-card__title">
+            <Icon name={c.icon as any} size="1.2rem" />
+            {c.label}
+          </span>
+          <span class="home-card__desc">{c.description}</span>
+          {c.tracked.length > 0 && <span class="home-card__progress" aria-live="polite" />}
+        </a>
+      ) : (
+        <div class="home-card home-card--soon">
+          <span class="home-card__title">
+            <Icon name={c.icon as any} size="1.2rem" />
+            {c.label}
+          </span>
+          <span class="home-card__desc">{c.description}</span>
+          <span class="home-card__soon">в работе</span>
+        </div>
+      ),
+    )
+  }
+</div>
+
+<script>
+  import { getStudied } from '../../scripts/storage';
+
+  const render = () => {
+    const studied = new Set(getStudied());
+    document.querySelectorAll<HTMLElement>('.home-card[data-tracked]').forEach((card) => {
+      const tracked: string[] = JSON.parse(card.dataset.tracked ?? '[]');
+      const out = card.querySelector('.home-card__progress');
+      if (!out || !tracked.length) return;
+      const done = tracked.filter((s) => studied.has(s)).length;
+      out.textContent = `Изучено ${done} из ${tracked.length}`;
+    });
+  };
+  render();
+  window.addEventListener('sa-storage', render);
+</script>
+
+<style>
+  .home-card__progress {
+    margin-top: auto;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-accent-high);
+  }
+</style>

@@ -1,0 +1,13 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro';
+---
+
+<Default />
+
+<script>
+  import { initMermaid } from '../../scripts/mermaid';
+  import { initPrint } from '../../scripts/print';
+
+  initMermaid();
+  initPrint();
+</script>

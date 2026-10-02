@@ -1,0 +1,47 @@
+---
+/**
+ * Диаграмма PlantUML: SVG, отрисованный на сборке (scripts/render-plantuml.mjs), кнопки
+ * «Открыть в полном размере» и «Скачать .puml», исходник в раскрывающемся блоке.
+ *
+ *   <PlantUmlDiagram file="03_architecture/diagrams/state-account.puml" title="…" />          — кейс
+ *   <PlantUmlDiagram file="howto/sequence-min.puml" source="site" title="…" />                 — примеры сайта
+ */
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { Code } from '@astrojs/starlight/components';
+
+interface Props {
+  /** Путь к .puml относительно source/idm-joiner-docs (source="case") или src/diagrams (source="site"). */
+  file: string;
+  source?: 'case' | 'site';
+  title: string;
+  /** Показывать исходник под диаграммой (по умолчанию да). */
+  showSource?: boolean;
+}
+const { file, source = 'case', title, showSource = true } = Astro.props;
+
+const srcRoot = source === 'case' ? 'source/idm-joiner-docs' : 'src/diagrams';
+const code = await readFile(resolve(srcRoot, file), 'utf8');
+const svgHref = `/diagrams/${source}/${file.replace(/\.puml$/, '.svg')}`;
+const pumlHref = source === 'case' ? `/case-files/idm-joiner-docs/${file}` : undefined;
+---
+
+<figure class="diagram-figure not-content">
+  <a href={svgHref} target="_blank" rel="noopener" title="Открыть в полном размере">
+    <img src={svgHref} alt={title} loading="lazy" decoding="async" />
+  </a>
+  <figcaption>{title}</figcaption>
+</figure>
+<div class="diagram-toolbar not-content">
+  <a class="sa-btn" href={svgHref} target="_blank" rel="noopener">Открыть в полном размере</a>
+  <a class="sa-btn" href={svgHref} download>Скачать SVG</a>
+  {pumlHref && <a class="sa-btn" href={pumlHref} download>Скачать .puml</a>}
+</div>
+{
+  showSource && (
+    <details class="diagram-source">
+      <summary>Исходный код PlantUML</summary>
+      <Code code={code} lang="txt" title={file.split('/').pop()} />
+    </details>
+  )
+}

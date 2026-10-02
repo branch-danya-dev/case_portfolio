@@ -1,0 +1,465 @@
+openapi: 3.0.3
+info:
+  title: IdM API
+  version: 1.0.0
+  description: |
+    Публичный API ядра IdM (волна 1). Используется порталом IdM и ServiceDesk (webhook закрытия задач).
+    Транспорт — HTTPS с mTLS для системных клиентов. Ошибки — в формате RFC 7807 (application/problem+json).
+
+    Открыть: editor.swagger.io (вставить содержимое файла) или любой просмотрщик OpenAPI.
+servers:
+  - url: https://idm.bank.local/api/v1
+    description: Промышленная среда
+  - url: https://idm-test.bank.local/api/v1
+    description: Тестовая среда
+tags:
+  - name: Сотрудники
+  - name: Каталог
+  - name: Заявки
+  - name: Ручные задачи
+paths:
+  /employees/{employeeNumber}/access:
+    get:
+      tags: [Сотрудники]
+      summary: Доступы сотрудника с основаниями выдачи
+      description: FR-22, FR-23. Руководитель видит только своих подчинённых, аудитор и ИБ — всех.
+      operationId: getEmployeeAccess
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/EmployeeNumber'
+      responses:
+        '200':
+          description: Доступы сотрудника
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeAccess'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /catalog/entitlements:
+    get:
+      tags: [Каталог]
+      summary: Каталог полномочий для заявок
+      operationId: listEntitlements
+      security:
+        - portalAuth: []
+      parameters:
+        - name: systemCode
+          in: query
+          required: false
+          schema:
+            type: string
+            example: AD
+      responses:
+        '200':
+          description: Список полномочий
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Entitlement'
+  /access-requests:
+    post:
+      tags: [Заявки]
+      summary: Создать заявку на дополнительные полномочия
+      description: |
+        FR-13. Перед созданием выполняется проверка SoD (FR-12): конфликт не отклоняет заявку,
+        а добавляет обязательный шаг согласования ИБ и возвращается в поле sodConflicts.
+      operationId: createAccessRequest
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessRequestCreate'
+            example:
+              employeeNumber: '004318'
+              items:
+                - entitlementId: ENT-AD-07
+              justification: Работа из дома по графику дежурств
+      responses:
+        '201':
+          description: Заявка создана
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL созданной заявки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessRequest'
+        '200':
+          description: Повтор запроса с тем же Idempotency-Key — возвращена ранее созданная заявка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /access-requests/{requestId}:
+    get:
+      tags: [Заявки]
+      summary: Получить заявку
+      operationId: getAccessRequest
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+      responses:
+        '200':
+          description: Заявка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /access-requests/{requestId}/items/{itemId}/decisions:
+    post:
+      tags: [Заявки]
+      summary: Решение согласующего по позиции заявки
+      description: FR-14. Согласующий должен быть назначен на текущий шаг позиции.
+      operationId: decideRequestItem
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Decision'
+      responses:
+        '200':
+          description: Решение принято, возвращено актуальное состояние заявки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: Позиция не на шаге этого согласующего или решение уже принято
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /manual-tasks/{taskId}/completion:
+    post:
+      tags: [Ручные задачи]
+      summary: Webhook ServiceDesk о закрытии задачи ручного исполнения
+      description: |
+        FR-17, INT-06. Вызывается ServiceDesk при закрытии задачи, созданной IdM.
+        Идемпотентен: повторный вызов для уже завершённой задачи возвращает 204.
+      operationId: completeManualTask
+      security:
+        - serviceAuth: [idm.manual-tasks.write]
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          description: Идентификатор задачи провижининга IdM (передаётся в ServiceDesk при создании)
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManualTaskCompletion'
+            example:
+              result: DONE
+              ticketId: SD-7781
+              externalId: ABS-USR-88231
+              completedBy: petrov.sv
+              comment: Пользователь создан вручную
+      responses:
+        '204':
+          description: Принято
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Задача отменена (например, приём отменён), результат не применён
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  securitySchemes:
+    portalAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Токен, выданный порталу после SSO (Kerberos/AD)
+    serviceAuth:
+      type: oauth2
+      description: Системные клиенты (ServiceDesk); дополнительно mTLS
+      flows:
+        clientCredentials:
+          tokenUrl: https://sso.bank.local/oauth2/token
+          scopes:
+            idm.manual-tasks.write: Закрытие задач ручного исполнения
+  parameters:
+    EmployeeNumber:
+      name: employeeNumber
+      in: path
+      required: true
+      description: Табельный номер
+      schema:
+        type: string
+        example: '004318'
+    RequestId:
+      name: requestId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: UUID, генерируется клиентом; повтор с тем же ключом в течение 24 ч не создаёт новую заявку
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Forbidden:
+      description: Нет прав на операцию
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: Объект не найден
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unprocessable:
+      description: Ошибка бизнес-валидации (полномочие не из каталога, сотрудник не в подчинении и т. п.)
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    EmployeeAccess:
+      type: object
+      required: [employeeNumber, identityStatus, roles, accounts]
+      properties:
+        employeeNumber:
+          type: string
+        fullName:
+          type: string
+        identityStatus:
+          type: string
+          enum: [PRE_HIRE, ACTIVE, CANCELLED, TERMINATED]
+        hireDate:
+          type: string
+          format: date
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              roleId:
+                type: string
+                example: ROLE-01
+              name:
+                type: string
+              source:
+                type: string
+                enum: [RULE, REQUEST]
+              basisId:
+                type: string
+                description: RULE-01 или идентификатор заявки
+        accounts:
+          type: array
+          items:
+            type: object
+            properties:
+              systemCode:
+                type: string
+                enum: [AD, EXCHANGE, ABS, EDS]
+              login:
+                type: string
+              status:
+                type: string
+                enum: [PLANNED, CREATING, CREATED_DISABLED, ACTIVE, FAILED, DELETED]
+              entitlements:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entitlementId:
+                      type: string
+                    basisType:
+                      type: string
+                      enum: [ROLE, REQUEST, SOD_EXCEPTION]
+                    basisId:
+                      type: string
+                    grantedAt:
+                      type: string
+                      format: date-time
+    Entitlement:
+      type: object
+      required: [entitlementId, systemCode, name, isCritical]
+      properties:
+        entitlementId:
+          type: string
+          example: ENT-AD-07
+        systemCode:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        isCritical:
+          type: boolean
+    AccessRequestCreate:
+      type: object
+      required: [employeeNumber, items, justification]
+      properties:
+        employeeNumber:
+          type: string
+        items:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: object
+            required: [entitlementId]
+            properties:
+              entitlementId:
+                type: string
+        justification:
+          type: string
+          minLength: 10
+          maxLength: 1000
+    AccessRequest:
+      type: object
+      required: [requestId, status, items, createdAt]
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        employeeNumber:
+          type: string
+        status:
+          type: string
+          enum: [DRAFT, ON_APPROVAL, APPROVED, REJECTED, PROVISIONING, COMPLETED, PARTIALLY_COMPLETED, CANCELLED]
+        createdAt:
+          type: string
+          format: date-time
+        sodConflicts:
+          type: array
+          items:
+            type: object
+            properties:
+              sodRuleId:
+                type: string
+                example: SOD-01
+              entitlementA:
+                type: string
+              entitlementB:
+                type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              itemId:
+                type: string
+                format: uuid
+              entitlementId:
+                type: string
+              status:
+                type: string
+                enum: [ON_APPROVAL, APPROVED, REJECTED, GRANTED, FAILED]
+              approvals:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    step:
+                      type: string
+                      enum: [OWNER, SECURITY]
+                    approver:
+                      type: string
+                    decision:
+                      type: string
+                      enum: [APPROVED, REJECTED]
+                      nullable: true
+                    dueAt:
+                      type: string
+                      format: date-time
+    Decision:
+      type: object
+      required: [decision]
+      properties:
+        decision:
+          type: string
+          enum: [APPROVED, REJECTED]
+        comment:
+          type: string
+          maxLength: 1000
+          description: Обязателен при REJECTED
+    ManualTaskCompletion:
+      type: object
+      required: [result, ticketId, completedBy]
+      properties:
+        result:
+          type: string
+          enum: [DONE, REJECTED]
+          description: REJECTED — администратор не может выполнить задачу (комментарий обязателен)
+        ticketId:
+          type: string
+        externalId:
+          type: string
+          description: Идентификатор созданного объекта в целевой системе
+        completedBy:
+          type: string
+          description: Логин администратора
+        comment:
+          type: string
+    Problem:
+      type: object
+      description: RFC 7807 Problem Details
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          format: uri
+          example: https://idm.bank.local/problems/not-a-subordinate
+        title:
+          type: string
+          example: Сотрудник не находится в вашем подчинении
+        status:
+          type: integer
+          example: 422
+        detail:
+          type: string
+        instance:
+          type: string
+        correlationId:
+          type: string
+          description: Идентификатор для поиска в журналах

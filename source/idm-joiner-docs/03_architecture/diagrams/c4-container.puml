@@ -1,0 +1,58 @@
+@startuml c4-container
+' C4, уровень 2 — контейнеры (разворачиваемые части решения)
+!include <C4/C4_Container>
+
+title Контейнеры решения IdM (волна 1)
+
+Person(mgr, "Руководитель / ИБ / Аудитор", "Пользователи портала")
+System_Ext(hrms, "HRMS (1С:ЗУП)", "Кадровая система")
+System_Ext(ad, "Active Directory", "")
+System_Ext(exch, "Exchange", "")
+System_Ext(abs, "АБС", "")
+System_Ext(sd, "ServiceDesk", "")
+System_Ext(sms, "SMS-шлюз", "")
+System_Ext(siem, "SIEM", "")
+
+System_Boundary(bus, "Корпоративная шина") {
+  ContainerQueue(q_hr, "hr.employee.events.v1", "Kafka topic", "Кадровые события")
+  ContainerQueue(q_dlq, "hr.employee.events.v1.dlq", "Kafka topic", "Некорректные события")
+  ContainerQueue(q_audit, "idm.audit.v1", "Kafka topic", "События аудита")
+}
+
+System_Boundary(idm, "IdM") {
+  Container(portal, "Портал IdM", "Web SPA", "Заявки, согласования, статус, ролевая модель, отчёты")
+  Container(core, "Ядро IdM (Core API)", "Java, REST", "Идентичности, роли, SoD, заявки, согласования; публичный API")
+  Container(inbox, "Обработчик кадровых событий", "Java, Kafka consumer", "Валидация, идемпотентность, передача в ядро")
+  Container(sched, "Планировщик", "Java, Quartz", "Создание за 3 дня, активация в 07:00, сверка в 02:00, эскалации")
+  Container(prov, "Сервис провижининга", "Java", "Коннекторы LDAP, PowerShell, REST; повторы; задачи в ServiceDesk")
+  ContainerDb(db, "БД IdM", "PostgreSQL", "Идентичности, учётные записи, роли, заявки, задачи")
+  ContainerDb(audit, "Журнал аудита", "PostgreSQL, append-only", "Неизменяемый журнал операций")
+}
+
+System_Boundary(absb, "Контур АБС") {
+  Container(absad, "Адаптер АБС", "Java, REST", "API администрирования пользователей АБС (разрабатывается в проекте)")
+}
+
+Rel(hrms, q_hr, "Публикует", "Kafka")
+Rel(q_hr, inbox, "Читает", "Kafka")
+Rel(inbox, q_dlq, "Некорректные события", "Kafka")
+Rel(inbox, core, "Передаёт событие", "внутренний вызов")
+Rel(core, hrms, "Полный срез для сверки", "REST")
+Rel(mgr, portal, "Работает", "HTTPS, SSO")
+Rel(portal, core, "Вызывает", "REST/JSON")
+Rel(core, db, "Читает и пишет", "JDBC")
+Rel(core, audit, "Пишет", "JDBC")
+Rel(sched, core, "Запускает плановые операции", "REST")
+Rel(core, prov, "Задачи провижининга", "внутренняя очередь")
+Rel(prov, ad, "Создание, блокировка, группы", "LDAPS")
+Rel(prov, exch, "Почтовые ящики", "PowerShell Remoting")
+Rel(prov, absad, "Пользователи и роли", "REST/JSON, mTLS")
+Rel(absad, abs, "Административные функции", "Внутренний API АБС")
+Rel(prov, sd, "Задачи ручного исполнения", "REST")
+Rel(sd, core, "Закрытие задачи", "REST webhook")
+Rel(core, sms, "OTP", "REST")
+Rel(audit, q_audit, "Выгрузка", "CDC / Kafka")
+Rel(q_audit, siem, "Читает", "Kafka")
+
+SHOW_LEGEND()
+@enduml

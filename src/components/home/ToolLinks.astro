@@ -1,0 +1,23 @@
+---
+/** Быстрые ссылки на инструменты. Список — src/tools.mjs. */
+import { tools } from '../../tools.mjs';
+---
+
+<div class="home-sections not-content">
+  {
+    tools.map((t) =>
+      t.ready ? (
+        <a class="home-card" href={`/${t.slug}/`}>
+          <span class="home-card__title">{t.label}</span>
+          <span class="home-card__desc">{t.description}</span>
+        </a>
+      ) : (
+        <div class="home-card home-card--soon">
+          <span class="home-card__title">{t.label}</span>
+          <span class="home-card__desc">{t.description}</span>
+          <span class="home-card__soon">в работе</span>
+        </div>
+      ),
+    )
+  }
+</div>

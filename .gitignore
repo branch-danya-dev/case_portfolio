@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+vendor/
+public/case-files/
+.env
+.DS_Store
+npm-debug.log*

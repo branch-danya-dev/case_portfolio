@@ -1,0 +1,16 @@
+---
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import StudiedToggle from '../StudiedToggle.astro';
+
+const { entry, id } = Astro.locals.starlightRoute;
+const track = (entry.data as { trackProgress?: boolean }).trackProgress;
+---
+
+<Default />
+{
+  track && (
+    <div class="page-title-row">
+      <StudiedToggle slug={id} />
+    </div>
+  )
+}

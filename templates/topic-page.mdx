@@ -1,0 +1,59 @@
+---
+# Шаблон тематической страницы. Скопируйте в src/content/docs/<раздел>/<slug>.mdx.
+# Эталон заполнения — src/content/docs/processes/bpmn.mdx.
+title: Название темы
+description: Одно предложение — о чём страница (попадает в поиск и превью ссылки).
+trackProgress: true
+sidebar:
+  order: 1
+---
+
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import Brief from '../../../components/Brief.astro';
+import Check from '../../../components/Check.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import InterviewQuestions from '../../../components/InterviewQuestions.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+3–5 строк сути, которые читаются за 20 секунд. Термины при первом упоминании — с английским оригиналом (term).
+
+</Brief>
+
+## Когда применять
+
+| Применять | Не нужно |
+|---|---|
+| … | … → чем заменить |
+
+## Как делать
+
+<Steps>
+
+1. Шаг или правило.
+2. …
+
+</Steps>
+
+## Нотация
+
+Таблица элементов или готовый шаблон для копирования (блок кода с title — у него будет кнопка «Копировать»).
+
+## Пример из кейса IDM-JOINER
+
+Разбор артефакта кейса со ссылкой: <CaseRef href="/case-files/idm-joiner-docs/…" id="FR-08">…</CaseRef>.
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| … | … | … |
+
+## Вопросы на собеседовании
+
+<InterviewQuestions topic="имя-файла-из-src-data-questions" />
+
+## Связанные темы
+
+<Related pages={['раздел/slug']} planned={['Тема, которой ещё нет']} />

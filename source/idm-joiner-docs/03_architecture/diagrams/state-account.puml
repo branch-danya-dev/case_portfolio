@@ -1,0 +1,23 @@
+@startuml state-account
+title Жизненный цикл учётной записи в целевой системе
+hide empty description
+
+[*] --> PLANNED : Роли определены\n/ создание запланировано на T-3
+PLANNED : Ожидает даты создания
+CREATING : Задача провижининга\nв работе
+CREATED_DISABLED : Создана, заблокирована
+ACTIVE : Активна
+FAILED : Не создана,\nзадача в ServiceDesk
+DELETED : Удалена
+
+PLANNED --> CREATING : Таймер: дата создания
+PLANNED --> [*] : HIRE_CANCELLED\n/ план отменён
+CREATING --> CREATED_DISABLED : Успех коннектора
+CREATING --> FAILED : Повторы исчерпаны\nили бизнес-ошибка
+FAILED --> CREATED_DISABLED : Задача ServiceDesk закрыта\n(webhook)
+CREATED_DISABLED --> ACTIVE : Таймер: дата выхода, 07:00\n/ разблокировать
+CREATED_DISABLED --> DELETED : HIRE_CANCELLED\n/ удалить
+FAILED --> DELETED : HIRE_CANCELLED\n/ отменить задачу ServiceDesk
+ACTIVE --> DELETED : Увольнение (волна 2)
+DELETED --> [*]
+@enduml

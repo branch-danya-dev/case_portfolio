@@ -1,0 +1,17 @@
+---
+/**
+ * «Проверить»: утверждение, в котором автор не уверен (номер раздела стандарта, версия спецификации и т. п.).
+ * Каждый такой блок дублируется строкой в TODO-CHECK.md с тем же id.
+ */
+import { Aside } from '@astrojs/starlight/components';
+
+interface Props {
+  /** Идентификатор для TODO-CHECK.md, например "bpmn-01". */
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<Aside type="caution" title={`Проверить · ${id}`}>
+  <slot />
+</Aside>

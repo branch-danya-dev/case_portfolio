@@ -1,0 +1,23 @@
+@startuml state-identity
+title Жизненный цикл идентичности
+hide empty description
+
+[*] --> PRE_HIRE : HIRE\n[personId не найден]
+PRE_HIRE : Приказ проведён,\nдата выхода в будущем
+ACTIVE : Сотрудник работает
+CANCELLED : Приём отменён до выхода
+TERMINATED : Все трудоустройства завершены
+
+PRE_HIRE --> PRE_HIRE : HIRE_CHANGED /\nпересчёт ролей или дат
+PRE_HIRE --> ACTIVE : Таймер: дата выхода, 07:00\n/ активация учётных записей
+PRE_HIRE --> CANCELLED : HIRE_CANCELLED\n/ удаление учётных записей
+ACTIVE --> TERMINATED : Увольнение\n(волна 2)
+TERMINATED --> PRE_HIRE : HIRE [тот же personId]\n/ повторный приём (BRL-05)
+CANCELLED --> PRE_HIRE : HIRE [тот же personId]
+ACTIVE --> ACTIVE : HIRE [внутреннее\nсовместительство] / BRL-07
+
+note right of TERMINATED
+  Переходы из ACTIVE в TERMINATED
+  реализуются в волне 2 (Leaver).
+end note
+@enduml

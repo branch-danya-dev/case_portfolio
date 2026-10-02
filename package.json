@@ -1,0 +1,34 @@
+{
+  "name": "sa-handbook",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run prepare:assets && astro dev",
+    "build": "npm run prepare:assets && astro build && node scripts/check-offline.mjs",
+    "preview": "astro preview",
+    "prepare:assets": "node scripts/sync-case-files.mjs && node scripts/render-plantuml.mjs",
+    "setup:plantuml": "node scripts/setup-plantuml.mjs",
+    "render:puml": "node scripts/render-plantuml.mjs --force"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.1",
+    "@astrojs/react": "^7.0.0",
+    "@astrojs/starlight": "^0.42.5",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "astro": "^7.3.5",
+    "bpmn-js": "^18.31.0",
+    "fflate": "^0.8.3",
+    "marked": "^18.0.14",
+    "mermaid": "^12.1.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "starlight-links-validator": "^0.26.0",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
+  }
+}

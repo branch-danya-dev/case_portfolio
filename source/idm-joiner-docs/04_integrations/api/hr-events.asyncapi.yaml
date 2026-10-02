@@ -1,0 +1,191 @@
+asyncapi: 3.0.0
+info:
+  title: Кадровые события HRMS
+  version: 1.0.0
+  description: |
+    Контракт INT-01. Документ описывает HRMS как отправителя событий о приёме на работу.
+    Получатель в волне 1 — IdM; другие системы могут подписаться на топик без доработки HRMS.
+
+    Гарантии доставки: at-least-once. Получатель обязан обрабатывать события идемпотентно по eventId.
+    Порядок: гарантируется только внутри партиции; ключ сообщения — personId,
+    поэтому все события одного человека приходят по порядку.
+
+    Открыть: studio.asyncapi.com (вставить содержимое файла).
+servers:
+  production:
+    host: kafka.bank.local:9093
+    protocol: kafka-secure
+    description: Корпоративная шина, TLS + SASL/SCRAM
+channels:
+  employeeEvents:
+    address: hr.employee.events.v1
+    description: Кадровые события о приёме. Хранение — 7 дней.
+    messages:
+      employeeEvent:
+        $ref: '#/components/messages/EmployeeEvent'
+  employeeEventsDlq:
+    address: hr.employee.events.v1.dlq
+    description: События, не прошедшие валидацию в IdM. Разбирает команда HRMS.
+    messages:
+      employeeEvent:
+        $ref: '#/components/messages/EmployeeEvent'
+operations:
+  sendEmployeeEvent:
+    action: send
+    summary: HRMS публикует событие после проведения, изменения или отмены приказа о приёме
+    channel:
+      $ref: '#/channels/employeeEvents'
+    messages:
+      - $ref: '#/channels/employeeEvents/messages/employeeEvent'
+components:
+  messages:
+    EmployeeEvent:
+      name: EmployeeEvent
+      title: Кадровое событие
+      contentType: application/json
+      bindings:
+        kafka:
+          key:
+            type: string
+            description: personId — ключ партиционирования, обеспечивает порядок событий одного человека
+          bindingVersion: '0.5.0'
+      payload:
+        $ref: '#/components/schemas/EmployeeEvent'
+      examples:
+        - name: hire
+          summary: Приём операциониста в офис Екатеринбурга
+          payload:
+            eventId: 3f6c2a5e-8b1d-4c1e-9a77-0c2b9d1e4f10
+            eventType: HIRE
+            occurredAt: '2027-03-01T10:15:00+03:00'
+            schemaVersion: 1
+            personId: P-100500
+            person:
+              lastName: Иванов
+              firstName: Алексей
+              middleName: Петрович
+              mobilePhone: '+79001234567'
+            employment:
+              hrEmploymentId: E-2027-00431
+              employeeNumber: '004318'
+              employmentType: MAIN
+              hireDate: '2027-03-15'
+              orgUnit:
+                code: '1601'
+                name: Доп. офис «Екатеринбург-Центр»
+                type: RETAIL_OFFICE
+              position:
+                code: '40110'
+                name: Операционист
+              managerEmployeeNumber: '001207'
+        - name: cancelled
+          summary: Отмена приёма
+          payload:
+            eventId: 9a1e7c3b-2d44-4f0a-8e61-5b3c7d2a9e01
+            eventType: HIRE_CANCELLED
+            occurredAt: '2027-03-11T16:40:00+03:00'
+            schemaVersion: 1
+            personId: P-100500
+            employment:
+              hrEmploymentId: E-2027-00431
+  schemas:
+    EmployeeEvent:
+      type: object
+      additionalProperties: false
+      required: [eventId, eventType, occurredAt, schemaVersion, personId, employment]
+      properties:
+        eventId:
+          type: string
+          format: uuid
+          description: Уникальный идентификатор события; ключ идемпотентности для получателей
+        eventType:
+          type: string
+          enum: [HIRE, HIRE_CHANGED, HIRE_CANCELLED]
+          description: |
+            HIRE — проведён приказ о приёме;
+            HIRE_CHANGED — изменены данные приказа до даты выхода (дата, должность, подразделение);
+            HIRE_CANCELLED — приказ о приёме отменён.
+        occurredAt:
+          type: string
+          format: date-time
+          description: Момент проведения операции в HRMS
+        schemaVersion:
+          type: integer
+          const: 1
+          description: Версия схемы. Несовместимые изменения — новый топик (.v2)
+        personId:
+          type: string
+          pattern: '^P-[0-9]{1,10}$'
+          description: Идентификатор физического лица в HRMS, не меняется при повторном приёме
+        person:
+          $ref: '#/components/schemas/Person'
+        employment:
+          $ref: '#/components/schemas/Employment'
+      if:
+        properties:
+          eventType:
+            enum: [HIRE, HIRE_CHANGED]
+      then:
+        required: [person]
+        properties:
+          employment:
+            required: [hrEmploymentId, employeeNumber, employmentType, hireDate, orgUnit, position]
+    Person:
+      type: object
+      additionalProperties: false
+      required: [lastName, firstName]
+      properties:
+        lastName:
+          type: string
+          maxLength: 60
+        firstName:
+          type: string
+          maxLength: 60
+        middleName:
+          type: string
+          maxLength: 60
+        mobilePhone:
+          type: string
+          pattern: '^\+7[0-9]{10}$'
+          description: Мобильный телефон для SMS с одноразовым паролем (E.164)
+    Employment:
+      type: object
+      additionalProperties: false
+      required: [hrEmploymentId]
+      properties:
+        hrEmploymentId:
+          type: string
+          description: Идентификатор трудоустройства (договора) в HRMS
+        employeeNumber:
+          type: string
+          description: Табельный номер
+        employmentType:
+          type: string
+          enum: [MAIN, PART_TIME]
+          description: MAIN — основное место работы, PART_TIME — совместительство
+        hireDate:
+          type: string
+          format: date
+          description: Первый рабочий день
+        orgUnit:
+          type: object
+          required: [code, name, type]
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+              enum: [RETAIL_OFFICE, CREDIT_DEPT, ACCOUNTING, IT_DEPT, OTHER]
+        position:
+          type: object
+          required: [code, name]
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+        managerEmployeeNumber:
+          type: string
+          description: Табельный номер руководителя; может отсутствовать

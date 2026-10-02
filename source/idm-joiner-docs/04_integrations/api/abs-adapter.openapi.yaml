@@ -1,0 +1,206 @@
+openapi: 3.0.3
+info:
+  title: Адаптер администрирования пользователей АБС
+  version: 1.0.0
+  description: |
+    Контракт INT-05 (ADR-003). API предоставляет команда АБС; требования к контракту сформулированы СА проекта IDM-JOINER.
+    Клиент — сервис провижининга IdM. Транспорт — HTTPS с mTLS, доступ только с адресов IdM.
+
+    Идемпотентность:
+    - POST /users требует заголовок Idempotency-Key (IdM передаёт taskId). Повтор с тем же ключом
+      возвращает 200 и ранее созданного пользователя, а не ошибку.
+    - PUT и DELETE идемпотентны по семантике HTTP: повторный вызов даёт тот же результат.
+
+    Ошибки — RFC 7807. Коды 5xx, 429 и таймауты IdM считает техническими и повторяет;
+    4xx (кроме 429) — бизнес-ошибками и не повторяет (FR-16).
+servers:
+  - url: https://abs-adapter.bank.local/api/v1
+paths:
+  /users:
+    post:
+      summary: Создать пользователя АБС
+      operationId: createUser
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+            example:
+              login: IVANOV.AP
+              lastName: Иванов
+              firstName: Алексей
+              middleName: Петрович
+              personnelNumber: '004318'
+              branchCode: '066'
+              status: BLOCKED
+      responses:
+        '201':
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '200':
+          description: Повтор с тем же Idempotency-Key — возвращён ранее созданный пользователь
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '409':
+          description: Логин уже занят другим пользователем (другой Idempotency-Key)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '422':
+          description: Бизнес-ошибка, например неизвестный branchCode
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '503':
+          description: АБС недоступна (закрытие дня, регламентные работы)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /users/{login}:
+    parameters:
+      - $ref: '#/components/parameters/Login'
+    patch:
+      summary: Изменить статус пользователя
+      operationId: updateUserStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [BLOCKED, ACTIVE]
+      responses:
+        '200':
+          description: Статус изменён (или уже был таким)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Пользователь не найден
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+    delete:
+      summary: Удалить пользователя, который ни разу не был активирован
+      description: Используется при отмене приёма (FR-18). Пользователя с операциями удалить нельзя.
+      operationId: deleteUser
+      responses:
+        '204':
+          description: Удалён или уже отсутствовал
+        '409':
+          description: У пользователя есть операции в АБС, удаление невозможно
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /users/{login}/roles/{roleCode}:
+    parameters:
+      - $ref: '#/components/parameters/Login'
+      - name: roleCode
+        in: path
+        required: true
+        description: Код роли АБС (entitlement.external_ref), например OPERATOR
+        schema:
+          type: string
+    put:
+      summary: Назначить роль
+      operationId: grantRole
+      responses:
+        '204':
+          description: Роль назначена (или уже была назначена)
+        '404':
+          description: Пользователь или роль не найдены
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+    delete:
+      summary: Отозвать роль
+      operationId: revokeRole
+      responses:
+        '204':
+          description: Роль отозвана (или не была назначена)
+components:
+  parameters:
+    Login:
+      name: login
+      in: path
+      required: true
+      description: Логин в верхнем регистре
+      schema:
+        type: string
+        maxLength: 20
+        pattern: '^[A-Z0-9.\-]+$'
+  schemas:
+    UserCreate:
+      type: object
+      required: [login, lastName, firstName, personnelNumber, branchCode, status]
+      properties:
+        login:
+          type: string
+          maxLength: 20
+          pattern: '^[A-Z0-9.\-]+$'
+        lastName:
+          type: string
+          maxLength: 40
+        firstName:
+          type: string
+          maxLength: 40
+        middleName:
+          type: string
+          maxLength: 40
+        personnelNumber:
+          type: string
+        branchCode:
+          type: string
+          pattern: '^[0-9]{3}$'
+        status:
+          type: string
+          enum: [BLOCKED, ACTIVE]
+    User:
+      allOf:
+        - $ref: '#/components/schemas/UserCreate'
+        - type: object
+          required: [userId]
+          properties:
+            userId:
+              type: string
+              example: ABS-USR-88231
+            roles:
+              type: array
+              items:
+                type: string
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string

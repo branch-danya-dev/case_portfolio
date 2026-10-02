@@ -1,0 +1,76 @@
+@startuml seq-01-hire
+title SEQ-01. Приём нового сотрудника: успешный сценарий
+autonumber
+skinparam responseMessageBelowArrow true
+
+actor "HR-специалист" as HR
+participant "HRMS" as HRMS
+queue "Kafka\nhr.employee.events.v1" as K
+participant "Обработчик\nсобытий" as INB
+participant "Ядро IdM" as CORE
+database "БД IdM" as DB
+participant "Планировщик" as SCH
+participant "Сервис\nпровижининга" as PROV
+participant "AD" as AD
+participant "Exchange" as EX
+participant "Адаптер АБС" as ABS
+participant "ServiceDesk" as SD
+participant "SMS-шлюз" as SMS
+actor "Руководитель" as MGR
+
+== Приказ проведён (пример: за 10 дней до выхода, дата выхода = D) ==
+HR -> HRMS : Провести приказ о приёме
+HRMS ->> K : EmployeeEvent(HIRE, eventId, key = personId)
+K ->> INB : Доставка (at-least-once)
+INB -> DB : Найти eventId в hr_event_inbox
+DB --> INB : Не найден
+INB -> INB : Валидация по схеме AsyncAPI
+INB -> CORE : Обработать HIRE
+CORE -> DB : Найти identity по personId
+DB --> CORE : Не найдена
+CORE -> DB : Создать identity (PRE_HIRE) и employment
+CORE -> CORE : Сгенерировать логин (FR-06)
+CORE -> CORE : Назначить ROLE-00 и роли по правилам (FR-09, FR-10)
+CORE -> CORE : Проверить SoD (FR-12): конфликтов нет
+CORE -> DB : Сохранить role_assignment, account (PLANNED),\nprovisioning_task (SCHEDULED на D−3 раб. дня)
+CORE -> DB : Записать eventId как обработанный
+CORE --> INB : OK
+INB ->> K : Commit offset
+
+note over CORE, DB
+  Шаги 10–15 выполняются в одной транзакции БД:
+  создание данных и отметка eventId фиксируются вместе.
+  Каждое действие пишется в журнал аудита (FR-21).
+end note
+
+== D−3 рабочих дня: создание учётных записей ==
+SCH -> PROV : Выполнить задачи с scheduled_at <= now
+PROV -> AD : Создать пользователя\n(userAccountControl = 514, заблокирован),\nдобавить в группы ролей
+AD --> PROV : OK, objectGUID
+PROV -> EX : Enable-Mailbox
+EX --> PROV : OK
+PROV -> ABS : POST /users (Idempotency-Key = taskId, status = BLOCKED)
+ABS --> PROV : 201 Created
+PROV -> ABS : PUT /users/{login}/roles/{roleCode}
+ABS --> PROV : 204
+PROV -> SD : Создать задачу «Выдать роль в СЭД» (connector_type = MANUAL)
+SD --> PROV : ticketId
+PROV -> CORE : Результаты задач
+CORE -> DB : account → CREATED_DISABLED (AD, Exchange, АБС);\nСЭД → ожидает закрытия задачи
+
+== D−1 рабочий день ==
+SCH -> CORE : Сформировать уведомления
+CORE ->> MGR : E-mail: доступы подготовлены (FR-19)
+
+== День D, 07:00 по часовому поясу подразделения ==
+SCH -> PROV : Активировать учётные записи
+PROV -> AD : Разблокировать (userAccountControl = 512),\nустановить одноразовый пароль, pwdLastSet = 0
+AD --> PROV : OK
+PROV -> ABS : PATCH /users/{login} (status = ACTIVE)
+ABS --> PROV : 200
+PROV -> CORE : Активация выполнена
+CORE -> DB : identity → ACTIVE, account → ACTIVE
+CORE -> SMS : Отправить OTP на mobilePhone (FR-20)
+SMS --> CORE : Принято
+CORE ->> MGR : E-mail: сотрудник может начать работу
+@enduml

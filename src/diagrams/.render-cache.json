@@ -1,0 +1,14 @@
+{
+  "source/idm-joiner-docs/02_requirements/diagrams/use-case.puml": "84b09c854074336bcd2a178d63f265d1ad704acbd6aaad40126744631c8582fb",
+  "source/idm-joiner-docs/03_architecture/diagrams/c4-container.puml": "0cde42b1fd6260d815321c17931b5456dbc41802d008a08199dd4496849444e4",
+  "source/idm-joiner-docs/03_architecture/diagrams/c4-context.puml": "ed6f5c2aaf0ccdfd2012630f38f23a0266235f7a72c722649181d2f526b77fe0",
+  "source/idm-joiner-docs/03_architecture/diagrams/er-model.puml": "382e6a14bd3caf765fdf5fba634a339093b990b42a9f9c4f6a6aee005827434c",
+  "source/idm-joiner-docs/03_architecture/diagrams/state-access-request.puml": "f3ade8c6ef3ea5da9e43c510c08b2b6f41ef432c652758ad7122c49b55a47d36",
+  "source/idm-joiner-docs/03_architecture/diagrams/state-account.puml": "cac61c64edd20f3d09cadae12d8042e13d620f23ed5180630c4dd3db36f0a0a8",
+  "source/idm-joiner-docs/03_architecture/diagrams/state-identity.puml": "0db4eff194d4c3536e92c7c444973f4745b70b257748fce0360897ef38d7a826",
+  "source/idm-joiner-docs/03_architecture/diagrams/state-provisioning-task.puml": "b21939a213cb5f1b905ad42a8c988056d32b513a8f15b2c329cc37b9de3ec911",
+  "source/idm-joiner-docs/04_integrations/diagrams/seq-01-hire.puml": "f48cf301d78a42fbe7b931b9c526afc525b9e11992856abea68610c51e7fbbd9",
+  "source/idm-joiner-docs/04_integrations/diagrams/seq-02-abs-failure.puml": "7f475c1abac4f8fbd36c9c60329fb047056193f445c594351b08d134488a4773",
+  "source/idm-joiner-docs/04_integrations/diagrams/seq-03-hire-cancelled.puml": "b307cfc8f8869d35407a3fe56a93d1df129f5e9c6415a0dd5e73718076f9a0d6",
+  "source/idm-joiner-docs/04_integrations/diagrams/seq-04-access-request.puml": "0dca29ccd76fc7a36bb3d35b897410cac7a54757f592b6e844a8d21c06d9b18b"
+}

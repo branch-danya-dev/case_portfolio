@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_1" name="AS-IS: предоставление доступов новому сотруднику" processRef="Process_1" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_HR" name="HR-специалист">
+        <bpmn:flowNodeRef>S0</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>A1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>A2</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_MGR" name="Руководитель">
+        <bpmn:flowNodeRef>A3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>A4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>A11</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>E1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_APR" name="Согласующие">
+        <bpmn:flowNodeRef>A5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>G1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_ADM" name="Администраторы">
+        <bpmn:flowNodeRef>A6</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>A7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>A8</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>A9</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>A10</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="S0" name="Кандидат принял оффер">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="A1" name="A1 Оформить приказ о приёме в HRMS">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="A2" name="A2 Сообщить руководителю дату выхода (e-mail)">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="A3" name="A3 Составить перечень доступов «как у коллеги»">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="A4" name="A4 Создать заявку в ServiceDesk">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="A5" name="A5 Согласовать заявку">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="G1" name="Согласовано?">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="A6" name="A6 Создать учётную запись AD">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_9</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="A7" name="A7 Создать почтовый ящик">
+      <bpmn:incoming>Flow_9</bpmn:incoming>
+      <bpmn:outgoing>Flow_10</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="A8" name="A8 Создать пользователя АБС, выдать роли">
+      <bpmn:incoming>Flow_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_11</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="A9" name="A9 Выдать права в СЭД">
+      <bpmn:incoming>Flow_11</bpmn:incoming>
+      <bpmn:outgoing>Flow_12</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="A10" name="A10 Передать логин и пароль руководителю">
+      <bpmn:incoming>Flow_12</bpmn:incoming>
+      <bpmn:outgoing>Flow_13</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="A11" name="A11 Передать учётные данные сотруднику">
+      <bpmn:incoming>Flow_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_14</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:endEvent id="E1" name="Доступы выданы (через 4–5 дней после выхода)">
+      <bpmn:incoming>Flow_14</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="S0" targetRef="A1" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="A1" targetRef="A2" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="A2" targetRef="A3" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="A3" targetRef="A4" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="A4" targetRef="A5" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="A5" targetRef="G1" />
+    <bpmn:sequenceFlow id="Flow_7" name="Да" sourceRef="G1" targetRef="A6" />
+    <bpmn:sequenceFlow id="Flow_8" name="Нет" sourceRef="G1" targetRef="A4" />
+    <bpmn:sequenceFlow id="Flow_9" sourceRef="A6" targetRef="A7" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="A7" targetRef="A8" />
+    <bpmn:sequenceFlow id="Flow_11" sourceRef="A8" targetRef="A9" />
+    <bpmn:sequenceFlow id="Flow_12" sourceRef="A9" targetRef="A10" />
+    <bpmn:sequenceFlow id="Flow_13" sourceRef="A10" targetRef="A11" />
+    <bpmn:sequenceFlow id="Flow_14" sourceRef="A11" targetRef="E1" />
+    <bpmn:textAnnotation id="Ann_P01"><bpmn:text>P-01 Запуск вручную, 40% заявок после выхода</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_1" sourceRef="A2" targetRef="Ann_P01" />
+    <bpmn:textAnnotation id="Ann_P02"><bpmn:text>P-02 Копирование лишних прав</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_2" sourceRef="A3" targetRef="Ann_P02" />
+    <bpmn:textAnnotation id="Ann_P03"><bpmn:text>P-03 Свободный текст, 23% возвратов</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_3" sourceRef="A4" targetRef="Ann_P03" />
+    <bpmn:textAnnotation id="Ann_P07"><bpmn:text>P-07 SoD проверяется «на глаз»</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_4" sourceRef="A5" targetRef="Ann_P07" />
+    <bpmn:textAnnotation id="Ann_P04"><bpmn:text>P-04 4 очереди, суммарно 2–4 дня</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_5" sourceRef="A7" targetRef="Ann_P04" />
+    <bpmn:textAnnotation id="Ann_P05"><bpmn:text>P-05 Пароль по e-mail и на бумаге</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_6" sourceRef="A10" targetRef="Ann_P05" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Participant_1_di" bpmnElement="Participant_1" isHorizontal="true"><dc:Bounds x="20" y="20" width="2190" height="640" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_HR_di" bpmnElement="Lane_HR" isHorizontal="true"><dc:Bounds x="50" y="20" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_MGR_di" bpmnElement="Lane_MGR" isHorizontal="true"><dc:Bounds x="50" y="180" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_APR_di" bpmnElement="Lane_APR" isHorizontal="true"><dc:Bounds x="50" y="340" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_ADM_di" bpmnElement="Lane_ADM" isHorizontal="true"><dc:Bounds x="50" y="500" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S0_di" bpmnElement="S0"><dc:Bounds x="152" y="82" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="115" y="123" width="110" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A1_di" bpmnElement="A1"><dc:Bounds x="260" y="60" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A2_di" bpmnElement="A2"><dc:Bounds x="410" y="60" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A3_di" bpmnElement="A3"><dc:Bounds x="560" y="220" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A4_di" bpmnElement="A4"><dc:Bounds x="710" y="220" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A5_di" bpmnElement="A5"><dc:Bounds x="860" y="380" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="G1_di" bpmnElement="G1" isMarkerVisible="true"><dc:Bounds x="1045" y="395" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1015" y="450" width="110" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A6_di" bpmnElement="A6"><dc:Bounds x="1160" y="540" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A7_di" bpmnElement="A7"><dc:Bounds x="1310" y="540" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A8_di" bpmnElement="A8"><dc:Bounds x="1460" y="540" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A9_di" bpmnElement="A9"><dc:Bounds x="1610" y="540" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A10_di" bpmnElement="A10"><dc:Bounds x="1760" y="540" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="A11_di" bpmnElement="A11"><dc:Bounds x="1910" y="220" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="E1_di" bpmnElement="E1"><dc:Bounds x="2102" y="242" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="2065" y="283" width="110" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1"><di:waypoint x="188" y="100" /><di:waypoint x="260" y="100" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2"><di:waypoint x="380" y="100" /><di:waypoint x="410" y="100" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3"><di:waypoint x="530" y="100" /><di:waypoint x="545" y="100" /><di:waypoint x="545" y="260" /><di:waypoint x="560" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4"><di:waypoint x="680" y="260" /><di:waypoint x="710" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5"><di:waypoint x="830" y="260" /><di:waypoint x="845" y="260" /><di:waypoint x="845" y="420" /><di:waypoint x="860" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6"><di:waypoint x="980" y="420" /><di:waypoint x="1045" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7"><di:waypoint x="1095" y="420" /><di:waypoint x="1128" y="420" /><di:waypoint x="1128" y="580" /><di:waypoint x="1160" y="580" /><bpmndi:BPMNLabel><dc:Bounds x="1101" y="404" width="30" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8"><di:waypoint x="1070" y="395" /><di:waypoint x="1070" y="200" /><di:waypoint x="770" y="200" /><di:waypoint x="770" y="220" /><bpmndi:BPMNLabel><dc:Bounds x="1076" y="379" width="30" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_9_di" bpmnElement="Flow_9"><di:waypoint x="1280" y="580" /><di:waypoint x="1310" y="580" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10"><di:waypoint x="1430" y="580" /><di:waypoint x="1460" y="580" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11"><di:waypoint x="1580" y="580" /><di:waypoint x="1610" y="580" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12"><di:waypoint x="1730" y="580" /><di:waypoint x="1760" y="580" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13_di" bpmnElement="Flow_13"><di:waypoint x="1880" y="580" /><di:waypoint x="1895" y="580" /><di:waypoint x="1895" y="260" /><di:waypoint x="1910" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14_di" bpmnElement="Flow_14"><di:waypoint x="2030" y="260" /><di:waypoint x="2102" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Ann_P01_di" bpmnElement="Ann_P01"><dc:Bounds x="460" y="690" width="138" height="56" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_1_di" bpmnElement="Assoc_1"><di:waypoint x="470" y="140" /><di:waypoint x="470" y="690" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Ann_P02_di" bpmnElement="Ann_P02"><dc:Bounds x="610" y="690" width="138" height="56" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_2_di" bpmnElement="Assoc_2"><di:waypoint x="620" y="300" /><di:waypoint x="620" y="690" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Ann_P03_di" bpmnElement="Ann_P03"><dc:Bounds x="760" y="690" width="138" height="56" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_3_di" bpmnElement="Assoc_3"><di:waypoint x="770" y="300" /><di:waypoint x="770" y="690" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Ann_P07_di" bpmnElement="Ann_P07"><dc:Bounds x="910" y="690" width="138" height="56" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_4_di" bpmnElement="Assoc_4"><di:waypoint x="920" y="460" /><di:waypoint x="920" y="690" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Ann_P04_di" bpmnElement="Ann_P04"><dc:Bounds x="1360" y="690" width="138" height="56" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_5_di" bpmnElement="Assoc_5"><di:waypoint x="1370" y="620" /><di:waypoint x="1370" y="690" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Ann_P05_di" bpmnElement="Ann_P05"><dc:Bounds x="1810" y="690" width="138" height="56" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_6_di" bpmnElement="Assoc_6"><di:waypoint x="1820" y="620" /><di:waypoint x="1820" y="690" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

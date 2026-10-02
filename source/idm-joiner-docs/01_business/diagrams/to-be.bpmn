@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_1" name="TO-BE: предоставление доступов новому сотруднику" processRef="Process_1" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_HR" name="HR-специалист">
+        <bpmn:flowNodeRef>S0</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_MGR" name="Руководитель">
+        <bpmn:flowNodeRef>T11</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>E1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_IDM" name="IdM (автоматически)">
+        <bpmn:flowNodeRef>T2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>G1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>G2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>TM</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T9</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T10</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_SEC" name="Инженер ИБ">
+        <bpmn:flowNodeRef>T6</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_ADM" name="Администраторы">
+        <bpmn:flowNodeRef>T8</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="S0" name="Кандидат принял оффер">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="T1" name="T1 Оформить приказ о приёме в HRMS">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="T2" name="T2 Принять и проверить кадровое событие">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="T3" name="T3 Создать идентичность, сгенерировать логин">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="T4" name="T4 Определить бизнес-роли">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="T5" name="T5 Проверить SoD">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="G1" name="Есть SoD-конфликт?">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="T6" name="T6 Рассмотреть SoD-конфликт">
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="T7" name="T7 Создать учётные записи (заблокированы)">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:incoming>Flow_9</bpmn:incoming>
+      <bpmn:outgoing>Flow_10</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="G2" name="Нужны ручные задачи?">
+      <bpmn:incoming>Flow_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_11</bpmn:outgoing>
+      <bpmn:outgoing>Flow_12</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="T8" name="T8 Исполнить задачу вручную (СЭД, сбои)">
+      <bpmn:incoming>Flow_12</bpmn:incoming>
+      <bpmn:outgoing>Flow_13</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:intermediateCatchEvent id="TM" name="День выхода, 07:00 по времени подразделения">
+      <bpmn:incoming>Flow_11</bpmn:incoming>
+      <bpmn:incoming>Flow_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_14</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerDef_TM" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="T9" name="T9 Активировать учётные записи">
+      <bpmn:incoming>Flow_14</bpmn:incoming>
+      <bpmn:outgoing>Flow_15</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="T10" name="T10 Отправить OTP по SMS, уведомить руководителя">
+      <bpmn:incoming>Flow_15</bpmn:incoming>
+      <bpmn:outgoing>Flow_16</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="T11" name="T11 Получить уведомление, при необходимости запросить доп. доступы">
+      <bpmn:incoming>Flow_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_17</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="E1" name="Сотрудник работает с 09:00 первого дня">
+      <bpmn:incoming>Flow_17</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="S0" targetRef="T1" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="T1" targetRef="T2" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="T2" targetRef="T3" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="T3" targetRef="T4" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="T4" targetRef="T5" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="T5" targetRef="G1" />
+    <bpmn:sequenceFlow id="Flow_7" name="Нет" sourceRef="G1" targetRef="T7" />
+    <bpmn:sequenceFlow id="Flow_8" name="Да" sourceRef="G1" targetRef="T6" />
+    <bpmn:sequenceFlow id="Flow_9" sourceRef="T6" targetRef="T7" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="T7" targetRef="G2" />
+    <bpmn:sequenceFlow id="Flow_11" name="Нет" sourceRef="G2" targetRef="TM" />
+    <bpmn:sequenceFlow id="Flow_12" name="Да" sourceRef="G2" targetRef="T8" />
+    <bpmn:sequenceFlow id="Flow_13" sourceRef="T8" targetRef="TM" />
+    <bpmn:sequenceFlow id="Flow_14" sourceRef="TM" targetRef="T9" />
+    <bpmn:sequenceFlow id="Flow_15" sourceRef="T9" targetRef="T10" />
+    <bpmn:sequenceFlow id="Flow_16" sourceRef="T10" targetRef="T11" />
+    <bpmn:sequenceFlow id="Flow_17" sourceRef="T11" targetRef="E1" />
+    <bpmn:textAnnotation id="Ann_BRL"><bpmn:text>Не позднее чем за 2 раб. дня до выхода (риск R-01)</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_1" sourceRef="T1" targetRef="Ann_BRL" />
+    <bpmn:textAnnotation id="Ann_BRL01"><bpmn:text>BRL-01: за 3 раб. дня до выхода, в заблокированном состоянии</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_2" sourceRef="T7" targetRef="Ann_BRL01" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Participant_1_di" bpmnElement="Participant_1" isHorizontal="true"><dc:Bounds x="20" y="20" width="2190" height="800" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_HR_di" bpmnElement="Lane_HR" isHorizontal="true"><dc:Bounds x="50" y="20" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_MGR_di" bpmnElement="Lane_MGR" isHorizontal="true"><dc:Bounds x="50" y="180" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_IDM_di" bpmnElement="Lane_IDM" isHorizontal="true"><dc:Bounds x="50" y="340" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SEC_di" bpmnElement="Lane_SEC" isHorizontal="true"><dc:Bounds x="50" y="500" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_ADM_di" bpmnElement="Lane_ADM" isHorizontal="true"><dc:Bounds x="50" y="660" width="2160" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S0_di" bpmnElement="S0"><dc:Bounds x="152" y="82" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="115" y="123" width="110" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T1_di" bpmnElement="T1"><dc:Bounds x="260" y="60" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T2_di" bpmnElement="T2"><dc:Bounds x="410" y="380" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T3_di" bpmnElement="T3"><dc:Bounds x="560" y="380" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T4_di" bpmnElement="T4"><dc:Bounds x="710" y="380" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T5_di" bpmnElement="T5"><dc:Bounds x="860" y="380" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="G1_di" bpmnElement="G1" isMarkerVisible="true"><dc:Bounds x="1045" y="395" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1015" y="350" width="110" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T6_di" bpmnElement="T6"><dc:Bounds x="1010" y="540" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T7_di" bpmnElement="T7"><dc:Bounds x="1160" y="380" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="G2_di" bpmnElement="G2" isMarkerVisible="true"><dc:Bounds x="1345" y="395" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1315" y="350" width="110" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T8_di" bpmnElement="T8"><dc:Bounds x="1310" y="700" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TM_di" bpmnElement="TM"><dc:Bounds x="1502" y="402" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1465" y="357" width="110" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T9_di" bpmnElement="T9"><dc:Bounds x="1610" y="380" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T10_di" bpmnElement="T10"><dc:Bounds x="1760" y="380" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T11_di" bpmnElement="T11"><dc:Bounds x="1910" y="220" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="E1_di" bpmnElement="E1"><dc:Bounds x="2102" y="242" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="2065" y="283" width="110" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1"><di:waypoint x="188" y="100" /><di:waypoint x="260" y="100" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2"><di:waypoint x="380" y="100" /><di:waypoint x="395" y="100" /><di:waypoint x="395" y="420" /><di:waypoint x="410" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3"><di:waypoint x="530" y="420" /><di:waypoint x="560" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4"><di:waypoint x="680" y="420" /><di:waypoint x="710" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5"><di:waypoint x="830" y="420" /><di:waypoint x="860" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6"><di:waypoint x="980" y="420" /><di:waypoint x="1045" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7"><di:waypoint x="1095" y="420" /><di:waypoint x="1160" y="420" /><bpmndi:BPMNLabel><dc:Bounds x="1101" y="404" width="30" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8"><di:waypoint x="1070" y="445" /><di:waypoint x="1070" y="540" /><bpmndi:BPMNLabel><dc:Bounds x="1076" y="445" width="30" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_9_di" bpmnElement="Flow_9"><di:waypoint x="1130" y="580" /><di:waypoint x="1220" y="580" /><di:waypoint x="1220" y="460" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10"><di:waypoint x="1280" y="420" /><di:waypoint x="1345" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11"><di:waypoint x="1395" y="420" /><di:waypoint x="1502" y="420" /><bpmndi:BPMNLabel><dc:Bounds x="1401" y="404" width="30" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12"><di:waypoint x="1370" y="445" /><di:waypoint x="1370" y="700" /><bpmndi:BPMNLabel><dc:Bounds x="1376" y="445" width="30" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13_di" bpmnElement="Flow_13"><di:waypoint x="1430" y="740" /><di:waypoint x="1520" y="740" /><di:waypoint x="1520" y="438" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14_di" bpmnElement="Flow_14"><di:waypoint x="1538" y="420" /><di:waypoint x="1610" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15_di" bpmnElement="Flow_15"><di:waypoint x="1730" y="420" /><di:waypoint x="1760" y="420" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16_di" bpmnElement="Flow_16"><di:waypoint x="1880" y="420" /><di:waypoint x="1895" y="420" /><di:waypoint x="1895" y="260" /><di:waypoint x="1910" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17_di" bpmnElement="Flow_17"><di:waypoint x="2030" y="260" /><di:waypoint x="2102" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Ann_BRL_di" bpmnElement="Ann_BRL"><dc:Bounds x="310" y="850" width="138" height="56" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_1_di" bpmnElement="Assoc_1"><di:waypoint x="320" y="140" /><di:waypoint x="320" y="850" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Ann_BRL01_di" bpmnElement="Ann_BRL01"><dc:Bounds x="1240" y="850" width="138" height="56" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_2_di" bpmnElement="Assoc_2"><di:waypoint x="1250" y="460" /><di:waypoint x="1250" y="850" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,37 @@
+---
+/** Кнопка «Изучено». Состояние хранится в localStorage (ключ sa:studied). */
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+<sa-studied-toggle data-slug={slug}>
+  <button type="button" class="studied-toggle" aria-pressed="false">
+    <span class="mark" aria-hidden="true"></span>
+    <span class="label">Отметить как изученное</span>
+  </button>
+</sa-studied-toggle>
+
+<script>
+  import { getStudied, normalizeSlug, setStudied } from '../scripts/storage';
+
+  class StudiedToggle extends HTMLElement {
+    connectedCallback() {
+      const slug = normalizeSlug(this.dataset.slug ?? '');
+      const button = this.querySelector('button')!;
+      const label = this.querySelector('.label')!;
+      const render = () => {
+        const on = getStudied().includes(slug);
+        button.setAttribute('aria-pressed', String(on));
+        label.textContent = on ? 'Изучено' : 'Отметить как изученное';
+      };
+      button.addEventListener('click', () => {
+        setStudied(slug, button.getAttribute('aria-pressed') !== 'true');
+        render();
+      });
+      render();
+    }
+  }
+  customElements.define('sa-studied-toggle', StudiedToggle);
+</script>

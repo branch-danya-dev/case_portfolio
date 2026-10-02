@@ -1,0 +1,56 @@
+@startuml use-case
+' Диаграмма вариантов использования IdM (волна 1)
+' Открыть: VS Code (расширение PlantUML), IntelliJ, plantuml.com/plantuml, Confluence (макрос PlantUML)
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Кадровая система\n(HRMS)" as HRMS <<система>>
+actor "Таймер" as TIMER <<система>>
+actor "Руководитель" as MGR
+actor "Новый сотрудник" as EMP
+actor "Владелец ресурса" as OWNER
+actor "Инженер ИБ" as SEC
+actor "Администратор" as ADM
+actor "Владелец\nролевой модели" as RM
+actor "Аудитор" as AUD
+
+rectangle "IdM" {
+  usecase "UC-01 Обработать кадровое\nсобытие о приёме" as UC01
+  usecase "UC-06 Обработать изменение\nили отмену приёма" as UC06
+  usecase "UC-10 Выполнить ежедневную\nсверку с HRMS" as UC10
+  usecase "UC-02 Активировать доступы\nв день выхода" as UC02
+  usecase "UC-09 Получить первичные\nучётные данные" as UC09
+  usecase "UC-03 Запросить\nдополнительные доступы" as UC03
+  usecase "UC-04 Согласовать заявку\nили SoD-конфликт" as UC04
+  usecase "UC-05 Исполнить задачу\nручного исполнения" as UC05
+  usecase "UC-07 Вести ролевую модель" as UC07
+  usecase "UC-08 Просмотреть журнал\nи отчёты" as UC08
+  usecase "Проверить SoD" as SOD
+}
+
+HRMS --> UC01
+HRMS --> UC06
+TIMER --> UC10
+TIMER --> UC02
+EMP --> UC09
+MGR --> UC03
+OWNER --> UC04
+SEC --> UC04
+ADM --> UC05
+RM --> UC07
+AUD --> UC08
+SEC --> UC08
+
+UC01 ..> SOD : <<include>>
+UC03 ..> SOD : <<include>>
+UC04 ..> UC01 : <<extend>>\n(при SoD-конфликте)
+UC05 ..> UC01 : <<extend>>\n(СЭД или сбой)
+
+note right of SOD
+  <<include>> — базовый сценарий всегда
+  включает этот шаг (стрелка от базового).
+  <<extend>> — расширение выполняется только
+  при условии (стрелка от расширения к базовому).
+end note
+@enduml

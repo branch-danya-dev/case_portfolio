@@ -1,0 +1,29 @@
+@startuml state-provisioning-task
+title Жизненный цикл задачи провижининга
+hide empty description
+
+[*] --> SCHEDULED
+SCHEDULED : Ожидает scheduled_at
+IN_PROGRESS : Вызов коннектора
+RETRY_WAIT : Ожидание повтора\n(1 мин, затем 5 мин)
+MANUAL : Задача в ServiceDesk
+DONE : Выполнена
+CANCELLED : Отменена
+
+SCHEDULED --> IN_PROGRESS : Наступило scheduled_at
+SCHEDULED --> CANCELLED : HIRE_CANCELLED
+IN_PROGRESS --> DONE : Успех
+IN_PROGRESS --> RETRY_WAIT : Техническая ошибка\n[attempts < 3] / attempts++
+RETRY_WAIT --> IN_PROGRESS : Таймер повтора
+IN_PROGRESS --> MANUAL : Техническая ошибка [attempts = 3]\nили бизнес-ошибка\n/ создать задачу в ServiceDesk
+MANUAL --> DONE : Webhook: задача закрыта
+MANUAL --> CANCELLED : HIRE_CANCELLED\n/ отменить задачу ServiceDesk
+DONE --> [*]
+CANCELLED --> [*]
+
+note right of IN_PROGRESS
+  Ключ идемпотентности = task_id.
+  Повтор после таймаута не создаёт
+  дубль в целевой системе.
+end note
+@enduml

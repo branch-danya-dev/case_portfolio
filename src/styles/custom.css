@@ -1,0 +1,543 @@
+/* ==========================================================================
+   Тема: один акцентный цвет (бирюзовый), шрифты Inter и JetBrains Mono (локально).
+   Контраст акцента к фону проверен на уровне WCAG AA для текста ссылок.
+   ========================================================================== */
+
+:root {
+  --sl-font: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sl-font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Mono', monospace;
+  --sl-content-width: 50rem;
+
+  /* Тёмная тема (по умолчанию в Starlight :root = тёмная) */
+  --sl-color-accent-low: #06302c;
+  --sl-color-accent: #14b8a6;
+  --sl-color-accent-high: #99f6e4;
+
+  --sa-radius: 0.6rem;
+  --sa-surface: var(--sl-color-gray-6);
+  --sa-border: var(--sl-color-gray-5);
+  --sa-ok: #4ade80;
+  --sa-warn: #fbbf24;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #ccfbf1;
+  --sl-color-accent: #0f766e;
+  --sl-color-accent-high: #134e4a;
+  --sa-surface: var(--sl-color-gray-7);
+  --sa-border: var(--sl-color-gray-5);
+  --sa-ok: #15803d;
+  --sa-warn: #b45309;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+/* Таблицы на узких экранах прокручиваются по горизонтали */
+.sl-markdown-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.sl-markdown-content th {
+  white-space: nowrap;
+}
+
+/* Видимый фокус для навигации с клавиатуры */
+:where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Блок «Кратко» ---------- */
+.brief {
+  margin-block: 1.25rem 1.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--sl-color-accent);
+  border-inline-start-width: 0.35rem;
+  border-radius: var(--sa-radius);
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-white);
+}
+.brief-title {
+  margin: 0 0 0.35rem;
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sl-color-accent-high);
+}
+.brief > :last-child {
+  margin-bottom: 0;
+}
+.sl-markdown-content .brief p {
+  margin-top: 0.35rem;
+}
+
+/* ---------- «Изучено» ---------- */
+.studied-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.75rem;
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-2);
+  background: transparent;
+  border: 1px solid var(--sa-border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.studied-toggle:hover {
+  border-color: var(--sl-color-accent);
+  color: var(--sl-color-white);
+}
+.studied-toggle[aria-pressed='true'] {
+  color: var(--sl-color-accent-high);
+  border-color: var(--sl-color-accent);
+  background: var(--sl-color-accent-low);
+}
+.studied-toggle .mark {
+  inline-size: 1rem;
+  block-size: 1rem;
+  display: inline-grid;
+  place-items: center;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+.studied-toggle[aria-pressed='true'] .mark::before {
+  content: '✓';
+}
+.page-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
+}
+.page-title-row .print-link {
+  margin-top: 0.5rem;
+  font-size: var(--sl-text-sm);
+}
+
+/* ---------- Mermaid ---------- */
+.mermaid-figure {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  background: var(--sl-color-black);
+}
+.mermaid-render {
+  overflow-x: auto;
+  text-align: center;
+}
+.mermaid-render svg {
+  max-width: 100%;
+  height: auto;
+}
+.mermaid-figure.is-rendered .mermaid-code {
+  display: none;
+}
+.mermaid-figure.is-rendered.show-code .mermaid-code {
+  display: block;
+}
+.mermaid-code {
+  white-space: pre;
+  tab-size: 4;
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-xs);
+  background: var(--sa-surface);
+  border-radius: calc(var(--sa-radius) - 0.2rem);
+}
+.mermaid-error {
+  margin: 0;
+  color: var(--sa-warn);
+  font-size: var(--sl-text-sm);
+}
+.mermaid-caption {
+  margin-top: 0.5rem;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+  text-align: center;
+}
+.mermaid-toolbar,
+.diagram-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+.mermaid-toolbar:empty {
+  display: none;
+}
+
+/* ---------- Общие кнопки инструментов ---------- */
+.sa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  font: inherit;
+  font-size: var(--sl-text-xs);
+  line-height: 1.6;
+  color: var(--sl-color-gray-2);
+  text-decoration: none;
+  background: var(--sa-surface);
+  border: 1px solid var(--sa-border);
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.sa-btn:hover {
+  color: var(--sl-color-white);
+  border-color: var(--sl-color-accent);
+}
+.sa-btn[aria-pressed='true'] {
+  border-color: var(--sl-color-accent);
+  color: var(--sl-color-accent-high);
+}
+.sa-btn--primary {
+  color: var(--sl-color-black);
+  background: var(--sl-color-accent);
+  border-color: var(--sl-color-accent);
+}
+.sa-btn--primary:hover {
+  color: var(--sl-color-black);
+  background: var(--sl-color-accent-high);
+}
+
+/* ---------- Вопросы к собеседованию ---------- */
+.questions {
+  display: grid;
+  gap: 0.6rem;
+  margin-block: 1rem;
+}
+.question {
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  background: var(--sa-surface);
+}
+.sl-markdown-content .question {
+  margin-top: 0;
+}
+.question > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--sl-color-white);
+  list-style: none;
+}
+.question > summary::-webkit-details-marker {
+  display: none;
+}
+.question > summary::before {
+  content: '▸';
+  color: var(--sl-color-accent);
+  transition: transform 0.15s;
+}
+.question[open] > summary::before {
+  transform: rotate(90deg);
+}
+.question .q-text {
+  flex: 1;
+}
+.question .answer {
+  padding: 0 1rem 0.9rem 2.1rem;
+  border-top: 1px solid var(--sa-border);
+}
+.question .answer > :first-child {
+  margin-top: 0.75rem;
+}
+.level-badge {
+  flex: none;
+  padding: 0.05rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid var(--sa-border);
+  color: var(--sl-color-gray-2);
+}
+.level-badge[data-level='junior'] {
+  color: var(--sa-ok);
+  border-color: currentColor;
+}
+.level-badge[data-level='senior'] {
+  color: var(--sa-warn);
+  border-color: currentColor;
+}
+
+/* ---------- Ссылка на артефакт кейса ---------- */
+.case-ref {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+.case-ref .case-id {
+  padding: 0 0.35rem;
+  font-family: var(--sl-font-mono);
+  font-size: 0.8em;
+  border-radius: 0.3rem;
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-accent-high);
+  text-decoration: none;
+}
+
+/* ---------- Связанные темы ---------- */
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+.sl-markdown-content .related li {
+  margin: 0;
+}
+.related a {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--sa-border);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: var(--sl-text-sm);
+}
+.related a:hover {
+  border-color: var(--sl-color-accent);
+}
+.related-planned {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border: 1px dashed var(--sa-border);
+  border-radius: 999px;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+
+/* ---------- Символы нотаций (таблица BPMN и т. п.) ---------- */
+.notation-symbol {
+  display: block;
+  inline-size: 4.5rem;
+  min-inline-size: 4.5rem;
+  block-size: auto;
+  color: var(--sl-color-white);
+}
+.sl-markdown-content td:has(> .notation-symbol) {
+  vertical-align: middle;
+}
+
+/* ---------- Просмотрщик BPMN ---------- */
+.bpmn-viewer {
+  margin-block: 1.5rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  overflow: hidden;
+  background: var(--sa-surface);
+}
+.bpmn-viewer__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--sa-border);
+}
+.bpmn-viewer__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-white);
+}
+.bpmn-viewer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+/* Холст всегда светлый: так схемы читаются одинаково, как в Camunda Modeler */
+.bpmn-viewer__canvas {
+  position: relative;
+  background: #fff;
+  color: #111;
+}
+.bpmn-viewer__canvas .djs-container {
+  font-family: var(--sl-font);
+}
+.bpmn-viewer__status {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: #444;
+  font-size: var(--sl-text-sm);
+}
+.bpmn-viewer__hint {
+  margin: 0;
+  padding: 0.4rem 0.75rem;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+  border-top: 1px solid var(--sa-border);
+}
+.bpmn-viewer:fullscreen {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+}
+.bpmn-viewer:fullscreen .bpmn-viewer__canvas {
+  flex: 1;
+  height: auto !important;
+}
+
+/* ---------- Диаграммы PlantUML ---------- */
+.diagram-figure {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  background: #fff;
+}
+.diagram-figure img {
+  display: block;
+  margin-inline: auto;
+  max-width: 100%;
+  height: auto;
+}
+.diagram-figure figcaption {
+  margin-top: 0.5rem;
+  font-size: var(--sl-text-sm);
+  text-align: center;
+  color: #444;
+}
+
+/* ---------- Главная ---------- */
+.home-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.9rem;
+  margin-block: 1.25rem 2rem;
+}
+.sl-markdown-content .home-sections > * {
+  margin: 0;
+}
+.home-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  background: var(--sa-surface);
+  text-decoration: none;
+  color: var(--sl-color-gray-2);
+}
+a.home-card:hover {
+  border-color: var(--sl-color-accent);
+}
+.home-card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 650;
+  color: var(--sl-color-white);
+}
+.home-card__title svg {
+  color: var(--sl-color-accent);
+  flex: none;
+}
+.home-card__desc {
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
+}
+.home-card--soon {
+  opacity: 0.65;
+}
+.home-card__soon {
+  align-self: flex-start;
+  margin-top: auto;
+  font-size: 0.7rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  border: 1px dashed var(--sa-border);
+}
+.home-progress {
+  display: grid;
+  gap: 0.4rem;
+  margin-block: 1rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+}
+.home-progress__bar {
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--sl-color-gray-5);
+  overflow: hidden;
+}
+.home-progress__fill {
+  height: 100%;
+  width: 0;
+  background: var(--sl-color-accent);
+  transition: width 0.3s;
+}
+.home-progress__label {
+  font-size: var(--sl-text-sm);
+}
+.route {
+  counter-reset: route;
+  padding: 0;
+  list-style: none;
+}
+.sl-markdown-content .route > li {
+  position: relative;
+  margin: 0;
+  padding: 0 0 1rem 2.6rem;
+  counter-increment: route;
+}
+.route > li::before {
+  content: counter(route);
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  inline-size: 1.8rem;
+  block-size: 1.8rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: var(--sl-text-sm);
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-accent-high);
+}
+.route > li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0.88rem;
+  top: 2rem;
+  bottom: 0.2rem;
+  border-inline-start: 2px solid var(--sa-border);
+}

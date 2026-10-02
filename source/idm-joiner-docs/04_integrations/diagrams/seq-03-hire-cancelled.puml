@@ -1,0 +1,41 @@
+@startuml seq-03-hire-cancelled
+title SEQ-03. Отмена приёма после создания учётных записей
+autonumber
+skinparam responseMessageBelowArrow true
+
+participant "HRMS" as HRMS
+queue "Kafka" as K
+participant "Обработчик\nсобытий" as INB
+participant "Ядро IdM" as CORE
+database "БД IdM" as DB
+participant "Сервис\nпровижининга" as PROV
+participant "AD" as AD
+participant "Exchange" as EX
+participant "Адаптер АБС" as ABS
+participant "ServiceDesk" as SD
+actor "Руководитель" as MGR
+
+HRMS ->> K : EmployeeEvent(HIRE_CANCELLED)
+K ->> INB : Доставка
+INB -> CORE : Обработать HIRE_CANCELLED
+CORE -> DB : Загрузить identity, accounts, tasks
+DB --> CORE : identity PRE_HIRE; AD, Exchange, АБС — CREATED_DISABLED;\nСЭД — задача MANUAL (SD-7790)
+
+alt Учётные записи ещё не активированы
+  CORE -> DB : Отменить задачи SCHEDULED (активация)
+  CORE -> PROV : Задачи DELETE для AD, Exchange, АБС
+  PROV -> EX : Disable-Mailbox
+  EX --> PROV : OK
+  PROV -> AD : Удалить пользователя
+  AD --> PROV : OK
+  PROV -> ABS : DELETE /users/{login}
+  ABS --> PROV : 204
+  PROV -> SD : Отменить задачу SD-7790
+  SD --> PROV : OK
+  CORE -> DB : accounts → DELETED, identity → CANCELLED,\nлогин освобождён
+  CORE ->> MGR : E-mail: приём отменён, доступы удалены
+else Учётные записи уже активированы (сотрудник вышел)
+  CORE -> DB : Событие отклонено
+  CORE -> SD : Инцидент группе HR:\nотмена после выхода = увольнение (Leaver, волна 2)
+end
+@enduml

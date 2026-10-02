@@ -1,0 +1,29 @@
+@startuml state-access-request
+title Жизненный цикл заявки на дополнительный доступ
+hide empty description
+
+[*] --> DRAFT
+DRAFT : Заполняется руководителем
+ON_APPROVAL : На согласовании
+APPROVED : Все позиции согласованы
+REJECTED : Отклонена
+PROVISIONING : Выдача полномочий
+COMPLETED : Все полномочия выданы
+PARTIALLY_COMPLETED : Часть позиций\nотклонена или не выдана
+CANCELLED : Отозвана
+
+DRAFT --> ON_APPROVAL : Отправить\n[SoD проверен]
+DRAFT --> CANCELLED : Отозвать
+ON_APPROVAL --> ON_APPROVAL : Решение по шагу /\nследующий согласующий;\nпросрочка / эскалация
+ON_APPROVAL --> APPROVED : Все позиции согласованы
+ON_APPROVAL --> REJECTED : Все позиции отклонены
+ON_APPROVAL --> PROVISIONING : Часть согласована,\nчасть отклонена
+ON_APPROVAL --> CANCELLED : Отозвать / HIRE_CANCELLED
+APPROVED --> PROVISIONING : Задачи провижининга созданы
+PROVISIONING --> COMPLETED : Все задачи DONE\n[нет отклонённых позиций]
+PROVISIONING --> PARTIALLY_COMPLETED : Есть отклонённые позиции\nили задачи FAILED
+REJECTED --> [*]
+COMPLETED --> [*]
+PARTIALLY_COMPLETED --> [*]
+CANCELLED --> [*]
+@enduml

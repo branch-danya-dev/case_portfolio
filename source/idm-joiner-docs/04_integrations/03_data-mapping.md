@@ -1,0 +1,43 @@
+# Маппинг данных
+
+Версия 1.0 · Статус: Согласован · Автор: Системный аналитик
+
+Маппинг отвечает на вопрос **«какое поле источника превращается в какое поле приёмника и по какому правилу»**. Это самый «приземлённый» артефакт системного аналитика и один из самых важных: ошибки маппинга находят только на тестах или в продуктиве.
+
+## 1. Кадровое событие (INT-01) → IdM → AD / Exchange / АБС
+
+| Поле события | Атрибут IdM | AD (INT-03) | Exchange (INT-04) | АБС (INT-05) | Правило преобразования |
+|---|---|---|---|---|---|
+| `personId` | `identity.person_id` | — | — | — | Без изменений; ключ поиска идентичности |
+| `person.lastName` | `identity.last_name` | `sn` | — | `lastName` | Без изменений |
+| `person.firstName` | `identity.first_name` | `givenName` | — | `firstName` | Без изменений |
+| `person.middleName` | `identity.middle_name` | `middleName` | — | `middleName` | Пусто, если нет отчества |
+| ФИО (вычисляется) | — | `displayName`, `cn` | `DisplayName` | — | «Фамилия Имя Отчество» |
+| — (генерируется) | `account.login` | `sAMAccountName` | `Alias` | `login` | FR-06; в АБС — в верхнем регистре |
+| — (генерируется) | — | `userPrincipalName` | `PrimarySmtpAddress` | — | `<login>@bank.ru` |
+| `employment.employeeNumber` | `employment.employee_number` | `employeeID` | — | `personnelNumber` | Без изменений |
+| `employment.position.name` | `position.name` | `title` | — | — | Без изменений |
+| `employment.orgUnit.name` | `org_unit.name` | `department` | — | — | Без изменений |
+| `employment.orgUnit.code` | `org_unit.org_unit_code` | OU размещения | База почтовых ящиков | `branchCode` | Через справочник `org_unit`: OU, `abs_branch_code`; нет значения → бизнес-ошибка, задача в ServiceDesk |
+| `employment.managerEmployeeNumber` | `employment.manager_identity_id` | `manager` | — | — | Поиск идентичности руководителя → DN его учётной записи AD; не найден — атрибут не заполняется, предупреждение в журнал |
+| `employment.hireDate` | `employment.hire_date` | — | — | — | Используется для расчёта дат FR-07, FR-08 |
+| `person.mobilePhone` | `identity.mobile_phone` | **не передаётся** | — | — | Только для SMS (FR-20); формат E.164 `+79XXXXXXXXX`; ПДн минимизированы (NFR-09) |
+| — | `account.status` | `userAccountControl` | — | `status` | CREATED_DISABLED → 514 / BLOCKED; ACTIVE → 512 / ACTIVE |
+| — | `entitlement.external_ref` | `memberOf` (через группу) | `Add-MailboxPermission` | `roles[]` | По составу ролей |
+
+## 2. Справочник подразделений (фрагмент)
+
+| `org_unit_code` | Название | `org_unit_type` | `timezone` | OU в AD | `abs_branch_code` |
+|---|---|---|---|---|---|
+| 0001 | Головной офис, ДИТ | `IT_DEPT` | Europe/Moscow | `OU=IT,OU=HQ,DC=bank,DC=local` | 000 |
+| 0102 | Бухгалтерия | `ACCOUNTING` | Europe/Moscow | `OU=ACC,OU=HQ,DC=bank,DC=local` | 000 |
+| 1601 | Доп. офис «Екатеринбург-Центр» | `RETAIL_OFFICE` | Asia/Yekaterinburg | `OU=EKB,OU=Branches,DC=bank,DC=local` | 066 |
+| 2501 | Доп. офис «Владивосток» | `RETAIL_OFFICE` | Asia/Vladivostok | `OU=VVO,OU=Branches,DC=bank,DC=local` | 025 |
+
+## 3. Типичные ловушки маппинга, проверенные в этом проекте
+
+- **Длина полей.** `sAMAccountName` — до 20 символов, поле `lastName` в АБС — до 40. Длинные двойные фамилии должны пройти тест.
+- **Регистр.** АБС хранит логины в верхнем регистре, AD — регистронезависим. Сравнение логинов — без учёта регистра.
+- **Отсутствующие значения.** Нет отчества, нет руководителя (руководитель сам ещё не принят), нет телефона. Для каждого случая определено поведение.
+- **Справочники.** Код подразделения HRMS ≠ код филиала АБС. Без справочника соответствия интеграция «работает» только на тестовых данных.
+- **Буква «ё».** HRMS хранит «Королёв», в АБС исторически «Королев». Решение: в АБС передаётся как есть; поиск в IdM — с нормализацией «ё» → «е».

@@ -1,0 +1,198 @@
+@startuml er-model
+' Логическая модель данных IdM (нотация «вороньи лапки» / Crow's Foot)
+' ||  — ровно один;  |o — ноль или один;  }o — ноль или много;  }| — один или много
+hide circle
+hide empty methods
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+package "Кадровые данные" #F7F9FC {
+  entity "identity\nИдентичность" as identity {
+    * identity_id : uuid <<PK>>
+    --
+    * person_id : varchar <<UK>> «из HRMS»
+    * last_name : varchar
+    * first_name : varchar
+      middle_name : varchar
+      mobile_phone : varchar
+    * status : enum «PRE_HIRE, ACTIVE, CANCELLED, TERMINATED»
+  }
+  entity "employment\nТрудоустройство" as employment {
+    * employment_id : uuid <<PK>>
+    --
+    * identity_id : uuid <<FK>>
+    * hr_employment_id : varchar <<UK>>
+    * employee_number : varchar «табельный №»
+    * org_unit_code : varchar <<FK>>
+    * position_code : varchar <<FK>>
+      manager_identity_id : uuid <<FK>>
+    * employment_type : enum «MAIN, PART_TIME»
+    * hire_date : date
+    * status : enum
+  }
+  entity "org_unit\nПодразделение" as org_unit {
+    * org_unit_code : varchar <<PK>>
+    --
+    * name : varchar
+    * org_unit_type : varchar
+    * timezone : varchar «Europe/Moscow…»
+      parent_code : varchar <<FK>>
+      abs_branch_code : varchar
+  }
+  entity "position\nДолжность" as position {
+    * position_code : varchar <<PK>>
+    --
+    * name : varchar
+  }
+  entity "hr_event_inbox\nВходящие события" as inbox {
+    * event_id : uuid <<PK>>
+    --
+    * event_type : enum
+    * received_at : timestamp
+      processed_at : timestamp
+    * status : enum «PROCESSED, REJECTED»
+  }
+}
+
+package "Ролевая модель" #FFF8E1 {
+  entity "business_role\nБизнес-роль" as role {
+    * role_id : varchar <<PK>>
+    --
+    * name : varchar
+    * is_birthright : boolean
+  }
+  entity "entitlement\nПолномочие" as ent {
+    * entitlement_id : varchar <<PK>>
+    --
+    * system_code : varchar <<FK>>
+    * name : varchar
+    * external_ref : varchar «имя группы, код роли АБС»
+    * is_critical : boolean
+      owner_identity_id : uuid <<FK>>
+  }
+  entity "role_entitlement" as role_ent {
+    * role_id : varchar <<PK, FK>>
+    * entitlement_id : varchar <<PK, FK>>
+  }
+  entity "assignment_rule\nПравило назначения" as rule {
+    * rule_id : varchar <<PK>>
+    --
+      org_unit_type : varchar «null = любой»
+      position_code : varchar «null = любой»
+    * role_id : varchar <<FK>>
+    * valid_from : date
+      valid_to : date
+  }
+  entity "sod_rule\nSoD-правило" as sod {
+    * sod_rule_id : varchar <<PK>>
+    --
+    * entitlement_a : varchar <<FK>>
+    * entitlement_b : varchar <<FK>>
+    * reaction : enum «DENY, APPROVAL»
+  }
+  entity "target_system\nЦелевая система" as sys {
+    * system_code : varchar <<PK>>
+    --
+    * name : varchar
+    * connector_type : enum «LDAP, POWERSHELL, REST, MANUAL»
+  }
+}
+
+package "Доступы" #E3F2FD {
+  entity "account\nУчётная запись" as account {
+    * account_id : uuid <<PK>>
+    --
+    * identity_id : uuid <<FK>>
+    * system_code : varchar <<FK>>
+    * login : varchar
+      external_id : varchar «objectGUID, id в АБС»
+    * status : enum
+  }
+  entity "role_assignment\nНазначение роли" as ra {
+    * assignment_id : uuid <<PK>>
+    --
+    * employment_id : uuid <<FK>>
+    * role_id : varchar <<FK>>
+    * source : enum «RULE, REQUEST»
+      rule_id : varchar <<FK>>
+      request_id : uuid <<FK>>
+  }
+  entity "account_entitlement\nВыданное полномочие" as ae {
+    * account_id : uuid <<PK, FK>>
+    * entitlement_id : varchar <<PK, FK>>
+    --
+    * basis_type : enum «ROLE, REQUEST, SOD_EXCEPTION»
+    * basis_id : varchar
+    * status : enum
+    * granted_at : timestamp
+  }
+  entity "provisioning_task\nЗадача провижининга" as task {
+    * task_id : uuid <<PK>> «= ключ идемпотентности»
+    --
+    * account_id : uuid <<FK>>
+    * operation : enum «CREATE, ENABLE, GRANT, REVOKE, DELETE»
+      entitlement_id : varchar <<FK>>
+    * scheduled_at : timestamp
+    * status : enum
+    * attempts : int
+      last_error : text
+      sd_ticket_id : varchar
+  }
+  entity "reserved_login\nЗарезервированный логин" as rl {
+    * login : varchar <<PK>>
+    --
+    * person_id : varchar
+    * reserved_until : date
+  }
+}
+
+package "Заявки" #F3E5F5 {
+  entity "access_request\nЗаявка" as req {
+    * request_id : uuid <<PK>>
+    --
+    * employment_id : uuid <<FK>>
+    * requester_identity_id : uuid <<FK>>
+    * justification : text
+    * status : enum
+    * created_at : timestamp
+  }
+  entity "request_item\nПозиция заявки" as item {
+    * item_id : uuid <<PK>>
+    --
+    * request_id : uuid <<FK>>
+    * entitlement_id : varchar <<FK>>
+    * status : enum
+  }
+  entity "approval\nСогласование" as appr {
+    * approval_id : uuid <<PK>>
+    --
+    * item_id : uuid <<FK>>
+    * step : enum «OWNER, SECURITY»
+      approver_identity_id : uuid <<FK>>
+      decision : enum «APPROVED, REJECTED»
+      comment : text
+    * due_at : timestamp
+  }
+}
+
+identity ||--o{ employment
+org_unit ||--o{ employment
+position ||--o{ employment
+org_unit |o--o{ org_unit : parent
+identity ||--o{ account
+sys ||--o{ account
+sys ||--o{ ent
+role ||--o{ role_ent
+ent ||--o{ role_ent
+role ||--o{ rule
+ent ||--o{ sod
+employment ||--o{ ra
+role ||--o{ ra
+account ||--o{ ae
+ent ||--o{ ae
+account ||--o{ task
+employment ||--o{ req
+req ||--|{ item
+ent ||--o{ item
+item ||--o{ appr
+@enduml

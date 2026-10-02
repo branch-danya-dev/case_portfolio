@@ -1,0 +1,53 @@
+@startuml seq-02-abs-failure
+title SEQ-02. Сбой АБС при создании пользователя
+autonumber
+skinparam responseMessageBelowArrow true
+
+participant "Планировщик" as SCH
+participant "Сервис\nпровижининга" as PROV
+database "БД IdM" as DB
+participant "Адаптер АБС" as ABS
+participant "ServiceDesk" as SD
+actor "Администратор АБС" as ADM
+participant "Ядро IdM" as CORE
+actor "Руководитель" as MGR
+
+SCH -> PROV : Выполнить задачу task-42 (CREATE в АБС)
+PROV -> ABS : POST /users\nIdempotency-Key: task-42
+ABS -[#red]-> PROV : Таймаут 30 с (ответа нет)
+PROV -> DB : task-42: attempts = 1, RETRY_WAIT (1 мин)
+
+... 1 минута ...
+
+PROV -> ABS : POST /users\nIdempotency-Key: task-42 (тот же ключ)
+alt Первый запрос всё-таки выполнился в АБС
+  ABS --> PROV : 200 OK (повтор по ключу, возвращён созданный пользователь)
+  PROV -> DB : task-42 → DONE
+  note right : Без ключа идемпотентности\nздесь был бы дубль пользователя\nили ошибка «логин занят»
+else АБС недоступна
+  ABS --> PROV : 503 Service Unavailable
+  PROV -> DB : attempts = 2, RETRY_WAIT (5 мин)
+  ... 5 минут ...
+  PROV -> ABS : POST /users (Idempotency-Key: task-42)
+  ABS --> PROV : 503
+  PROV -> DB : attempts = 3
+  PROV -> SD : Создать задачу группе «Администраторы АБС»:\nданные пользователя, текст ошибки, taskId
+  SD --> PROV : ticketId = SD-7781
+  PROV -> DB : task-42 → MANUAL, sd_ticket_id = SD-7781
+  PROV -> CORE : Задача переведена на ручное исполнение
+  CORE ->> MGR : E-mail: доступ в АБС готовится вручную
+
+  == Ручное исполнение ==
+  ADM -> SD : Взять задачу SD-7781
+  ADM -> ABS : Создать пользователя средствами АБС
+  ADM -> SD : Закрыть задачу, указать ID пользователя АБС
+  SD -> CORE : POST /manual-tasks/task-42/completion\n{ result: DONE, externalId, ticketId }
+  CORE -> DB : task-42 → DONE, account → CREATED_DISABLED
+  CORE --> SD : 204 No Content
+end
+
+note over PROV, ABS
+  Бизнес-ошибка (например, 422: подразделения нет в справочнике АБС)
+  не повторяется: задача сразу уходит в ServiceDesk (FR-16, раздел 2.3).
+end note
+@enduml

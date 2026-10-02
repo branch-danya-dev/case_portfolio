@@ -1,0 +1,18 @@
+---
+/**
+ * Ссылка на артефакт учебного кейса IDM-JOINER.
+ * href — страница кейса (/case/…) или исходный файл (/case-files/idm-joiner-docs/…).
+ * Ссылка проверяется starlight-links-validator (см. astro.config.mjs → components).
+ */
+interface Props {
+  href: string;
+  /** Идентификатор артефакта: FR-08, ADR-002, SEQ-02… */
+  id?: string;
+}
+const { href, id } = Astro.props;
+---
+
+<span class="case-ref">
+  {id && <span class="case-id">{id}</span>}
+  <a href={href}><slot /></a>
+</span>

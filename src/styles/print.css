@@ -1,0 +1,95 @@
+/* Печать: только содержимое страницы, без навигации и интерактива.
+   Компактные шпаргалки (cheatsheets/) дополнительно используют класс .cheatsheet. */
+
+@page {
+  size: A4;
+  margin: 12mm 12mm 14mm;
+}
+
+@media print {
+  :root,
+  :root[data-theme='light'],
+  :root[data-theme='dark'] {
+    --sl-color-white: #000;
+    --sl-color-gray-1: #111;
+    --sl-color-gray-2: #222;
+    --sl-color-gray-3: #444;
+    --sl-color-gray-5: #bbb;
+    --sl-color-gray-6: #f3f3f3;
+    --sl-color-black: #fff;
+    --sl-color-text: #000;
+    --sl-color-bg: #fff;
+    --sl-color-accent-low: #eef;
+    --sl-color-accent-high: #000;
+    --sa-surface: #fff;
+    --sa-border: #bbb;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000;
+    font-size: 10.5pt;
+  }
+
+  header.header,
+  #starlight__sidebar,
+  .sidebar-pane,
+  .right-sidebar-container,
+  mobile-starlight-toc,
+  .pagination-links,
+  footer,
+  .studied-toggle,
+  .print-link,
+  .mermaid-toolbar,
+  .diagram-toolbar,
+  .bpmn-viewer__actions,
+  .bpmn-viewer__hint,
+  starlight-theme-select,
+  site-search,
+  .skip-link {
+    display: none !important;
+  }
+
+  .main-frame {
+    padding: 0 !important;
+  }
+  .main-pane,
+  .content-panel,
+  .sl-container {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  table,
+  figure,
+  pre,
+  .brief,
+  .question {
+    break-inside: avoid;
+  }
+
+  /* Ответы в вопросах при печати раскрыты */
+  details > :not(summary) {
+    display: block !important;
+  }
+
+  .sl-markdown-content table {
+    display: table;
+    font-size: 9pt;
+  }
+
+  .mermaid-figure.is-rendered .mermaid-code {
+    display: none !important;
+  }
+}
