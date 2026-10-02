@@ -1,6 +1,6 @@
 // Интерактивные инструменты (раздел tools/). ready: false — ещё не сделан: на главной показывается как «в работе».
 export const tools = [
-  { slug: 'tools/artifact-generator', label: 'Генератор шаблонов артефактов', description: 'User story + Gherkin, use case, ФТ, НФТ, ADR, интеграция → Markdown', ready: false },
+  { slug: 'tools/artifact-generator', label: 'Генератор шаблонов артефактов', description: 'User story + Gherkin, use case, ФТ, НФТ, ADR, интеграция → Markdown с проверкой', ready: true },
   { slug: 'tools/mermaid-sandbox', label: 'Песочница Mermaid', description: 'Редактор с живым превью и экспортом в SVG', ready: true },
   { slug: 'tools/http-reference', label: 'Справочник HTTP', description: 'Методы и коды ответов: когда что возвращать', ready: false },
   { slug: 'tools/interview-trainer', label: 'Тренажёр для собеседования', description: 'Карточки и экзамен по банку вопросов, самооценка, прогресс по темам', ready: true },
