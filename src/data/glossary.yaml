@@ -858,3 +858,30 @@
   definition: Приёмочное тестирование пользователями и заказчиком — проверка, что система решает их задачи в реальном процессе.
   topic: testing
   seeAlso: [pmi]
+
+- id: jql
+  term: JQL
+  en: Jira Query Language
+  definition: Язык запросов Jira для поиска задач по полям, статусам и связям; на нём строят фильтры и доски.
+  topic: software
+
+- id: diagrams-as-code
+  term: Диаграммы как код
+  en: Diagrams as code
+  definition: Описание диаграмм текстом (PlantUML, Mermaid, Structurizr DSL), который хранится в Git, проходит ревью и рендерится в картинку.
+  topic: software
+  seeAlso: [docs-as-code]
+
+- id: mock-server
+  term: Заглушка (mock-сервер)
+  en: Mock server, stub
+  definition: Программа, которая отвечает вместо настоящей системы по заданным правилам или по контракту; позволяет тестировать интеграцию и сценарии ошибок без провайдера.
+  topic: software
+  seeAlso: [openapi]
+
+- id: consumer-lag
+  term: Отставание потребителя
+  en: Consumer lag
+  definition: Разница между последним записанным в партицию сообщением и последним прочитанным группой потребителей; растущий lag означает, что потребитель не успевает.
+  topic: software
+  seeAlso: [dlq]

@@ -21,7 +21,7 @@ export const sections = [
   { id: 'documentation', label: 'Документирование', description: 'ТЗ по ГОСТ 34, шаблоны, docs-as-code, практики Confluence', icon: 'open-book', ready: true, kind: 'topic' },
   { id: 'methodologies', label: 'Методологии', description: 'Waterfall, Scrum, Kanban, гибриды и место аналитика в каждой', icon: 'clock', ready: true, kind: 'topic' },
   { id: 'testing', label: 'Тестирование для аналитика', description: 'Виды тестирования, тест-дизайн, ПМИ, UAT', icon: 'approve-check', ready: true, kind: 'topic' },
-  { id: 'software', label: 'Каталог ПО', description: 'Jira, Confluence, draw.io, Camunda Modeler, Postman, DBeaver и другие: что, когда, зачем', icon: 'desktop', ready: false, kind: 'reference' },
+  { id: 'software', label: 'Каталог ПО', description: 'Jira, Confluence, draw.io, Camunda Modeler, Postman, DBeaver и другие: что, когда, зачем', icon: 'desktop', ready: true, kind: 'reference' },
   { id: 'case', label: 'Кейс IDM-JOINER', description: 'Полный учебный проект: от устава до тест-кейсов, с диаграммами и контрактами', icon: 'star', ready: true, collapsed: true, kind: 'case', sidebar: caseSidebar },
   { id: 'interview', label: 'Собеседование', description: 'Вопросы с ответами по темам и практические задачи', icon: 'question-circle', ready: false, kind: 'practice' },
   { id: 'tools', label: 'Инструменты', description: 'Генераторы, песочницы, калькуляторы, тренажёры — всё работает в браузере', icon: 'setting', ready: true, kind: 'tools' },

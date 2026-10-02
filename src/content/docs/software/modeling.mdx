@@ -1,0 +1,54 @@
+---
+title: "ПО: моделирование"
+description: Инструменты для диаграмм — draw.io, Camunda Modeler, bpmn.io, PlantUML, Mermaid, Structurizr, Archi, Enterprise Architect, ARIS, Business Studio, Figma и Penpot. Что, когда, зачем, аналоги.
+sidebar:
+  order: 2
+  label: Моделирование
+---
+
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import SoftwareCatalog from '../../../components/SoftwareCatalog.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+Три класса инструментов: **рисовалки** (draw.io) — свободная раскладка, быстро; **диаграммы как код** (PlantUML, Mermaid, Structurizr) — текст в Git, ревью, нет «разъезжания»; **репозитории моделей** (Enterprise Architect, ARIS, Archi) — один элемент во многих диаграммах, трассировка.
+Для BPMN нужен инструмент, который сохраняет стандартный **.bpmn**, — Camunda Modeler или bpmn.io.
+Практика по каждому типу диаграмм — в разделе [«Диаграммы: как создавать»](/diagram-howto/).
+
+</Brief>
+
+<SoftwareCatalog group="modeling" />
+
+## Как выбрать
+
+| Нужно | Инструмент |
+|---|---|
+| Быстрая схема для обсуждения | draw.io |
+| BPMN-процесс, особенно исполняемый | Camunda Modeler, bpmn.io |
+| Sequence, state, use case в документации рядом с кодом | PlantUML, Mermaid |
+| Диаграмма прямо в Markdown (README, GitLab) | Mermaid |
+| C4 с согласованными уровнями | Structurizr или PlantUML C4 |
+| Карта систем предприятия | Archi, Enterprise Architect |
+| Утверждённые процессы компании | ARIS, Business Studio — как источник |
+| Макеты экранов | Figma, Penpot |
+
+Инструменты этого сайта: [песочница Mermaid](/tools/mermaid-sandbox/) и [BPMN-редактор](/tools/bpmn-editor/) — работают офлайн, данные остаются в браузере.
+
+## Пример из кейса IDM-JOINER
+
+В кейсе использованы два подхода: процессы AS-IS и TO-BE — файлы **.bpmn** (<CaseRef href="/case/01-business/to-be/" id="TO-BE">TO-BE</CaseRef>), все остальные 12 диаграмм — **PlantUML**: use case, sequence, state, ER, C4 (<CaseRef href="/case/diagrams/" id="Диаграммы">все диаграммы</CaseRef>). Исходники лежат рядом с документами и меняются вместе с ними.
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| BPMN в draw.io «похожими фигурами» | Файл не открыть в BPMN-инструменте, нотация нарушается | Camunda Modeler / bpmn.io |
+| Сохранять только картинку | Никто не может поправить | Исходник рядом с картинкой |
+| Один и тот же элемент нарисован по-разному на разных диаграммах | Противоречия в документации | Диаграммы как код или репозиторий моделей |
+| Тяжёлый репозиторий моделей для маленького проекта | Время уходит на инструмент | draw.io или PlantUML |
+
+## Связанные темы
+
+<Related pages={['software', 'diagram-howto', 'diagrams/choose', 'processes/bpmn', 'diagrams/c4']} />

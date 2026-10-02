@@ -1,0 +1,450 @@
+# Каталог ПО для системного аналитика.
+# group: tasks-docs | modeling | api | data | brokers — страница software/<group>.
+# platforms: веб, десктоп, CLI, плагин, библиотека.
+# license — указывать только если уверены: «открытый код», «бесплатно», «есть бесплатная версия», «коммерческий».
+# Не писать версии, цены, горячие клавиши и пункты меню.
+
+# ── Требования, задачи, документация ────────────────────────────
+
+- id: jira
+  name: "Jira"
+  group: tasks-docs
+  platforms: [веб]
+  license: коммерческий
+  what: "Трекер задач Atlassian — эпики, истории, задачи, баги, настраиваемые workflow, доски Scrum и Kanban, связи между задачами, язык запросов JQL."
+  when: "Бэклог и спринты, задачи на доработку, дефекты, связи «требование → история → тест»."
+  why: "Аналитик ведёт эпики и истории, пишет критерии приёмки, связывает задачи со страницами требований и строит фильтры JQL для готовности бэклога."
+  alternatives: [YouTrack, Яндекс Трекер, Kaiten, Redmine, Azure DevOps Boards]
+  caseUse: "Бэклог кейса — эпики EPIC-01 … EPIC-06 и истории US-01 … со ссылками на ФТ в Confluence."
+
+- id: confluence
+  name: "Confluence"
+  group: tasks-docs
+  platforms: [веб]
+  license: коммерческий
+  what: "Корпоративная вики Atlassian — дерево страниц, шаблоны, макросы, история версий, комментарии, встраивание задач Jira и диаграмм через плагины."
+  when: "Долгоживущая документация — требования, архитектура, интеграции, глоссарий, протоколы встреч."
+  why: "Основное место, где живут требования; аналитик ведёт пространство проекта, шаблоны страниц и согласования через комментарии."
+  alternatives: [Wiki.js, BookStack, Outline, YouTrack Knowledge Base, Git + Markdown]
+  caseUse: "Документы кейса (устав, ФТ, НФТ, интеграции) — типичное дерево страниц пространства проекта."
+
+- id: youtrack
+  name: "YouTrack"
+  group: tasks-docs
+  platforms: [веб]
+  what: "Трекер задач JetBrains с доской, поиском по запросам, настраиваемыми полями и встроенной базой знаний."
+  when: "Команда хочет трекер и вики в одном продукте."
+  why: "Те же задачи аналитика, что в Jira — бэклог, связи, критерии; статьи базы знаний вместо отдельной вики."
+  alternatives: [Jira, Яндекс Трекер]
+
+- id: yandex-tracker
+  name: "Яндекс Трекер"
+  group: tasks-docs
+  platforms: [веб]
+  what: "Облачный трекер задач Яндекса — очереди, доски, связи задач, настраиваемые процессы."
+  when: "Компания работает в облачной экосистеме Яндекса или выбирает российский облачный трекер."
+  why: "Бэклог, задачи, связи — как в Jira; часто встречается при импортозамещении."
+  alternatives: [Jira, YouTrack, Kaiten]
+
+- id: kaiten
+  name: "Kaiten"
+  group: tasks-docs
+  platforms: [веб]
+  what: "Российский сервис для управления задачами с акцентом на канбан-доски — пространства, доски, карточки, метрики потока."
+  when: "Команды, работающие по Kanban; замена Jira в российских компаниях."
+  why: "Аналитик ведёт карточки требований и задач, видит поток работы и узкие места."
+  alternatives: [Jira, Яндекс Трекер]
+
+- id: redmine
+  name: "Redmine"
+  group: tasks-docs
+  platforms: [веб]
+  license: открытый код
+  what: "Трекер задач с открытым кодом — проекты, задачи, трекеры, wiki проекта, учёт времени; разворачивается на своих серверах."
+  when: "Нужен бесплатный трекер внутри контура компании; встречается в госсекторе и давно работающих командах."
+  why: "Задачи и требования в трекере, документация — в wiki проекта."
+  alternatives: [Jira, YouTrack]
+
+- id: obsidian
+  name: "Obsidian"
+  group: tasks-docs
+  platforms: [десктоп]
+  what: "Редактор заметок в Markdown — файлы хранятся локально, ссылки между заметками, граф связей, отображение Mermaid."
+  when: "Личная база знаний, конспекты интервью, черновики требований."
+  why: "Быстро записывать и связывать заметки; файлы — обычный Markdown, их легко перенести в Git или вики."
+  alternatives: [VS Code, Typora, Joplin]
+
+- id: vscode
+  name: "VS Code"
+  group: tasks-docs
+  platforms: [десктоп]
+  license: бесплатно
+  what: "Редактор кода Microsoft с расширениями для Markdown, YAML, OpenAPI, PlantUML, draw.io и Git."
+  when: "Docs-as-code — требования, контракты и диаграммы как текст в репозитории."
+  why: "Один инструмент для Markdown, YAML-контрактов, PlantUML и работы с Git; предпросмотр диаграмм рядом с исходником."
+  alternatives: [IntelliJ IDEA, Obsidian, Notepad++]
+  caseUse: "Весь кейс — Markdown, PlantUML, OpenAPI и AsyncAPI — открывается в VS Code (README кейса, «Чем открывать»)."
+
+- id: gitlab
+  name: "GitLab / GitHub"
+  group: tasks-docs
+  platforms: [веб]
+  what: "Хостинг Git-репозиториев — merge / pull requests с ревью, отображение Markdown и Mermaid, вики, задачи."
+  when: "Документация хранится рядом с кодом (docs-as-code), требования проходят ревью как код."
+  why: "Версии документов, ревью изменений требований, история «кто и почему поменял»."
+  alternatives: [Gitea, Bitbucket]
+
+- id: excel
+  name: "Excel / LibreOffice Calc"
+  group: tasks-docs
+  platforms: [десктоп]
+  what: "Электронные таблицы."
+  when: "Маппинг полей, матрица трассировки, RACI, реестр стейкхолдеров, расчёты для приоритизации."
+  why: "Быстро собрать табличный артефакт и обсудить его с бизнесом; потом перенести в вики."
+  alternatives: [Google Таблицы, Р7-Офис, МойОфис]
+
+# ── Моделирование ─────────────────────────────────────────────────
+
+- id: drawio
+  name: "draw.io (diagrams.net)"
+  group: modeling
+  platforms: [веб, десктоп, плагин]
+  license: бесплатно
+  what: "Бесплатный редактор диаграмм — библиотеки фигур для UML, BPMN, ER, сетей и других нотаций; есть десктопная версия и плагины для Confluence и VS Code."
+  when: "Любые диаграммы «руками» — контекст, процессы, схемы интеграций, ER — когда нужна свободная раскладка."
+  why: "Самый частый инструмент аналитика: работает без установки, файлы хранятся у вас, легко встроить в вики."
+  alternatives: [Visio, Lucidchart, Miro, Excalidraw]
+
+- id: camunda-modeler
+  name: "Camunda Modeler"
+  group: modeling
+  platforms: [десктоп]
+  license: открытый код
+  what: "Десктопный редактор BPMN и DMN на основе bpmn-js; сохраняет стандартный файл .bpmn."
+  when: "Процессы в BPMN 2.0, особенно если схема потом исполняется движком."
+  why: "Строгий BPMN — редактор не даст нарисовать недопустимую конструкцию; файл переносим между инструментами."
+  alternatives: [bpmn.io, Business Studio, ARIS, Enterprise Architect]
+  caseUse: "Схемы AS-IS и TO-BE кейса — файлы .bpmn, открываются в Camunda Modeler и в BPMN-редакторе этого сайта."
+
+- id: bpmn-io
+  name: "bpmn.io"
+  group: modeling
+  platforms: [веб, библиотека]
+  license: открытый код
+  what: "Библиотеки bpmn-js и dmn-js и демо-редактор в браузере."
+  when: "Быстро открыть или поправить .bpmn без установки."
+  why: "Тот же движок, что в Camunda Modeler; на этом сайте на нём сделан BPMN-редактор."
+  alternatives: [Camunda Modeler]
+
+- id: plantuml
+  name: "PlantUML"
+  group: modeling
+  platforms: [CLI, плагин, библиотека]
+  license: открытый код
+  what: "Диаграммы из текста — UML (use case, sequence, activity, state, class, component, deployment), ER, C4 через стандартную библиотеку; работает на Java."
+  when: "Диаграммы, которые должны жить в Git рядом с кодом и меняться через ревью; sequence и state."
+  why: "Diff виден в ревью, диаграмма не «разъезжается» после правок, плагины есть для IDE и Confluence."
+  alternatives: [Mermaid, Structurizr, draw.io]
+  caseUse: "Все 12 диаграмм кейса, кроме BPMN, — файлы .puml."
+
+- id: mermaid
+  name: "Mermaid"
+  group: modeling
+  platforms: [библиотека, веб]
+  license: открытый код
+  what: "Диаграммы из текста на JavaScript — flowchart, sequence, class, state, ER, Gantt и другие; отображается в GitLab, GitHub, Obsidian."
+  when: "Диаграммы прямо в Markdown — README, вики, задачи."
+  why: "Не нужна Java и отдельный рендер: платформа рисует диаграмму сама. На этом сайте есть песочница Mermaid."
+  alternatives: [PlantUML]
+
+- id: structurizr
+  name: "Structurizr"
+  group: modeling
+  platforms: [веб, CLI]
+  what: "Инструмент Саймона Брауна, автора C4, — модель архитектуры в DSL, из которой строятся все уровни C4."
+  when: "Архитектура в C4, где одна модель должна давать согласованные контекст, контейнеры и компоненты."
+  why: "Элемент описан один раз — меньше расхождений между уровнями диаграмм."
+  alternatives: [PlantUML C4, draw.io]
+
+- id: archi
+  name: "Archi"
+  group: modeling
+  platforms: [десктоп]
+  license: открытый код
+  what: "Бесплатный редактор моделей ArchiMate — бизнес, приложения, технологии и связи между ними."
+  when: "Корпоративная архитектура: карта систем, связь бизнес-возможностей и приложений."
+  why: "Аналитик видит, какие системы затрагивает изменение; полезно на уровне ИТ-ландшафта."
+  alternatives: [Enterprise Architect, ARIS]
+
+- id: enterprise-architect
+  name: "Sparx Enterprise Architect"
+  group: modeling
+  platforms: [десктоп]
+  license: коммерческий
+  what: "Среда моделирования с репозиторием — UML, BPMN, ArchiMate, SysML, требования, трассировка между элементами, генерация документов."
+  when: "Крупные организации с единым репозиторием моделей."
+  why: "Один элемент используется во многих диаграммах, трассировка требований к моделям и документы из модели."
+  alternatives: [Visual Paradigm, Archi, ARIS]
+
+- id: visual-paradigm
+  name: "Visual Paradigm"
+  group: modeling
+  platforms: [десктоп, веб]
+  license: коммерческий
+  what: "Среда моделирования UML, BPMN, ER и других нотаций с генерацией документации."
+  when: "Как Enterprise Architect — моделирование в одной среде."
+  why: "Модели и документы в одном инструменте."
+  alternatives: [Enterprise Architect]
+
+- id: aris
+  name: "ARIS"
+  group: modeling
+  platforms: [десктоп, веб]
+  license: коммерческий
+  what: "Платформа моделирования и управления бизнес-процессами с репозиторием; известна нотацией EPC."
+  when: "Крупные компании с централизованным описанием процессов."
+  why: "Аналитик берёт оттуда утверждённые процессы AS-IS и ссылки на регламенты."
+  alternatives: [Business Studio, Enterprise Architect]
+
+- id: business-studio
+  name: "Business Studio"
+  group: modeling
+  platforms: [десктоп]
+  license: коммерческий
+  what: "Российская система бизнес-моделирования — процессы, оргструктура, цели, регламенты, генерация документов."
+  when: "Описание процессов и регламентов в российских компаниях."
+  why: "Источник утверждённых процессов и ролей при выявлении требований."
+  alternatives: [ARIS]
+
+- id: figma
+  name: "Figma / Penpot"
+  group: modeling
+  platforms: [веб, десктоп]
+  what: "Редакторы интерфейсов и прототипов; Penpot — с открытым кодом и возможностью развернуть у себя."
+  when: "Макеты и кликабельные прототипы экранов, вайрфреймы."
+  why: "Аналитик проверяет макеты на соответствие требованиям, ссылается на экраны из use cases, иногда сам рисует вайрфреймы."
+  alternatives: [Balsamiq, draw.io (вайрфреймы)]
+
+# ── API ───────────────────────────────────────────────────────────
+
+- id: postman
+  name: "Postman"
+  group: api
+  platforms: [десктоп, веб]
+  what: "Клиент для HTTP API — коллекции запросов, окружения и переменные, авторизация, тесты на JavaScript, импорт OpenAPI, mock-серверы."
+  when: "Проверить API вручную, собрать набор запросов для демонстрации и приёмки."
+  why: "Аналитик проверяет, что API работает по контракту, воспроизводит дефекты и показывает примеры запросов команде."
+  alternatives: [Bruno, Insomnia, Hoppscotch, curl]
+  caseUse: "Спецификации OpenAPI кейса можно импортировать в коллекцию и вызывать методы на заглушке."
+
+- id: bruno
+  name: "Bruno"
+  group: api
+  platforms: [десктоп]
+  license: открытый код
+  what: "Клиент для API, который хранит коллекции обычными файлами — их можно положить в Git; работает без облачной учётной записи."
+  when: "Коллекции запросов должны жить в репозитории и проходить ревью; облачные сервисы запрещены ИБ."
+  why: "Docs-as-code для запросов к API; удобно в закрытом контуре."
+  alternatives: [Postman, Insomnia]
+
+- id: insomnia
+  name: "Insomnia"
+  group: api
+  platforms: [десктоп]
+  what: "Клиент для REST, GraphQL и gRPC API с окружениями и импортом OpenAPI."
+  when: "То же, что Postman."
+  why: "Ручная проверка API."
+  alternatives: [Postman, Bruno]
+
+- id: soapui
+  name: "SoapUI"
+  group: api
+  platforms: [десктоп]
+  what: "Инструмент тестирования SOAP и REST — импорт WSDL с генерацией запросов, проверки ответов, mock-сервисы; есть версия с открытым кодом."
+  when: "Интеграции на SOAP — по WSDL быстро получить пример запроса и вызвать сервис."
+  why: "Не нужно собирать XML-конверт вручную: запрос генерируется из WSDL."
+  alternatives: [Postman (SOAP вручную)]
+
+- id: swagger-editor
+  name: "Swagger Editor / Swagger UI"
+  group: api
+  platforms: [веб]
+  license: открытый код
+  what: "Редактор OpenAPI с проверкой синтаксиса и предпросмотром; Swagger UI — интерактивная документация с вызовом методов."
+  when: "Писать и ревьюить контракт OpenAPI; публиковать документацию API."
+  why: "Ошибки контракта видны сразу; документация для потребителей генерируется из спецификации."
+  alternatives: [Redoc, VS Code с расширением OpenAPI]
+  caseUse: "Спецификации кейса idm-api.openapi.yaml и abs-adapter.openapi.yaml открываются в Swagger Editor; на сайте они показаны через Redoc."
+
+- id: redoc
+  name: "Redoc"
+  group: api
+  platforms: [библиотека, CLI]
+  license: открытый код
+  what: "Генератор документации из OpenAPI — трёхпанельный вид, только чтение."
+  when: "Опубликовать читаемую документацию API."
+  why: "Удобно читать бизнес-пользователям и смежным командам."
+  alternatives: [Swagger UI]
+
+- id: asyncapi-studio
+  name: "AsyncAPI Studio"
+  group: api
+  platforms: [веб]
+  license: открытый код
+  what: "Редактор спецификаций AsyncAPI с проверкой и предпросмотром документации."
+  when: "Контракты для брокеров сообщений — топики, сообщения, схемы."
+  why: "То же, что Swagger Editor, но для асинхронных интеграций."
+  alternatives: [VS Code]
+  caseUse: "Контракт кадровых событий hr-events.asyncapi.yaml."
+
+- id: prism
+  name: "Prism"
+  group: api
+  platforms: [CLI]
+  license: открытый код
+  what: "Mock-сервер из спецификации OpenAPI — отвечает примерами из контракта и проверяет запросы на соответствие ему."
+  when: "Потребитель начинает разработку раньше, чем готов провайдер (contract-first)."
+  why: "Контракт сразу становится работающей заглушкой."
+  alternatives: [WireMock, mock-серверы Postman]
+
+- id: wiremock
+  name: "WireMock"
+  group: api
+  platforms: [библиотека, CLI]
+  license: открытый код
+  what: "Заглушки HTTP-сервисов — ответы по правилам, задержки, ошибки, запись и воспроизведение запросов."
+  when: "Тестовый стенд без настоящей внешней системы; проверка сценариев ошибок."
+  why: "Можно воспроизвести 503 и тайм-ауты, как в TC-12."
+  alternatives: [Prism, Mockoon]
+
+- id: curl
+  name: "curl"
+  group: api
+  platforms: [CLI]
+  license: открытый код
+  what: "Утилита командной строки для HTTP-запросов."
+  when: "Быстрый запрос с сервера или из терминала; пример запроса в документации."
+  why: "Пример в формате curl понятен всем, и его можно выполнить без установки клиентов."
+  alternatives: [Postman, HTTPie]
+
+- id: devtools
+  name: "DevTools браузера"
+  group: api
+  platforms: [веб]
+  what: "Инструменты разработчика в браузере — вкладка сети с запросами и ответами, консоль."
+  when: "Понять, какие API вызывает существующий интерфейс; разобрать дефект на фронте."
+  why: "Реверс-анализ системы без документации: видно реальные запросы, ответы и коды."
+  alternatives: []
+
+# ── Данные ────────────────────────────────────────────────────────
+
+- id: dbeaver
+  name: "DBeaver"
+  group: data
+  platforms: [десктоп]
+  what: "Универсальный клиент баз данных — подключение к большинству СУБД, редактор SQL, просмотр данных, ER-диаграммы схемы; есть бесплатная Community-версия."
+  when: "Исследовать незнакомую БД, писать запросы, проверять данные после теста."
+  why: "Один клиент для PostgreSQL, Oracle, MS SQL и других; ER-диаграмма существующей схемы помогает при реверс-анализе."
+  alternatives: [DataGrip, pgAdmin, Oracle SQL Developer]
+  caseUse: "Учебную БД кейса (case-db.sql, SQLite) можно открыть в DBeaver или в SQL-тренажёре сайта."
+
+- id: datagrip
+  name: "DataGrip"
+  group: data
+  platforms: [десктоп]
+  license: коммерческий
+  what: "IDE для баз данных от JetBrains — умное автодополнение SQL, навигация по схеме."
+  when: "Много работы с SQL."
+  why: "Быстрее писать сложные запросы."
+  alternatives: [DBeaver]
+
+- id: pgadmin
+  name: "pgAdmin"
+  group: data
+  platforms: [веб, десктоп]
+  license: открытый код
+  what: "Клиент администрирования PostgreSQL."
+  when: "Проект на PostgreSQL."
+  why: "Запросы, просмотр схемы и планов выполнения."
+  alternatives: [DBeaver]
+
+- id: sql-developer
+  name: "Oracle SQL Developer"
+  group: data
+  platforms: [десктоп]
+  license: бесплатно
+  what: "Бесплатный клиент Oracle для работы с БД Oracle."
+  when: "Проект на Oracle — частый случай в банках."
+  why: "Запросы, схема, планы выполнения в «родном» инструменте."
+  alternatives: [DBeaver]
+
+- id: dbdiagram
+  name: "dbdiagram.io"
+  group: data
+  platforms: [веб]
+  what: "ER-диаграммы из текста на языке DBML."
+  when: "Быстро набросать логическую модель данных и обсудить её."
+  why: "Текстовое описание таблиц — быстрее, чем рисовать; можно хранить в Git."
+  alternatives: [PlantUML (ER), Mermaid erDiagram, draw.io]
+
+- id: jq
+  name: "jq / yq"
+  group: data
+  platforms: [CLI]
+  license: открытый код
+  what: "Утилиты командной строки для выборки и преобразования JSON (jq) и YAML (yq)."
+  when: "Разобрать большой ответ API или выгрузку, вытащить нужные поля."
+  why: "Быстрый анализ данных интеграций без программирования."
+  alternatives: [VS Code, онлайн-форматтеры (не для конфиденциальных данных)]
+
+# ── Брокеры сообщений ─────────────────────────────────────────────
+
+- id: kafka-ui
+  name: "Kafka UI"
+  group: brokers
+  platforms: [веб]
+  license: открытый код
+  what: "Веб-интерфейс для Apache Kafka — топики, сообщения, группы потребителей и их отставание, Schema Registry."
+  when: "Посмотреть, дошло ли событие, какой у него формат, отстаёт ли потребитель."
+  why: "Аналитик проверяет реальные сообщения против контракта и разбирает инциденты интеграций."
+  alternatives: [AKHQ, Offset Explorer, Conduktor, kcat]
+  caseUse: "Проверить событие в топике hr.employee.events.v1 и некорректное — в hr.employee.events.v1.dlq."
+
+- id: akhq
+  name: "AKHQ"
+  group: brokers
+  platforms: [веб]
+  license: открытый код
+  what: "Веб-интерфейс для Kafka — топики, сообщения, группы потребителей, Schema Registry, Kafka Connect."
+  when: "То же, что Kafka UI."
+  why: "Просмотр сообщений и состояния потребителей."
+  alternatives: [Kafka UI]
+
+- id: offset-explorer
+  name: "Offset Explorer"
+  group: brokers
+  platforms: [десктоп]
+  what: "Десктопный клиент для Kafka (ранее Kafka Tool) — топики, партиции, сообщения, смещения."
+  when: "Нет веб-интерфейса на стенде, а доступ к брокеру есть."
+  why: "Посмотреть сообщения и смещения без командной строки."
+  alternatives: [Kafka UI, kcat]
+
+- id: kcat
+  name: "kcat"
+  group: brokers
+  platforms: [CLI]
+  license: открытый код
+  what: "Утилита командной строки для Kafka (ранее kafkacat) — прочитать и отправить сообщения, посмотреть метаданные."
+  when: "Быстро прочитать или отправить тестовое сообщение из терминала."
+  why: "Проверка интеграции на стенде без графических инструментов."
+  alternatives: [Скрипты Kafka (kafka-console-consumer), Kafka UI]
+
+- id: rabbitmq-management
+  name: "RabbitMQ Management UI"
+  group: brokers
+  platforms: [веб, плагин]
+  license: открытый код
+  what: "Веб-интерфейс плагина управления RabbitMQ — обменники, очереди, привязки, сообщения, публикация тестовых сообщений."
+  when: "Интеграции через RabbitMQ — проверить маршрутизацию и очередь."
+  why: "Видно, куда ушло сообщение и почему его нет в очереди (нет привязки, неверный ключ маршрутизации)."
+  alternatives: []

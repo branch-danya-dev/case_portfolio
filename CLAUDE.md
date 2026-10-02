@@ -24,6 +24,7 @@ src/sections.mjs             список разделов: сайдбар и к
 src/tools.mjs                список инструментов для главной
 src/data/questions/<тема>.yaml  банк вопросов (коллекция questions)
 src/data/glossary.yaml       глоссарий (коллекция glossary)
+src/data/software.yaml       каталог ПО (коллекция software) → <SoftwareCatalog group="…">
 src/components/              компоненты шаблона, просмотрщики; overrides/ — переопределения Starlight
 src/plugins/remark-mermaid.mjs  ```mermaid → <figure data-mermaid>, рисует src/scripts/mermaid.ts
 src/diagrams/**.puml         PlantUML-примеры сайта → public/diagrams/site/

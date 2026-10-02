@@ -1,0 +1,50 @@
+---
+title: "ПО: данные"
+description: Инструменты для работы с данными — DBeaver, DataGrip, pgAdmin, Oracle SQL Developer, dbdiagram.io, jq и yq. Что, когда, зачем, аналоги.
+sidebar:
+  order: 4
+  label: Данные
+---
+
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import SoftwareCatalog from '../../../components/SoftwareCatalog.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+Аналитику нужен **клиент БД**, чтобы исследовать незнакомую схему, писать SQL и проверять данные после теста, и **текстовые утилиты**, чтобы разбирать JSON и YAML из интеграций.
+Универсальный клиент (DBeaver) закрывает большинство СУБД; «родной» клиент (SQL Developer, pgAdmin) удобен для планов выполнения.
+Доступ — обычно только на чтение и к тестовым или обезличенным данным.
+
+</Brief>
+
+<SoftwareCatalog group="data" />
+
+## Как выбрать
+
+| Нужно | Инструмент |
+|---|---|
+| Подключиться к любой СУБД, писать запросы | DBeaver |
+| Много сложного SQL каждый день | DataGrip |
+| Проект на PostgreSQL / Oracle | pgAdmin / Oracle SQL Developer |
+| ER-диаграмма существующей БД | DBeaver (по схеме) |
+| Набросать логическую модель | dbdiagram.io, PlantUML, Mermaid |
+| Разобрать большой JSON или YAML | jq, yq, VS Code |
+
+## Пример из кейса IDM-JOINER
+
+<CaseRef href="/case/03-architecture/data-model/" id="ER">Модель данных кейса</CaseRef> перенесена в учебную БД SQLite (`case-db.sql`). Её можно открыть в DBeaver и найти, например, задачи провижининга в статусе MANUAL с тремя попытками (`attempts = 3`) — это та же картина, что ожидается после теста TC-12 «АБС недоступна».
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| Доступ на запись к продуктивной БД «для удобства» | Риск испортить данные, нарушение ИБ | Только чтение, тестовые стенды |
+| Выгрузка ПДн в Excel на свой ноутбук | Утечка | Обезличенные данные, работа в контуре |
+| Тяжёлый запрос на продуктиве в рабочее время | Нагрузка на систему | Реплика, ограничения, план выполнения |
+| JSON вставляют в онлайн-форматтер | Утечка данных интеграций | jq, VS Code — локально |
+
+## Связанные темы
+
+<Related pages={['software', 'data/sql-select', 'data/models-er', 'data/reference-data']} />

@@ -1,0 +1,90 @@
+---
+title: "Шпаргалка: каталог ПО"
+description: Инструменты аналитика на одном листе A4 — задача, инструмент, аналоги, правила безопасности.
+sidebar:
+  order: 13
+  label: Каталог ПО
+---
+
+import PrintButton from '../../../components/PrintButton.astro';
+
+<p class="cheatsheet-meta">Краткая версия раздела «Каталог ПО». Подробно — на странице <a href="/software/">Каталог ПО</a>.</p>
+
+<PrintButton />
+
+<div class="cheatsheet">
+
+<section>
+
+## Требования, задачи, документация
+
+| Задача | Инструмент | Аналоги |
+|---|---|---|
+| Бэклог, истории, дефекты | Jira | YouTrack, Яндекс Трекер, Kaiten, Redmine |
+| Долгоживущие требования | Confluence | Wiki.js, BookStack, Outline, Git + Markdown |
+| Docs-as-code | VS Code + GitLab / GitHub | IntelliJ IDEA, Gitea |
+| Заметки, конспекты интервью | Obsidian | Любой Markdown-редактор |
+| Маппинг, трассировка, RACI | Excel / Calc | Р7-Офис, МойОфис |
+
+Требования — в вики, единицы работы — в трекере, между ними ссылки.
+
+</section>
+
+<section>
+
+## Моделирование
+
+| Задача | Инструмент |
+|---|---|
+| Быстрая схема | draw.io |
+| BPMN (.bpmn) | Camunda Modeler, bpmn.io |
+| Sequence, state, use case, ER как текст | PlantUML, Mermaid |
+| C4 из одной модели | Structurizr, PlantUML C4 |
+| Карта систем, ArchiMate | Archi, Enterprise Architect |
+| Процессы компании (источник) | ARIS, Business Studio |
+| Макеты | Figma, Penpot |
+
+Всегда храните исходник, а не только картинку.
+
+</section>
+
+<section>
+
+## API
+
+| Задача | Инструмент |
+|---|---|
+| Контракт OpenAPI / AsyncAPI | Swagger Editor, AsyncAPI Studio, VS Code |
+| Документация | Swagger UI, Redoc |
+| Вызвать метод | Postman, Bruno, Insomnia, curl |
+| SOAP по WSDL | SoapUI |
+| Заглушка | Prism, WireMock |
+| Что вызывает интерфейс | DevTools → вкладка сети |
+
+</section>
+
+<section>
+
+## Данные и брокеры
+
+| Задача | Инструмент |
+|---|---|
+| Клиент любой СУБД, ER схемы | DBeaver (DataGrip, pgAdmin, SQL Developer) |
+| Набросать ER | dbdiagram.io, PlantUML, Mermaid |
+| Разобрать JSON / YAML | jq, yq |
+| Сообщения Kafka, lag, DLQ | Kafka UI, AKHQ, Offset Explorer, kcat |
+| RabbitMQ | Management UI |
+
+Событие «пропало»: топик → схема → **DLQ** → **lag** потребителя → логи.
+
+</section>
+
+<section>
+
+## Безопасность
+
+Рабочие данные — не в онлайн-сервисы · секреты — не в коллекциях · БД — только чтение и тестовые данные · ПО — из одобренного каталога компании.
+
+</section>
+
+</div>

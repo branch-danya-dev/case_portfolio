@@ -1,0 +1,233 @@
+---
+/**
+ * Каталог ПО из src/data/software.yaml.
+ * group задан — карточки «что / когда / зачем / аналоги» одной группы (страница software/<group>).
+ * group не задан — сводная таблица всех инструментов с фильтром (обзорная страница).
+ */
+import { getCollection } from 'astro:content';
+
+interface Props {
+  group?: 'tasks-docs' | 'modeling' | 'api' | 'data' | 'brokers';
+}
+const { group } = Astro.props;
+
+const GROUPS = {
+  'tasks-docs': 'Требования, задачи, документация',
+  modeling: 'Моделирование',
+  api: 'API',
+  data: 'Данные',
+  brokers: 'Брокеры сообщений',
+} as const;
+
+const all = await getCollection('software');
+const items = group ? all.filter((s) => s.data.group === group) : all;
+---
+
+{
+  group ? (
+    <div class="sw-cards not-content">
+      {items.map(({ id, data }) => (
+        <article class="sw-card" id={id}>
+          <header>
+            <h3>{data.name}</h3>
+            <p class="sw-tags">
+              {data.platforms.map((p) => <span class="sw-tag">{p}</span>)}
+              {data.license && <span class="sw-tag sw-tag--license">{data.license}</span>}
+            </p>
+          </header>
+          <dl>
+            <dt>Что</dt>
+            <dd>{data.what}</dd>
+            <dt>Когда</dt>
+            <dd>{data.when}</dd>
+            <dt>Зачем аналитику</dt>
+            <dd>{data.why}</dd>
+            {data.alternatives.length > 0 && (
+              <>
+                <dt>Аналоги</dt>
+                <dd>{data.alternatives.join(' · ')}</dd>
+              </>
+            )}
+            {data.caseUse && (
+              <>
+                <dt>В кейсе</dt>
+                <dd>{data.caseUse}</dd>
+              </>
+            )}
+          </dl>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <div class="sw-catalog not-content" data-sw-catalog>
+      <div class="sw-filter">
+        <label>
+          <input type="search" aria-label="Поиск по каталогу" placeholder="Найти: Kafka, BPMN, SQL, Postman…" data-sw-query />
+        </label>
+        <select data-sw-group aria-label="Группа">
+          <option value="">Все группы</option>
+          {Object.entries(GROUPS).map(([k, v]) => (
+            <option value={k}>{v}</option>
+          ))}
+        </select>
+      </div>
+      <div class="sw-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Инструмент</th>
+              <th>Группа</th>
+              <th>Когда</th>
+              <th>Аналоги</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map(({ id, data }) => (
+              <tr
+                data-group={data.group}
+                data-text={[data.name, data.what, data.when, data.alternatives.join(' ')].join(' ').toLowerCase()}
+              >
+                <td>
+                  <a href={`/software/${data.group}/#${id}`}>{data.name}</a>
+                </td>
+                <td>{GROUPS[data.group]}</td>
+                <td>{data.when}</td>
+                <td>{data.alternatives.join(', ')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="sw-empty" hidden>
+        Ничего не найдено.
+      </p>
+    </div>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-sw-catalog]').forEach((root) => {
+    const query = root.querySelector<HTMLInputElement>('[data-sw-query]')!;
+    const group = root.querySelector<HTMLSelectElement>('[data-sw-group]')!;
+    const rows = [...root.querySelectorAll<HTMLTableRowElement>('tbody tr')];
+    const empty = root.querySelector<HTMLElement>('.sw-empty')!;
+    const apply = () => {
+      const q = query.value.trim().toLowerCase();
+      const g = group.value;
+      let shown = 0;
+      for (const r of rows) {
+        const ok = (!g || r.dataset.group === g) && (!q || r.dataset.text!.includes(q));
+        r.hidden = !ok;
+        if (ok) shown++;
+      }
+      empty.hidden = shown > 0;
+    };
+    query.addEventListener('input', apply);
+    group.addEventListener('change', apply);
+  });
+</script>
+
+<style>
+  .sw-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+  .sw-card {
+    border: 1px solid var(--sa-border);
+    border-radius: 0.5rem;
+    background: var(--sa-surface);
+    padding: 1rem 1.1rem;
+    scroll-margin-top: 5rem;
+  }
+  .sw-card:target {
+    outline: 2px solid var(--sl-color-accent);
+  }
+  .sw-card h3 {
+    margin: 0;
+    font-size: var(--sl-text-h4);
+    color: var(--sl-color-white);
+  }
+  .sw-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.4rem 0 0.6rem;
+  }
+  .sw-tag {
+    font-size: var(--sl-text-xs);
+    border: 1px solid var(--sa-border);
+    border-radius: 999px;
+    padding: 0 0.5rem;
+    color: var(--sl-color-gray-2);
+  }
+  .sw-tag--license {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-accent-high);
+  }
+  .sw-card dl {
+    margin: 0;
+    font-size: var(--sl-text-sm);
+  }
+  .sw-card dt {
+    font-weight: 600;
+    color: var(--sl-color-white);
+    margin-top: 0.5rem;
+  }
+  .sw-card dd {
+    margin: 0.1rem 0 0;
+    color: var(--sl-color-gray-2);
+  }
+  .sw-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: 1rem;
+  }
+  .sw-filter label {
+    flex: 1 1 16rem;
+  }
+  .sw-filter input,
+  .sw-filter select {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--sa-border);
+    border-radius: 0.4rem;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-white);
+    font: inherit;
+  }
+  .sw-filter select {
+    width: auto;
+  }
+  .sw-table-wrap {
+    overflow-x: auto;
+  }
+  .sw-catalog table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--sl-text-sm);
+  }
+  .sw-catalog th,
+  .sw-catalog td {
+    border-bottom: 1px solid var(--sa-border);
+    padding: 0.4rem 0.5rem;
+    text-align: start;
+    vertical-align: top;
+  }
+  .sw-catalog td:first-child {
+    white-space: nowrap;
+  }
+  .sw-empty {
+    color: var(--sl-color-gray-3);
+  }
+  @media print {
+    .sw-filter {
+      display: none;
+    }
+    .sw-card {
+      break-inside: avoid;
+    }
+  }
+</style>

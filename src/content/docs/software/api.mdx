@@ -1,0 +1,54 @@
+---
+title: "ПО: API"
+description: Инструменты для работы с API — Postman, Bruno, Insomnia, SoapUI, Swagger Editor и Swagger UI, Redoc, AsyncAPI Studio, Prism, WireMock, curl, DevTools. Что, когда, зачем, аналоги.
+sidebar:
+  order: 3
+  label: API
+---
+
+import Brief from '../../../components/Brief.astro';
+import CaseRef from '../../../components/CaseRef.astro';
+import SoftwareCatalog from '../../../components/SoftwareCatalog.astro';
+import Related from '../../../components/Related.astro';
+
+<Brief>
+
+Четыре задачи: **написать контракт** (Swagger Editor, AsyncAPI Studio, VS Code), **показать его** (Swagger UI, Redoc), **вызвать метод** (Postman, Bruno, curl, SoapUI для SOAP) и **заменить систему заглушкой** (Prism, WireMock).
+Аналитик, который сам может отправить запрос и прочитать ответ, разбирает спорные дефекты интеграций за минуты, а не за дни переписки.
+В закрытом контуре выбирайте клиенты, которые работают **без облачной учётной записи** и хранят коллекции файлами.
+
+</Brief>
+
+<SoftwareCatalog group="api" />
+
+## Как выбрать
+
+| Нужно | Инструмент |
+|---|---|
+| Написать или проверить OpenAPI | Swagger Editor, VS Code с расширением |
+| Документация для потребителей | Swagger UI (с вызовом методов) или Redoc (только чтение) |
+| Вызвать REST-метод, сохранить набор запросов | Postman, Bruno, Insomnia |
+| Вызвать SOAP-сервис по WSDL | SoapUI |
+| Пример запроса в документации | curl |
+| Провайдер ещё не готов | Prism по OpenAPI, WireMock |
+| Как работает существующая система | DevTools — вкладка сети |
+| События в брокере | AsyncAPI Studio для контракта, [инструменты брокеров](/software/brokers/) для сообщений |
+
+## Пример из кейса IDM-JOINER
+
+- <CaseRef href="/case/04-integrations/api-abs-adapter/" id="API АБС">API адаптера АБС</CaseRef> — по контракту можно поднять заглушку и воспроизвести тест TC-12: адаптер отвечает 503, проверяем повторы с тем же `Idempotency-Key`. Именно так устроена заглушка из ПМИ кейса.
+- <CaseRef href="/case/04-integrations/api-idm/" id="API IdM">API IdM</CaseRef> — импорт в Postman или Bruno даёт готовую коллекцию запросов для демонстрации и приёмки.
+- <CaseRef href="/case/04-integrations/api-hr-events/" id="AsyncAPI">Кадровые события</CaseRef> — контракт AsyncAPI; реальные сообщения смотрят инструментами брокера.
+
+## Типичные ошибки
+
+| Ошибка | Чем плохо | Как правильно |
+|---|---|---|
+| Хранить токены и боевые данные в облачной коллекции | Утечка секретов | Переменные окружения, локальное хранение, тестовые данные |
+| Контракт в Word, а не в OpenAPI | Нельзя проверить и сгенерировать заглушку | OpenAPI / AsyncAPI в репозитории |
+| Проверять только успешный ответ | Ошибки и тайм-ауты не проверены | Заглушка с 4xx, 5xx, задержками |
+| «Postman показал 200 — значит, всё хорошо» | Тело ответа может не соответствовать контракту | Сверять ответ со схемой |
+
+## Связанные темы
+
+<Related pages={['software', 'integrations/contracts', 'integrations/rest', 'integrations/soap', 'integrations/reliability']} />

@@ -50,7 +50,24 @@ const glossary = defineCollection({
   }),
 });
 
+/** Каталог ПО: src/data/software.yaml — карточки «что / когда / зачем / аналоги». */
+const software = defineCollection({
+  loader: file('src/data/software.yaml'),
+  schema: z.object({
+    name: z.string(),
+    group: z.enum(['tasks-docs', 'modeling', 'api', 'data', 'brokers']),
+    platforms: z.array(z.enum(['веб', 'десктоп', 'CLI', 'плагин', 'библиотека'])).default([]),
+    license: z.enum(['открытый код', 'бесплатно', 'есть бесплатная версия', 'коммерческий']).optional(),
+    what: z.string(),
+    when: z.string(),
+    why: z.string(),
+    alternatives: z.array(z.string()).default([]),
+    /** Как инструмент связан с кейсом IDM-JOINER. */
+    caseUse: z.string().optional(),
+  }),
+});
+
 /** Переопределения строк интерфейса Starlight (src/content/i18n/ru.json). */
 const i18n = defineCollection({ loader: i18nLoader(), schema: i18nSchema() });
 
-export const collections = { docs, i18n, questions, glossary };
+export const collections = { docs, i18n, questions, glossary, software };
