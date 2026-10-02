@@ -2,12 +2,16 @@
 import Default from '@astrojs/starlight/components/ThemeProvider.astro';
 ---
 
-{/* Тема по умолчанию — тёмная. Срабатывает только при первом визите (ключа ещё нет в localStorage);
+{/* Тема по умолчанию — тёмная. Срабатывает один раз на браузер (флаг sa:theme-default-applied);
     выбор пользователя в переключателе («Светлая», «Авто») сохраняется и дальше не перезаписывается.
     Inline — чтобы не было мигания светлой темы до загрузки скриптов. */}
 <script is:inline>
   try {
-    if (localStorage.getItem('starlight-theme') === null) localStorage.setItem('starlight-theme', 'dark');
+    // Свой флаг, а не проверка ключа Starlight: Starlight пишет '' и для «Авто», и при первом визите.
+    if (localStorage.getItem('sa:theme-default-applied') === null) {
+      localStorage.setItem('starlight-theme', 'dark');
+      localStorage.setItem('sa:theme-default-applied', '1');
+    }
   } catch {}
 </script>
 <Default />
