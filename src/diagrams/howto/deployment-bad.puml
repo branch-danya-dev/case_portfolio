@@ -1,0 +1,12 @@
+@startuml deployment-bad
+' ПЛОХО: один сервер при НФТ 99,5%, нет протоколов, нет сетевых зон, смешаны логика и физика
+node "Сервер" as srv {
+  component "Ядро" as core
+  component "Провижининг" as prov
+}
+node "АБС" as abs
+database "БД" as db
+srv --> db
+srv --> abs
+core --> prov
+@enduml

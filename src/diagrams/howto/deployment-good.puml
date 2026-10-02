@@ -1,0 +1,20 @@
+@startuml deployment-good
+' ХОРОШО: резервирование, артефакты, протоколы, сетевая зона АБС
+node "Балансировщик" as lb
+node "Сервер приложений 1" as app1 <<ВМ>> {
+  artifact "idm-core" as c1
+}
+node "Сервер приложений 2" as app2 <<ВМ>> {
+  artifact "idm-core" as c2
+}
+database "БД IdM\n(кластер)" as db
+cloud "Сегмент АБС" as seg {
+  node "Сервер адаптера АБС" as abs
+}
+lb --> app1 : HTTPS
+lb --> app2 : HTTPS
+app1 --> db
+app2 --> db
+app1 --> abs : HTTPS + mTLS
+app2 --> abs : HTTPS + mTLS
+@enduml

@@ -1,0 +1,16 @@
+@startuml c4-container-min
+!include <C4/C4_Container>
+Person(mgr, "Руководитель")
+System_Ext(hrms, "HRMS", "Кадровая система")
+System_Boundary(idm, "IdM") {
+  Container(portal, "Портал IdM", "Web", "Заявки и согласования")
+  Container(core, "Ядро IdM", "Java, REST", "Идентичности, роли, SoD")
+  Container(handler, "Обработчик событий", "Java", "Валидация, идемпотентность, DLQ")
+  ContainerDb(db, "БД IdM", "СУБД", "Операционные данные")
+}
+Rel(mgr, portal, "Заявки", "HTTPS")
+Rel(portal, core, "Вызовы API", "REST")
+Rel(hrms, handler, "Кадровые события", "Kafka")
+Rel(handler, core, "Команды", "REST")
+Rel(core, db, "Чтение и запись", "SQL")
+@enduml

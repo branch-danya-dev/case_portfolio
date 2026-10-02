@@ -1,0 +1,12 @@
+@startuml component-bad
+' ПЛОХО: нет интерфейсов, стрелки без смысла, смешаны компоненты и сервер
+skinparam componentStyle uml2
+component "IdM" as IDM
+component "Провижининг" as P
+component "АБС" as ABS
+node "Сервер 10.1.2.3" as SRV
+IDM --> P
+P --> ABS
+P --> SRV
+ABS --> IDM
+@enduml

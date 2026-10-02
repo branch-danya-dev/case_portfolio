@@ -1,0 +1,21 @@
+@startuml component-crm-solution
+' Решение упражнения: подключение CRM через новый коннектор (учебный вариант)
+skinparam componentStyle uml2
+package "IdM" {
+  component "Ядро IdM" as CORE
+  component "Сервис провижининга" as PROV
+  component "Коннектор CRM" as CCRM
+  component "Коннектор AD" as CAD
+}
+interface "Внутренний API ядра" as CORE_API
+interface "Интерфейс коннектора" as CONN
+component "CRM" as CRM
+interface "REST API CRM\n/users" as CRM_API
+CORE -- CORE_API
+CCRM -- CONN
+CAD -- CONN
+PROV ..> CORE_API : задачи
+PROV ..> CONN : create / enable /\ngrant / revoke
+CRM -- CRM_API
+CCRM ..> CRM_API : вызывает
+@enduml

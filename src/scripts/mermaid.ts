@@ -33,6 +33,9 @@ export function initMermaid() {
     });
     for (const [i, figure] of figures.entries()) {
       if (seq !== renderSeq) return; // тема переключилась ещё раз — этот проход устарел
+      // Внутри закрытого <details> размеры элементов нулевые — mermaid нарисует криво.
+      // Такие диаграммы рисуются при раскрытии блока (см. обработчик toggle ниже).
+      if (figure.closest('details:not([open])')) continue;
       const code = figure.querySelector('.mermaid-code')?.textContent ?? '';
       const target = figure.querySelector<HTMLElement>('.mermaid-render')!;
       try {
@@ -68,6 +71,14 @@ export function initMermaid() {
 
   window.addEventListener('beforeprint', () => {
     if (!mermaidPromise) renderAll();
+  });
+
+  // Раскрыли <details> с диаграммами (решение упражнения) — перерисовываем
+  document.querySelectorAll('details').forEach((d) => {
+    if (!d.querySelector('figure[data-mermaid]')) return;
+    d.addEventListener('toggle', () => {
+      if (d.open) renderAll();
+    });
   });
 }
 

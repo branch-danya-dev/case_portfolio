@@ -1,0 +1,23 @@
+@startuml er-min
+hide circle
+skinparam linetype ortho
+entity "access_request" as req {
+  * request_id : uuid <<PK>>
+  --
+  * employment_id : uuid <<FK>>
+  * status : enum
+}
+entity "request_item" as item {
+  * item_id : uuid <<PK>>
+  --
+  * request_id : uuid <<FK>>
+  * entitlement_id : varchar <<FK>>
+}
+entity "entitlement" as ent {
+  * entitlement_id : varchar <<PK>>
+  --
+  * name : varchar
+}
+req ||--|{ item
+ent ||--o{ item
+@enduml

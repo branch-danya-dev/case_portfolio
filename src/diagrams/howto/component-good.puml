@@ -1,0 +1,13 @@
+@startuml component-good
+' ХОРОШО: компоненты с ответственностью, предоставляемые и требуемые интерфейсы, подписи
+skinparam componentStyle uml2
+component "Ядро IdM" as CORE
+component "Сервис провижининга" as PROV
+component "Адаптер АБС" as ABS
+interface "Внутренний API ядра" as CORE_API
+interface "REST /users" as ABS_API
+CORE -- CORE_API
+ABS -- ABS_API
+PROV ..> CORE_API : читает задачи\nи данные учётных записей
+PROV ..> ABS_API : создаёт и блокирует\nпользователей АБС
+@enduml

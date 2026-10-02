@@ -1,0 +1,16 @@
+@startuml use-case-good
+' ХОРОШО: цели акторов, граница системы, extend при условии
+left to right direction
+actor "Руководитель" as mgr
+actor "Владелец ресурса" as owner
+actor "Инженер ИБ" as sec
+rectangle "IdM" {
+  usecase "Запросить\nдополнительный доступ" as UC3
+  usecase "Согласовать заявку" as UC4
+  usecase "Рассмотреть\nSoD-конфликт" as SOD
+}
+mgr --> UC3
+owner --> UC4
+sec --> SOD
+SOD ..> UC3 : <<extend>>\n[найден конфликт]
+@enduml

@@ -15,10 +15,12 @@ interface Props {
   file: string;
   source?: 'case' | 'site';
   title: string;
-  /** Показывать исходник под диаграммой (по умолчанию да). */
+  /** Показывать исходник под диаграммой (по умолчанию да, в раскрывающемся блоке). */
   showSource?: boolean;
+  /** Показать исходник открытым блоком кода над диаграммой (для практикума). */
+  openSource?: boolean;
 }
-const { file, source = 'case', title, showSource = true } = Astro.props;
+const { file, source = 'case', title, showSource = true, openSource = false } = Astro.props;
 
 const srcRoot = source === 'case' ? 'source/idm-joiner-docs' : 'src/diagrams';
 const code = await readFile(resolve(srcRoot, file), 'utf8');
@@ -26,6 +28,7 @@ const svgHref = `/diagrams/${source}/${file.replace(/\.puml$/, '.svg')}`;
 const pumlHref = source === 'case' ? `/case-files/idm-joiner-docs/${file}` : undefined;
 ---
 
+{openSource && <Code code={code} lang="txt" title={file.split('/').pop()} />}
 <figure class="diagram-figure not-content">
   <a href={svgHref} target="_blank" rel="noopener" title="Открыть в полном размере">
     <img src={svgHref} alt={title} loading="lazy" decoding="async" />
@@ -38,7 +41,7 @@ const pumlHref = source === 'case' ? `/case-files/idm-joiner-docs/${file}` : und
   {pumlHref && <a class="sa-btn" href={pumlHref} download>Скачать .puml</a>}
 </div>
 {
-  showSource && (
+  showSource && !openSource && (
     <details class="diagram-source">
       <summary>Исходный код PlantUML</summary>
       <Code code={code} lang="txt" title={file.split('/').pop()} />

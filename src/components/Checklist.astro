@@ -1,0 +1,62 @@
+---
+/**
+ * Чек-лист проверки с отметками (сохраняются в localStorage: sa:checklist:<id>).
+ * Используется в практикуме «Диаграммы: как создавать».
+ */
+interface Props {
+  /** Уникальный id чек-листа на сайте. */
+  id: string;
+  items: string[];
+}
+const { id, items } = Astro.props;
+---
+
+<sa-checklist class="checklist not-content" data-id={id}>
+  <ul>
+    {
+      items.map((text, i) => (
+        <li>
+          <label>
+            <input type="checkbox" data-index={i} />
+            <span>{text}</span>
+          </label>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="checklist__footer">
+    <span class="checklist__count" aria-live="polite"></span>
+    <button type="button" class="sa-btn checklist__reset">Сбросить</button>
+  </div>
+</sa-checklist>
+
+<script>
+  import { load, save } from '../scripts/storage';
+
+  class Checklist extends HTMLElement {
+    connectedCallback() {
+      const key = `checklist:${this.dataset.id}`;
+      const boxes = [...this.querySelectorAll<HTMLInputElement>('input[type=checkbox]')];
+      const count = this.querySelector('.checklist__count')!;
+      const state = new Set(load<number[]>(key, []));
+      const render = () => {
+        const done = boxes.filter((b) => b.checked).length;
+        count.textContent = `Выполнено ${done} из ${boxes.length}`;
+      };
+      boxes.forEach((b) => {
+        b.checked = state.has(Number(b.dataset.index));
+        b.addEventListener('change', () => {
+          save(key, boxes.filter((x) => x.checked).map((x) => Number(x.dataset.index)));
+          render();
+        });
+      });
+      this.querySelector('.checklist__reset')!.addEventListener('click', () => {
+        boxes.forEach((b) => (b.checked = false));
+        save(key, []);
+        render();
+      });
+      render();
+    }
+  }
+  customElements.define('sa-checklist', Checklist);
+</script>

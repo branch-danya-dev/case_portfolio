@@ -1,0 +1,9 @@
+@startuml state-min
+hide empty description
+[*] --> SUBMITTED : Отправлена
+SUBMITTED --> APPROVED : Все позиции согласованы
+SUBMITTED --> REJECTED : Позиция отклонена\n[все позиции отклонены]
+APPROVED --> COMPLETED : Полномочия выданы
+REJECTED --> [*]
+COMPLETED --> [*]
+@enduml

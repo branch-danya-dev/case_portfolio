@@ -1,0 +1,18 @@
+@startuml class-min
+hide empty methods
+class AccessRequest {
+  +requestId : uuid
+  +status : string
+  +submit()
+}
+class RequestItem {
+  +entitlementCode : string
+  +status : string
+}
+class Entitlement {
+  +code : string
+  +isCritical : boolean
+}
+AccessRequest "1" *-- "1..*" RequestItem : содержит
+RequestItem "0..*" --> "1" Entitlement : на полномочие
+@enduml

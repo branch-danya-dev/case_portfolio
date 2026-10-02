@@ -1,0 +1,7 @@
+@startuml deployment-min
+node "Сервер приложений" as app <<ВМ>> {
+  artifact "idm-core" as core
+}
+database "БД IdM" as db
+app --> db : TCP
+@enduml

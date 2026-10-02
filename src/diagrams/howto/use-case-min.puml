@@ -1,0 +1,11 @@
+@startuml use-case-min
+left to right direction
+actor "Руководитель" as mgr
+actor "Владелец ресурса" as owner
+rectangle "IdM" {
+  usecase "Запросить\nдополнительный доступ" as UC3
+  usecase "Согласовать заявку" as UC4
+}
+mgr --> UC3
+owner --> UC4
+@enduml

@@ -1,0 +1,29 @@
+@startuml deployment-dr-solution
+' Решение упражнения: развёртывание под NFR-04 (99,5%, RTO 4 ч, RPO 15 мин) — учебный вариант
+node "ЦОД 1 (основной)" as dc1 {
+  node "Балансировщик" as lb1
+  node "Сервер приложений 1" as a1 <<ВМ>> {
+    artifact "idm-core" as c1
+    artifact "idm-provisioning" as p1
+  }
+  node "Сервер приложений 2" as a2 <<ВМ>> {
+    artifact "idm-core" as c2
+    artifact "idm-provisioning" as p2
+  }
+  database "БД IdM\n(основная)" as db1
+}
+node "ЦОД 2 (резервный)" as dc2 {
+  node "Сервер приложений 3" as a3 <<ВМ, холодный резерв>> {
+    artifact "idm-core" as c3
+  }
+  database "БД IdM\n(реплика)" as db2
+}
+node "Кластер Kafka" as kafka
+lb1 --> a1 : HTTPS
+lb1 --> a2 : HTTPS
+a1 --> db1
+a2 --> db1
+db1 ..> db2 : репликация\n(отставание ≤ 15 мин)
+a1 --> kafka : TLS
+a2 --> kafka : TLS
+@enduml

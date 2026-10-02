@@ -1,0 +1,16 @@
+@startuml c4-component-min
+!include <C4/C4_Component>
+Container_Boundary(prov, "Сервис провижининга") {
+  Component(sched, "Исполнитель задач", "Java", "Берёт задачи по scheduled_at")
+  Component(retry, "Политика повторов", "Java", "Повторы и перевод в MANUAL (FR-16)")
+  Component(conn, "Коннекторы", "Java", "AD, Exchange, АБС")
+  Component(sd, "Клиент ServiceDesk", "Java", "Задачи ручного исполнения")
+}
+System_Ext(abs, "Адаптер АБС", "REST")
+System_Ext(servicedesk, "ServiceDesk")
+Rel(sched, conn, "Выполнить операцию")
+Rel(conn, retry, "Ошибка")
+Rel(retry, sd, "Повторы исчерпаны")
+Rel(conn, abs, "POST /users", "HTTPS + mTLS")
+Rel(sd, servicedesk, "Создать задачу", "REST")
+@enduml

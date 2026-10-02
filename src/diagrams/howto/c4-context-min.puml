@@ -1,0 +1,10 @@
+@startuml c4-context-min
+!include <C4/C4_Context>
+Person(mgr, "Руководитель", "Запрашивает доступы")
+System(idm, "IdM", "Управление доступами")
+System_Ext(hrms, "HRMS", "Кадровая система")
+System_Ext(ad, "Active Directory", "Учётные записи")
+Rel(hrms, idm, "Кадровые события", "Kafka")
+Rel(mgr, idm, "Заявки", "HTTPS")
+Rel(idm, ad, "Учётные записи, группы", "LDAPS")
+@enduml

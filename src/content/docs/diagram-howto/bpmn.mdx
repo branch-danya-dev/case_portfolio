@@ -1,0 +1,162 @@
+---
+title: "Как нарисовать BPMN"
+description: "Практикум BPMN: алгоритм построения, почему Mermaid и PlantUML не подходят, минимальный BPMN XML, Camunda Modeler и draw.io, чек-лист, «до и после», упражнение — процесс Leaver."
+sidebar:
+  order: 1
+  label: BPMN
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import Checklist from '../../../components/Checklist.astro';
+import Exercise from '../../../components/Exercise.astro';
+import BpmnViewer from '../../../components/BpmnViewer.tsx';
+
+Теория и нотация — на странице [BPMN 2.0](/processes/bpmn/). Здесь — как быстро нарисовать процесс и проверить его.
+
+## Алгоритм построения
+
+<Steps>
+
+1. **Границы.** Назовите стартовое событие (что запускает процесс) и конечное (каким результатом он заканчивается). Пока без шагов.
+
+2. **Участники.** Пул на процесс, дорожки — роли и системы. Внешние организации — отдельные пулы (можно свёрнутые).
+
+3. **Счастливый путь.** 5–10 задач слева направо, «глагол + объект». Не думайте пока об ошибках.
+
+4. **Развилки.** Где процесс идёт по-разному — XOR-шлюз с вопросом, ветки подписаны ответами. Параллельная работа — AND-шлюз, и обязательно AND-слияние.
+
+5. **Ожидания и события.** Таймеры, приход сообщений, таймауты на задачах (граничные события).
+
+6. **Исключения и альтернативные концовки.** Отмена, отказ, ошибка — каждая ветка заканчивается своим конечным событием.
+
+7. **Прогон токена.** Пройдите каждый вариант «пальцем»: нет тупиков, ничего не выполняется дважды.
+
+8. **Когда остановиться:** все вопросы участников процесса закрыты, задачи — единицы работы одного исполнителя, на схеме не больше 20–25 задач. Больше — выносите в подпроцессы.
+
+</Steps>
+
+## Синтаксис
+
+**Mermaid и PlantUML BPMN не поддерживают.** BPMN — это стандартный XML-формат обмена (BPMN 2.0 XML), и рисуют его визуальными редакторами: Camunda Modeler, demo.bpmn.io, [BPMN-редактор этого сайта](/tools/bpmn-editor/), draw.io. Текстом BPMN почти никто не пишет, но полезно понимать, что лежит внутри файла.
+
+<Tabs>
+<TabItem label="Минимальный BPMN XML">
+
+```xml title="minimal.bpmn — процесс из трёх элементов"
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_1" targetNamespace="http://example.com/bpmn">
+  <!-- Семантика: что за элементы и как связаны -->
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:startEvent id="Start" name="Заявка подана" />
+    <bpmn:userTask id="Approve" name="Согласовать заявку" />
+    <bpmn:endEvent id="End" name="Заявка согласована" />
+    <bpmn:sequenceFlow id="F1" sourceRef="Start" targetRef="Approve" />
+    <bpmn:sequenceFlow id="F2" sourceRef="Approve" targetRef="End" />
+  </bpmn:process>
+  <!-- Графика (DI): где элементы нарисованы -->
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start"><dc:Bounds x="150" y="100" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Approve_di" bpmnElement="Approve"><dc:Bounds x="240" y="78" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_di" bpmnElement="End"><dc:Bounds x="400" y="100" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F1_di" bpmnElement="F1"><di:waypoint x="186" y="118" /><di:waypoint x="240" y="118" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F2_di" bpmnElement="F2"><di:waypoint x="340" y="118" /><di:waypoint x="400" y="118" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
+```
+
+Две части: **семантика** (`bpmn:process` — элементы и потоки) и **графика** (`bpmndi` — координаты). Файл без `bpmndi` корректен по смыслу, но редакторы не смогут его нарисовать.
+
+</TabItem>
+<TabItem label="Шпаргалка элементов XML">
+
+| Элемент нотации | Тег BPMN XML |
+|---|---|
+| Стартовое / конечное событие | `bpmn:startEvent`, `bpmn:endEvent` |
+| Промежуточное ловящее / бросающее | `bpmn:intermediateCatchEvent`, `bpmn:intermediateThrowEvent` |
+| Граничное событие | `bpmn:boundaryEvent attachedToRef="…" cancelActivity="false"` (непрерывающее) |
+| Таймер, сообщение, ошибка | `bpmn:timerEventDefinition`, `bpmn:messageEventDefinition`, `bpmn:errorEventDefinition` внутри события |
+| Задачи | `bpmn:task`, `bpmn:userTask`, `bpmn:serviceTask`, `bpmn:manualTask`, `bpmn:sendTask`, `bpmn:receiveTask`, `bpmn:scriptTask`, `bpmn:businessRuleTask` |
+| Подпроцесс / вызываемая активность | `bpmn:subProcess`, `bpmn:callActivity` |
+| Шлюзы | `bpmn:exclusiveGateway`, `bpmn:parallelGateway`, `bpmn:inclusiveGateway`, `bpmn:eventBasedGateway` |
+| Поток операций / сообщений | `bpmn:sequenceFlow`, `bpmn:messageFlow` (в `bpmn:collaboration`) |
+| Пул / дорожка | `bpmn:participant`, `bpmn:lane` в `bpmn:laneSet` |
+| Аннотация и ассоциация | `bpmn:textAnnotation`, `bpmn:association` |
+
+</TabItem>
+</Tabs>
+
+## В визуальном редакторе
+
+**Camunda Modeler** — бесплатное настольное приложение (Windows, macOS, Linux) для BPMN 2.0 и DMN; внутри — тот же движок bpmn-js, что в [BPMN-редакторе сайта](/tools/bpmn-editor/). Порядок работы:
+
+1. Создайте новую BPMN-диаграмму. Если не нужен запуск в движке Camunda — платформа не важна, это влияет только на панель свойств для исполняемых атрибутов.
+2. Элементы — из палитры слева; у выделенного элемента появляется контекстное меню: добавить следующий элемент, сменить тип (например, задачу на пользовательскую), соединить, удалить.
+3. Подпись — двойной щелчок по элементу.
+4. Пулы и дорожки: добавьте участника из палитры, дорожки — из контекстного меню пула.
+5. Сохраните как `.bpmn` — файл откроют demo.bpmn.io, BPMN-редактор сайта и другие инструменты, поддерживающие BPMN 2.0 XML.
+
+**draw.io** тоже рисует BPMN (библиотека фигур BPMN), но сохраняет в своём формате `.drawio`, а не в BPMN 2.0 XML: такую схему нельзя открыть в Camunda Modeler или передать в движок. Для документации это допустимо, для обмена моделями — нет.
+
+## Чек-лист готовой диаграммы
+
+<Checklist id="howto-bpmn" items={[
+  'У процесса есть стартовое событие с названием-состоянием («Заявка подана»)',
+  'Каждая ветка заканчивается конечным событием с понятным итогом',
+  'Задачи названы «глагол + объект»',
+  'Каждый ветвящий шлюз — вопрос, ветки подписаны ответами',
+  'Параллельные ветки сливаются AND-шлюзом; слияние тем же типом, что ветвление',
+  'Потоки операций не пересекают границы пулов; между пулами — потоки сообщений',
+  'Типы задач отражают реальность: человек в системе, система сама, ручная работа',
+  'Таймеры и ожидания показаны событиями, а не задачами «Подождать»',
+  'Описаны исключения: отказ, отмена, ошибка',
+  'Не больше 20–25 задач; крупные части вынесены в подпроцессы',
+  'Токен прогнан по всем вариантам: нет тупиков и двойного выполнения',
+]} />
+
+## До и после
+
+<div class="before-after not-content">
+<div class="before-after__col" data-kind="bad">
+<p class="before-after__label">До</p>
+<BpmnViewer client:visible src="/bpmn/howto/approval-bad.bpmn" title="Плохо" height={300} />
+</div>
+<div class="before-after__col" data-kind="good">
+<p class="before-after__label">После</p>
+<BpmnViewer client:visible src="/bpmn/howto/approval-good.bpmn" title="Хорошо" height={300} />
+</div>
+</div>
+
+Что изменилось:
+
+- **События получили названия-состояния:** «Заявка подана», «Полномочие выдано» — понятно, что запускает процесс и чем он кончается.
+- **«Заявка» → «Проверить заявку»:** задача без глагола — это объект, а не работа.
+- **Добавлено AND-слияние.** В исходной схеме две параллельные ветки входят прямо в «Выдать полномочие» — по правилам токенов задача выполнится **дважды**. AND-шлюз дожидается обоих согласований.
+- **Типы задач:** проверка и выдача — сервисные (делает система), согласования — пользовательские (человек в системе).
+
+## Упражнение
+
+<Exercise title="процесс Leaver (увольнение)">
+
+В кейсе IDM-JOINER процессы перевода и увольнения отложены на волну 2 (BR-12). Нарисуйте BPMN процесса **Leaver**: доступы блокируются в последний рабочий день; при срочном увольнении — немедленно; руководитель получает доступ к почтовому ящику сотрудника. Используйте дорожки HR, IdM и Руководитель. Рисуйте в [BPMN-редакторе](/tools/bpmn-editor/) и сравните с решением.
+
+<Fragment slot="solution">
+
+<BpmnViewer client:visible src="/bpmn/howto/leaver-solution.bpmn" title="Leaver — одно из возможных решений" height={460} />
+
+Что важно в решении:
+
+- **Старт — кадровое событие** (приказ), а не заявка руководителя — тот же принцип, что в TO-BE приёма.
+- **XOR «Срочное увольнение?»:** срочно — сразу к блокировке; иначе — **промежуточный таймер** «Конец последнего рабочего дня». Ожидание — событие, а не задача «Подождать».
+- **XOR-слияние** перед блокировкой: ветки взаимоисключающие, поэтому XOR, а не AND.
+- **Блокировка и отзыв полномочий — сервисная задача IdM**, передача почты — тоже системная, а руководитель только забирает данные (пользовательская задача).
+- Что можно добавить: отзыв доступов в системах без коннектора (задача в ServiceDesk), уведомление ИБ, удаление учётных записей через установленный срок, ресертификацию прав руководителя на ящик.
+
+</Fragment>
+
+</Exercise>

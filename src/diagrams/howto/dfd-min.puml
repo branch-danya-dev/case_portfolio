@@ -1,0 +1,9 @@
+@startuml dfd-min
+' Приближение DFD средствами PlantUML: внешняя сущность — rectangle, процесс — usecase (овал), хранилище — database
+left to right direction
+rectangle "HRMS" as hrms
+usecase "1. Принять\nкадровое событие" as p1
+database "D1 Реестр\nидентичностей" as d1
+hrms --> p1 : Кадровое событие
+p1 --> d1 : Идентичность
+@enduml

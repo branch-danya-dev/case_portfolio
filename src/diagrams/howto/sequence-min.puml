@@ -1,0 +1,13 @@
+@startuml sequence-min
+autonumber
+participant "Сервис провижининга" as P
+participant "Адаптер АБС" as A
+P -> A : POST /users (Idempotency-Key)
+activate A
+alt успех
+  A --> P : 201 Created
+else бизнес-ошибка
+  A --> P : 422 problem+json
+end
+deactivate A
+@enduml

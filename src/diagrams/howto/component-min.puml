@@ -1,0 +1,8 @@
+@startuml component-min
+skinparam componentStyle uml2
+component "Сервис провижининга" as PROV
+component "Адаптер АБС" as ABS
+interface "REST /users" as API
+ABS -- API
+PROV ..> API : вызывает
+@enduml

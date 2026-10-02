@@ -823,3 +823,104 @@ a.home-card:hover {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ---------- Практикум: чек-лист, «до и после», упражнение ---------- */
+.checklist {
+  display: block;
+  margin-block: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  background: var(--sa-surface);
+}
+.checklist ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.checklist li + li {
+  margin-top: 0.35rem;
+}
+.checklist label {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.checklist input {
+  margin-top: 0.3rem;
+  accent-color: var(--sl-color-accent);
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex: none;
+}
+.checklist input:checked + span {
+  color: var(--sl-color-gray-3);
+  text-decoration: line-through;
+}
+.checklist__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+.before-after {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1rem;
+  margin-block: 1rem;
+}
+.sl-markdown-content .before-after > * {
+  margin-top: 0;
+}
+.before-after__col {
+  padding: 0.75rem;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+}
+.before-after__col[data-kind='bad'] {
+  border-color: #b91c1c;
+}
+.before-after__col[data-kind='good'] {
+  border-color: var(--sl-color-accent);
+}
+.before-after__label {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+  font-size: var(--sl-text-sm);
+}
+.before-after__col[data-kind='bad'] .before-after__label {
+  color: #f87171;
+}
+:root[data-theme='light'] .before-after__col[data-kind='bad'] .before-after__label {
+  color: #b91c1c;
+}
+.before-after__col[data-kind='good'] .before-after__label {
+  color: var(--sl-color-accent-high);
+}
+.before-after .mermaid-figure,
+.before-after .bpmn-viewer,
+.before-after .diagram-figure {
+  margin-block: 0;
+}
+.exercise {
+  margin-block: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--sl-color-accent);
+  border-radius: var(--sa-radius);
+}
+.exercise__title {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+  color: var(--sl-color-white);
+}
+.exercise__solution > summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--sl-color-accent-high);
+}
+.exercise__body {
+  margin-top: 0.75rem;
+}

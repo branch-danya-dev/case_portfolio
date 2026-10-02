@@ -1,0 +1,24 @@
+@startuml use-case-mover-solution
+' Решение упражнения: use case процесса Mover (перевод) — учебный вариант, в кейсе его нет (волна 2)
+left to right direction
+actor "HRMS" as hrms <<система>>
+actor "Таймер" as timer <<система>>
+actor "Новый руководитель" as newmgr
+actor "Прежний руководитель" as oldmgr
+actor "Владелец ресурса" as owner
+rectangle "IdM" {
+  usecase "Обработать событие\nо переводе" as M1
+  usecase "Пересчитать роли\nпо новой должности" as M2
+  usecase "Отозвать права\nпрежней должности" as M3
+  usecase "Подтвердить сохранение\nотдельных прав" as M4
+  usecase "Запросить\nдополнительный доступ" as UC3
+  usecase "Согласовать заявку" as UC4
+}
+hrms --> M1
+timer --> M3
+oldmgr --> M4
+newmgr --> UC3
+owner --> UC4
+M1 ..> M2 : <<include>>
+M4 ..> M3 : <<extend>>\n[права нужны\nна переходный период]
+@enduml

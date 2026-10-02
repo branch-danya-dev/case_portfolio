@@ -1,0 +1,18 @@
+@startuml use-case-bad
+' ПЛОХО: прецеденты-кнопки, внутренний компонент как актор, include вместо extend, нет границы
+left to right direction
+actor "Руководитель" as mgr
+actor "БД IdM" as db
+usecase "Открыть портал" as A
+usecase "Нажать «Создать заявку»" as B
+usecase "Выбрать полномочие" as C
+usecase "Нажать «Отправить»" as D
+usecase "Согласовать с ИБ" as E
+mgr --> A
+mgr --> B
+mgr --> C
+mgr --> D
+B ..> C : <<include>>
+B ..> E : <<include>>
+D --> db
+@enduml

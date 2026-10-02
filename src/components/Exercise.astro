@@ -1,0 +1,18 @@
+---
+/** Упражнение: условие видно сразу, эталонное решение — в раскрывающемся блоке. */
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<section class="exercise">
+  <p class="exercise__title">Упражнение: {title}</p>
+  <slot />
+  <details class="exercise__solution">
+    <summary>Показать эталонное решение</summary>
+    <div class="exercise__body">
+      <slot name="solution" />
+    </div>
+  </details>
+</section>
