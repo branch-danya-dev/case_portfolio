@@ -615,3 +615,87 @@
   definition: Протокол аутентификации по билетам (TGT и сервисные билеты от KDC); основа единого входа в домене Active Directory.
   topic: integrations
   seeAlso: [sso]
+
+- id: microservices
+  term: Микросервисы
+  en: Microservices
+  definition: Архитектура из независимо разворачиваемых сервисов вокруг бизнес-возможностей, каждый со своими данными.
+  topic: architecture
+  seeAlso: [modular-monolith, saga]
+
+- id: modular-monolith
+  term: Модульный монолит
+  en: Modular monolith
+  definition: Одно разворачиваемое приложение с чёткими границами модулей, каждый из которых владеет своими данными; частый разумный старт вместо микросервисов.
+  topic: architecture
+  seeAlso: [microservices]
+
+- id: iso-25010
+  term: ISO/IEC 25010
+  en: Systems and software quality model
+  definition: Стандарт модели качества продукта; характеристики (производительность, надёжность, защищённость, сопровождаемость и др.) используют как чек-лист НФТ.
+  topic: architecture
+  seeAlso: [non-functional-requirement]
+
+- id: availability
+  term: Доступность
+  en: Availability
+  definition: Доля времени, когда система работает; задаётся в процентах («девятках») с указанием периода и того, что считается недоступностью.
+  topic: architecture
+  seeAlso: [rto, rpo]
+
+- id: rto
+  term: RTO
+  en: Recovery Time Objective
+  definition: Допустимое время восстановления системы после сбоя.
+  topic: architecture
+  seeAlso: [rpo, availability]
+
+- id: rpo
+  term: RPO
+  en: Recovery Point Objective
+  definition: Допустимая потеря данных при сбое, измеряемая временем — данные не старше N минут до сбоя.
+  topic: architecture
+  seeAlso: [rto]
+
+- id: sla
+  term: SLA, SLO, SLI
+  en: Service Level Agreement / Objective / Indicator
+  definition: Соглашение об уровне сервиса / целевое значение показателя / сам измеряемый показатель (например, доля успешных запросов).
+  topic: architecture
+  seeAlso: [availability]
+
+- id: cache
+  term: Кэш
+  en: Cache
+  definition: Копия данных ближе к потребителю для ускорения ответа и разгрузки источника; ключевое требование — допустимое устаревание данных.
+  topic: architecture
+  seeAlso: [ttl]
+
+- id: ttl
+  term: TTL
+  en: Time to live
+  definition: Время жизни записи в кэше или сообщения, после которого оно считается устаревшим.
+  topic: architecture
+  seeAlso: [cache]
+
+- id: cap
+  term: Теорема CAP
+  en: CAP theorem
+  definition: При разделении сети распределённая система не может быть одновременно согласованной и доступной — приходится выбирать поведение.
+  topic: architecture
+  seeAlso: [eventual-consistency]
+
+- id: eventual-consistency
+  term: Согласованность в конечном счёте
+  en: Eventual consistency
+  definition: Данные в разных узлах или системах могут временно различаться, но при отсутствии новых изменений придут к одному состоянию.
+  topic: architecture
+  seeAlso: [cap, reconciliation]
+
+- id: adr
+  term: ADR
+  en: Architecture Decision Record
+  definition: Запись об одном архитектурном решении — статус, контекст, варианты, решение, последствия.
+  topic: architecture
+  seeAlso: [non-functional-requirement]

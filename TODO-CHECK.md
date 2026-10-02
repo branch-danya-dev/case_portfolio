@@ -14,3 +14,4 @@
 | int-01 | `integrations/rest-design` | Статус документа IETF о заголовке Idempotency-Key (черновик или RFC) | datatracker.ietf.org |
 | int-02 | `integrations/contracts` | Актуальные версии спецификаций OpenAPI и AsyncAPI | spec.openapis.org, asyncapi.com |
 | int-03 | `integrations/security-oauth` | Номер и статус OAuth 2.0 Security BCP (RFC 9700?) и статус OAuth 2.1 | datatracker.ietf.org |
+| arch-01 | `architecture/nfr-iso25010` | Состав характеристик ISO/IEC 25010:2023 (9 характеристик?) и какой редакции соответствует действующий ГОСТ Р ИСО/МЭК 25010 | Тексты стандартов, Росстандарт |
