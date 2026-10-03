@@ -6,7 +6,7 @@ export const tools = [
   { slug: 'tools/interview-trainer', label: 'Тренажёр для собеседования', description: 'Карточки и экзамен по банку вопросов, самооценка, прогресс по темам', ready: true },
   { slug: 'tools/availability', label: 'Калькулятор доступности', description: 'Процент ↔ простой, часы обслуживания, цепочка систем, MTBF и MTTR', ready: true },
   { slug: 'tools/requirements-linter', label: 'Линтер требований', description: 'Размытые формулировки, атомарность, проверяемость, INVEST', ready: true },
-  { slug: 'tools/prioritization', label: 'Приоритизация', description: 'MoSCoW-доска, RICE, WSJF', ready: false },
+  { slug: 'tools/prioritization', label: 'Приоритизация', description: 'MoSCoW-доска, RICE, WSJF с сортировкой и экспортом', ready: true },
   { slug: 'tools/raci', label: 'Конструктор RACI', description: 'Роли × артефакты, проверка «одна A»', ready: false },
   { slug: 'tools/json-yaml', label: 'JSON / YAML', description: 'Форматирование, конвертация, JSON Schema', ready: false },
   { slug: 'tools/sql-trainer', label: 'SQL-тренажёр', description: 'Учебная БД кейса, задания с проверкой', ready: false },

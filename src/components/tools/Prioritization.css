@@ -1,0 +1,212 @@
+:root:has(.prio) {
+  --sl-content-width: 100%;
+}
+.prio {
+  display: grid;
+  gap: 0.8rem;
+  margin-block: 1rem;
+}
+.prio__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.prio__tabs button {
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--sa-border);
+  border-radius: 999px;
+  background: none;
+  color: var(--sl-color-gray-2);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  cursor: pointer;
+}
+.prio__tabs button.is-active {
+  border-color: var(--sl-color-accent);
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-white);
+}
+.prio__note {
+  margin: 0;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-2);
+}
+.prio__board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.6rem;
+  align-items: start;
+}
+@media (max-width: 70rem) {
+  .prio__board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 34rem) {
+  .prio__board {
+    grid-template-columns: 1fr;
+  }
+}
+.prio__col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 8rem;
+  padding: 0.6rem;
+  border: 1px solid var(--sa-border);
+  border-top-width: 4px;
+  border-radius: 0.5rem;
+  background: var(--sa-surface);
+  transition: background 0.15s;
+}
+.prio__col--M {
+  border-top-color: #e5484d;
+}
+.prio__col--S {
+  border-top-color: var(--sa-warn);
+}
+.prio__col--C {
+  border-top-color: var(--sa-ok);
+}
+.prio__col--W {
+  border-top-color: var(--sl-color-gray-4);
+}
+.prio__col--none {
+  border-style: dashed;
+}
+.prio__col.is-over {
+  background: var(--sl-color-accent-low);
+}
+.prio__col header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.4rem;
+  color: var(--sl-color-white);
+}
+.prio__col header small {
+  width: 100%;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+}
+.prio__count {
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+.prio__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--sa-border);
+  border-radius: 0.4rem;
+  background: var(--sl-color-bg);
+  font-size: var(--sl-text-sm);
+  cursor: grab;
+}
+.prio__card.is-dragging {
+  opacity: 0.4;
+}
+.prio__id {
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+}
+.prio__title {
+  color: var(--sl-color-white);
+  line-height: 1.35;
+}
+.prio__cardbar {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+.prio select,
+.prio input {
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--sa-border);
+  border-radius: 0.35rem;
+  background: var(--sl-color-bg);
+  color: var(--sl-color-white);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  max-width: 100%;
+}
+.prio__cardbar select {
+  flex: 1;
+  font-size: var(--sl-text-xs);
+}
+.prio__del {
+  border: 0;
+  background: none;
+  color: var(--sl-color-gray-3);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.prio__del:hover {
+  color: #e5484d;
+}
+.prio__add {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.prio__add input {
+  flex: 1 1 16rem;
+}
+.prio__checks {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: var(--sl-text-sm);
+  color: var(--sa-warn);
+}
+.prio__checks:empty {
+  display: none;
+}
+.prio__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.prio__status {
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-accent-high);
+}
+.prio__table-wrap {
+  overflow-x: auto;
+}
+.prio__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--sl-text-sm);
+}
+.prio__table th,
+.prio__table td {
+  padding: 0.35rem 0.4rem;
+  border-bottom: 1px solid var(--sa-border);
+  text-align: start;
+  vertical-align: middle;
+}
+.prio__table td input {
+  width: 100%;
+  min-width: 10rem;
+}
+.prio__table td input.prio__num {
+  min-width: 4.5rem;
+  width: 5rem;
+}
+.prio__rank {
+  font-family: var(--sl-font-mono);
+  color: var(--sl-color-gray-3);
+  text-align: center;
+}
+.prio__score {
+  font-weight: 700;
+  color: var(--sl-color-white);
+}
+.prio__addrow {
+  justify-self: start;
+}
