@@ -60,7 +60,7 @@
   transition: background 0.15s;
 }
 .prio__col--M {
-  border-top-color: #e5484d;
+  border-top-color: var(--sa-err);
 }
 .prio__col--S {
   border-top-color: var(--sa-warn);
@@ -87,12 +87,12 @@
 .prio__col header small {
   width: 100%;
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .prio__count {
   font-family: var(--sl-font-mono);
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .prio__card {
   display: flex;
@@ -111,7 +111,7 @@
 .prio__id {
   font-family: var(--sl-font-mono);
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .prio__title {
   color: var(--sl-color-white);
@@ -140,13 +140,13 @@
 .prio__del {
   border: 0;
   background: none;
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   font-size: 1.15rem;
   line-height: 1;
   cursor: pointer;
 }
 .prio__del:hover {
-  color: #e5484d;
+  color: var(--sa-err);
 }
 .prio__add {
   display: flex;
@@ -200,7 +200,7 @@
 }
 .prio__rank {
   font-family: var(--sl-font-mono);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   text-align: center;
 }
 .prio__score {

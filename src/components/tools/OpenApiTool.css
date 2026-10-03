@@ -61,9 +61,9 @@
 .oat__error {
   margin: 0;
   padding: 0.5rem 0.8rem;
-  border-left: 3px solid #e5484d;
+  border-left: 3px solid var(--sa-err);
   background: var(--sa-surface);
-  color: #e5484d;
+  color: var(--sa-err);
   font-size: var(--sl-text-sm);
 }
 .oat__review {
@@ -102,24 +102,24 @@
   letter-spacing: 0.03em;
 }
 .oat .lvl-error .oat__lvl {
-  color: #e5484d;
+  color: var(--sa-err);
 }
 .oat .lvl-warn .oat__lvl {
   color: var(--sa-warn);
 }
 .oat .lvl-info .oat__lvl {
-  color: #3e8ef7;
+  color: var(--sa-info);
 }
 .oat__toggle {
   display: inline-block;
   margin-top: 0.4rem;
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .oat__status {
   margin: 0;
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .oat__redoc:empty {
   display: none;

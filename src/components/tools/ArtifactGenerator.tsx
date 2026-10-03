@@ -58,7 +58,7 @@ export default function ArtifactGenerator() {
   };
 
   return (
-    <div className="artgen" data-ready={ready}>
+    <div className="artgen not-content" data-ready={ready}>
       <div className="artgen__tabs" role="tablist" aria-label="Шаблон">
         {ARTIFACT_TEMPLATES.map((t) => (
           <button

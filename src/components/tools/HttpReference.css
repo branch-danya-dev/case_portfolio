@@ -65,13 +65,13 @@
   border-left-color: var(--sa-ok);
 }
 .http__card--3xx {
-  border-left-color: #3e8ef7;
+  border-left-color: var(--sa-info);
 }
 .http__card--4xx {
   border-left-color: var(--sa-warn);
 }
 .http__card--5xx {
-  border-left-color: #e5484d;
+  border-left-color: var(--sa-err);
 }
 .http__card.is-target {
   outline: 2px solid var(--sl-color-accent);
@@ -107,7 +107,7 @@
   padding-top: 0.3rem;
 }
 .http__card footer small {
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .http__rfc {
   margin-left: auto;
@@ -122,7 +122,7 @@
   color: var(--sa-ok);
 }
 .http__retry--no {
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .http__retry--maybe {
   color: var(--sa-warn);
@@ -149,7 +149,7 @@
   color: var(--sa-ok);
 }
 .http__no {
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .http__code-link {
   font-family: var(--sl-font-mono);
@@ -165,5 +165,5 @@
   color: var(--sl-color-gray-2);
 }
 .http__empty {
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }

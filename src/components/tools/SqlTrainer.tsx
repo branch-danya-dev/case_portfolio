@@ -169,13 +169,18 @@ export default function SqlTrainer() {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault();
       onRun(mode === 'tasks');
-    } else if (e.key === 'Tab' && !e.shiftKey) {
+    } else if (e.key === 'Escape') {
+      // Esc снимает «захват» Tab: следующий Tab — обычный переход фокуса (не ловушка для клавиатуры)
+      e.currentTarget.dataset.tabEscape = '1';
+      return;
+    } else if (e.key === 'Tab' && !e.shiftKey && e.currentTarget.dataset.tabEscape !== '1') {
       e.preventDefault();
       const el = e.currentTarget;
       const { selectionStart: s, selectionEnd: en } = el;
       setQuery(query.slice(0, s) + '  ' + query.slice(en));
       requestAnimationFrame(() => el.setSelectionRange(s + 2, s + 2));
     }
+    if (e.key !== 'Tab') delete e.currentTarget.dataset.tabEscape;
   };
 
   const levels = useMemo(() => [...new Set(SQL_TASKS.map((t) => t.level))], []);
@@ -183,7 +188,7 @@ export default function SqlTrainer() {
   if (loadError) return <p className="sqlt__error">Не удалось загрузить SQL-движок или учебную БД: {loadError}</p>;
 
   return (
-    <div className="sqlt">
+    <div className="sqlt not-content">
       <div className="sqlt__tabs" role="tablist">
         <button type="button" role="tab" aria-selected={mode === 'tasks'} className={mode === 'tasks' ? 'is-active' : ''} onClick={() => (setMode('tasks'), setRun(null), setVerdict(null))}>
           Задания · решено {solved.filter((id) => SQL_TASKS.some((t) => t.id === id)).length} из {SQL_TASKS.length}
@@ -279,6 +284,7 @@ export default function SqlTrainer() {
               </button>
             )}
             {!engine && <span className="sqlt__loading">Загрузка SQLite…</span>}
+            <span className="sqlt__note">Tab в редакторе — отступ; чтобы перейти дальше с клавиатуры: Esc, затем Tab</span>
           </div>
 
           {mode === 'tasks' && showHint && <p className="sqlt__hint">{task.hint}</p>}

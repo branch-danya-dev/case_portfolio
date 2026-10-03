@@ -153,7 +153,7 @@ export default function MermaidSandbox() {
             aria-describedby="sandbox-hint"
           />
         </label>
-        <div className="sandbox__preview" aria-label="Превью диаграммы">
+        <div className="sandbox__preview" role="region" aria-label="Превью диаграммы">
           {error ? (
             <pre className="sandbox__error">{error}</pre>
           ) : (

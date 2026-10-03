@@ -30,7 +30,7 @@
 .artgen__desc {
   margin: 0.6rem 0 0.8rem;
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .artgen__panes {
   display: grid;
@@ -75,7 +75,7 @@
 }
 .artgen__field small {
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .artgen__field input,
 .artgen__field textarea,

@@ -67,7 +67,7 @@
 }
 .trainer__hint {
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .trainer__title {
   margin: 0.5rem 0 0;
@@ -111,7 +111,7 @@
 }
 .trainer__stack .trainer__prev--unknown,
 .trainer__summary .trainer__prev--unknown::before {
-  background: #e5484d;
+  background: var(--sa-err);
 }
 .trainer__summary {
   display: flex;
@@ -164,7 +164,7 @@
 }
 .trainer__prev {
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .trainer__prev.trainer__prev--known {
   color: var(--sa-ok);
@@ -173,7 +173,7 @@
   color: var(--sa-warn);
 }
 .trainer__prev.trainer__prev--unknown {
-  color: #e5484d;
+  color: var(--sa-err);
 }
 .trainer__question {
   margin: 0.8rem 0 1rem;
@@ -184,7 +184,7 @@
 }
 .trainer__reveal p {
   margin: 0 0 0.6rem;
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   font-size: var(--sl-text-sm);
 }
 .trainer__answer {
@@ -208,7 +208,7 @@
   margin-top: 1rem;
 }
 .trainer__r--unknown {
-  border-color: #e5484d;
+  border-color: var(--sa-err);
 }
 .trainer__r--review {
   border-color: var(--sa-warn);
@@ -222,7 +222,7 @@
   font-size: 0.75em;
   border: 1px solid currentColor;
   border-radius: 0.25rem;
-  opacity: 0.7;
+  
 }
 .trainer__nav {
   display: flex;

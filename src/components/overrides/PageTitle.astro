@@ -6,16 +6,17 @@ import StudiedToggle from '../StudiedToggle.astro';
 const { entry, id } = Astro.locals.starlightRoute;
 const track = (entry.data as { trackProgress?: boolean }).trackProgress;
 
-// Ссылка на печатную шпаргалку раздела, если она есть: cheatsheets/<раздел>
+// Ссылка на печатную шпаргалку раздела, если она есть: cheatsheets/<раздел>.
+// Не зависит от trackProgress — практикум diagram-howto в прогрессе не учитывается, но шпаргалка у него есть.
 const section = id.split('/')[0];
-const cheatsheet = track ? await getEntry('docs', `cheatsheets/${section}`) : undefined;
+const cheatsheet = section !== 'cheatsheets' ? await getEntry('docs', `cheatsheets/${section}`) : undefined;
 ---
 
 <Default />
 {
-  track && (
+  (track || cheatsheet) && (
     <div class="page-title-row">
-      <StudiedToggle slug={id} />
+      {track && <StudiedToggle slug={id} />}
       {cheatsheet && (
         <a class="print-link" href={`/cheatsheets/${section}/`}>
           Шпаргалка раздела для печати

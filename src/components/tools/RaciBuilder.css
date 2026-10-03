@@ -5,9 +5,9 @@
   display: grid;
   gap: 0.6rem;
   margin-block: 1rem;
-  --lvl-error: #e5484d;
+  --lvl-error: var(--sa-err);
   --lvl-warn: var(--sa-warn);
-  --lvl-info: #3e8ef7;
+  --lvl-info: var(--sa-info);
 }
 .raci__bar {
   display: flex;
@@ -18,7 +18,7 @@
 .raci__hint {
   margin: 0;
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .raci__summary {
   margin: 0;
@@ -110,7 +110,7 @@
   border: 1px solid var(--sa-border);
   border-radius: 0.3rem;
   background: var(--sl-color-bg);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   font-family: var(--sl-font-mono);
   font-size: 0.85rem;
   font-weight: 700;
@@ -122,12 +122,12 @@
 }
 .raci__cell--R {
   color: var(--sl-color-white);
-  background: color-mix(in srgb, #3e8ef7 30%, transparent);
+  background: color-mix(in srgb, var(--sa-info) 30%, transparent);
 }
 .raci__cell--A,
 .raci__cell--RA {
   color: var(--sl-color-white);
-  background: color-mix(in srgb, #e5484d 35%, transparent);
+  background: color-mix(in srgb, var(--sa-err) 35%, transparent);
 }
 .raci__cell--C {
   color: var(--sl-color-white);

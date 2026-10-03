@@ -181,7 +181,7 @@ export default function Prioritization() {
   );
 
   return (
-    <div className="prio">
+    <div className="prio not-content">
       <div className="prio__tabs" role="tablist">
         {(
           [

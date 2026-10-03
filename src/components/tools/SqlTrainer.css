@@ -47,7 +47,7 @@
   font-size: var(--sl-text-xs);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .sqlt__side ol {
   margin: 0;
@@ -104,7 +104,7 @@
   font-size: var(--sl-text-xs);
 }
 .sqlt__schema small {
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .sqlt__key {
   margin-left: 0.3rem;
@@ -114,7 +114,7 @@
   background: color-mix(in srgb, var(--sa-warn) 25%, transparent);
 }
 .sqlt__key--fk {
-  background: color-mix(in srgb, #3e8ef7 22%, transparent);
+  background: color-mix(in srgb, var(--sa-info) 22%, transparent);
 }
 .sqlt__main {
   display: grid;
@@ -131,7 +131,7 @@
 }
 .sqlt__meta {
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .sqlt__editor {
   min-height: 11rem;
@@ -162,16 +162,16 @@
   font-size: 0.72em;
   border: 1px solid currentColor;
   border-radius: 0.25rem;
-  opacity: 0.75;
+  
 }
 .sqlt__loading {
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .sqlt__hint {
   margin: 0;
   padding: 0.5rem 0.7rem;
-  border-left: 3px solid #3e8ef7;
+  border-left: 3px solid var(--sa-info);
   background: var(--sa-surface);
   font-size: var(--sl-text-sm);
 }
@@ -207,16 +207,16 @@
 .sqlt__error {
   margin: 0;
   padding: 0.5rem 0.8rem;
-  border-left: 3px solid #e5484d;
+  border-left: 3px solid var(--sa-err);
   background: var(--sa-surface);
-  color: #e5484d;
+  color: var(--sa-err);
   font-family: var(--sl-font-mono);
   font-size: 0.82rem;
 }
 .sqlt__note {
   margin: 0;
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .sqlt__table-wrap {
   overflow: auto;

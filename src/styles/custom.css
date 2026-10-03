@@ -18,6 +18,11 @@
   --sa-border: var(--sl-color-gray-5);
   --sa-ok: #4ade80;
   --sa-warn: #fbbf24;
+  /* ошибки и подсказки в инструментах; контраст к фону и к карточкам ≥ 4,5:1 в обеих темах */
+  --sa-err: #f87171;
+  --sa-info: #60a5fa;
+  /* приглушённый текст: gray-3 Starlight на карточках (--sa-surface) даёт 4,48 < 4,5 — берём чуть светлее */
+  --sa-muted: #959aa4;
 }
 
 :root[data-theme='light'] {
@@ -28,6 +33,9 @@
   --sa-border: var(--sl-color-gray-5);
   --sa-ok: #15803d;
   --sa-warn: #b45309;
+  --sa-err: #b91c1c;
+  --sa-info: #1d4ed8;
+  --sa-muted: var(--sl-color-gray-3);
 }
 
 [hidden] {
@@ -136,9 +144,30 @@ body {
 .page-title-row .print-link {
   margin-top: 0.5rem;
   font-size: var(--sl-text-sm);
+  /* ссылка вне .sl-markdown-content — без этого браузер красит её в стандартный синий / фиолетовый */
+  color: var(--sl-color-text-accent);
+}
+
+/* Узкий экран: длинное название сайта — с многоточием, а не обрезано посреди слова */
+.site-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.site-title {
+  min-width: 0;
 }
 
 /* ---------- Mermaid ---------- */
+/* Тёмная тема Mermaid рисует подписи стрелок #ccc на #585858 — контраст 4,43 < 4,5 (axe).
+   themeVariables у темы dark не меняются, поэтому фон подписи затемняем стилем: #ccc на #3a3a3a ≈ 7:1. */
+:root:not([data-theme='light']) :is(.mermaid-render, .sandbox__preview) :is(.labelBkg, .edgeLabel, .edgeLabel p) {
+  background-color: #3a3a3a !important;
+}
+:root:not([data-theme='light']) :is(.mermaid-render, .sandbox__preview) .edgeLabel rect {
+  fill: #3a3a3a !important;
+}
 .mermaid-figure {
   margin-block: 1.5rem;
   padding: 1rem;
@@ -179,7 +208,7 @@ body {
 .mermaid-caption {
   margin-top: 0.5rem;
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   text-align: center;
 }
 .mermaid-toolbar,
@@ -357,7 +386,7 @@ body {
   border: 1px dashed var(--sa-border);
   border-radius: 999px;
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 
 /* ---------- Символы нотаций (таблица BPMN и т. п.) ---------- */
@@ -422,7 +451,7 @@ body {
   margin: 0;
   padding: 0.4rem 0.75rem;
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   border-top: 1px solid var(--sa-border);
 }
 .bpmn-viewer:fullscreen {
@@ -630,7 +659,7 @@ a.home-card:hover {
 .aa-meta,
 .aa-small {
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .aa code {
   margin-inline-end: 0.25rem;
@@ -693,7 +722,7 @@ a.home-card:hover {
   font-weight: 700;
 }
 .aa-ref {
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   font-size: var(--sl-text-xs);
 }
 .aa-desc > :first-child {
@@ -708,7 +737,7 @@ a.home-card:hover {
   gap: 0.2rem 0.8rem;
   margin-top: 0.2rem;
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .aa pre {
   margin: 0.4rem 0 0;
@@ -725,7 +754,7 @@ a.home-card:hover {
 }
 .aa-status {
   padding: 1rem;
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 
 /* ---------- Кейс: ID артефактов не переносятся по дефису ---------- */
@@ -764,7 +793,15 @@ a.home-card:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
+  max-width: 100%;
   font-size: var(--sl-text-sm);
+}
+/* Ширину списка задаёт самое длинное название примера — на телефоне он не должен растягивать страницу */
+.sandbox__starter select {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
 }
 .sandbox__starter select,
 .bpmn-editor select {
@@ -839,7 +876,7 @@ a.home-card:hover {
 .sandbox__hint {
   margin-top: 0.6rem;
   font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .sa-btn:disabled {
   opacity: 0.5;
@@ -877,7 +914,7 @@ a.home-card:hover {
   flex: none;
 }
 .checklist input:checked + span {
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   text-decoration: line-through;
 }
 .checklist__footer {
@@ -886,7 +923,7 @@ a.home-card:hover {
   align-items: center;
   margin-top: 0.75rem;
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .before-after {
   display: grid;
@@ -945,4 +982,20 @@ a.home-card:hover {
 }
 .exercise__body {
   margin-top: 0.75rem;
+}
+
+/* ---------- Код без лигатур ----------
+   JetBrains Mono склеивает ->>, -->, <|-- и т. п. в стрелки-глифы. В справочнике по синтаксису
+   читатель должен видеть символы, которые набирать, поэтому лигатуры в коде отключены. */
+.expressive-code pre,
+.expressive-code code,
+code,
+kbd,
+.mermaid-code,
+.sandbox textarea,
+.sqlt__editor,
+.jy textarea,
+.artgen textarea {
+  font-variant-ligatures: none;
+  font-feature-settings: 'calt' 0, 'liga' 0;
 }

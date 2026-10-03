@@ -26,7 +26,7 @@ export default function remarkMermaid() {
         value:
           `<figure class="mermaid-figure not-content" data-mermaid${title ? ` aria-label="${escapeHtml(title)}"` : ''}>` +
           `<div class="mermaid-render" role="img" aria-label="${escapeHtml(title ?? 'Диаграмма')}"></div>` +
-          `<div class="mermaid-code" translate="no">${escapeHtml(node.value)}</div>` +
+          `<div class="mermaid-code" translate="no" tabindex="0">${escapeHtml(node.value)}</div>` +
           `<div class="mermaid-toolbar"></div>` +
           caption +
           `</figure>`,

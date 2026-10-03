@@ -87,10 +87,10 @@
 .jy__err {
   margin: 0;
   padding: 0.4rem 0.6rem;
-  border-left: 3px solid #e5484d;
+  border-left: 3px solid var(--sa-err);
   background: var(--sa-surface);
   font-size: var(--sl-text-sm);
-  color: #e5484d;
+  color: var(--sa-err);
 }
 .jy__status {
   color: var(--sl-color-accent-high);
@@ -108,7 +108,7 @@
   color: var(--sa-ok);
 }
 .jy__result.is-bad {
-  border-left-color: #e5484d;
+  border-left-color: var(--sa-err);
 }
 .jy__result p {
   margin: 0;

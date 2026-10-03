@@ -43,7 +43,7 @@
   padding: 0;
 }
 .avail input[aria-invalid] {
-  border-color: #e5484d;
+  border-color: var(--sa-err);
 }
 .avail__row > label > input {
   width: 9rem;
@@ -110,13 +110,13 @@
 .avail__del {
   border: 0;
   background: none;
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
   font-size: 1.2rem;
   line-height: 1;
   cursor: pointer;
 }
 .avail__del:hover {
-  color: #e5484d;
+  color: var(--sa-err);
 }
 .avail__actions {
   display: flex;
@@ -137,6 +137,6 @@
   color: var(--sl-color-gray-2);
 }
 .avail__err {
-  color: #e5484d;
+  color: var(--sa-err);
   font-size: var(--sl-text-sm);
 }

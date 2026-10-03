@@ -2,9 +2,9 @@
   display: grid;
   gap: 0.7rem;
   margin-block: 1rem;
-  --sev-error: #e5484d;
+  --sev-error: var(--sa-err);
   --sev-warn: var(--sa-warn);
-  --sev-info: #3e8ef7;
+  --sev-info: var(--sa-info);
 }
 .rlint__tabs {
   display: flex;
@@ -90,7 +90,7 @@
   margin-right: 0.5rem;
   font-family: var(--sl-font-mono);
   font-size: 0.85em;
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .rlint mark {
   padding: 0 0.1rem;
@@ -126,7 +126,7 @@
   color: var(--sl-color-gray-2);
 }
 .rlint__issues small {
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }
 .rlint__sev {
   display: inline-block;
@@ -222,5 +222,5 @@
   grid-column: 1 / -1;
   margin: 0;
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sa-muted);
 }

@@ -76,7 +76,7 @@ export default function HttpReference() {
   );
 
   return (
-    <div className="http">
+    <div className="http not-content">
       <div className="http__tabs" role="tablist" aria-label="Раздел справочника">
         {TABS.map((t) => (
           <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'is-active' : ''} onClick={() => setTab(t.id)}>

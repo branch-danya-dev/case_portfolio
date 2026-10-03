@@ -103,7 +103,7 @@ export default function AvailabilityCalc() {
   const needMtbf = pctValid ? (a * mttrH) / (1 - a) : NaN;
 
   return (
-    <div className="avail">
+    <div className="avail not-content">
       <section className="avail__card">
         <h2>Процент → допустимый простой</h2>
         <div className="avail__row">

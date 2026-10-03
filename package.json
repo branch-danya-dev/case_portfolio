@@ -5,12 +5,15 @@
   "private": true,
   "scripts": {
     "dev": "npm run prepare:assets && astro dev",
-    "build": "npm run prepare:assets && astro build && node scripts/check-offline.mjs",
+    "build": "npm run prepare:assets && astro build && node scripts/check-offline.mjs && node scripts/check-mermaid.mjs",
     "preview": "astro preview",
     "prepare:assets": "node scripts/lint-mdx.mjs && node scripts/check-sql-tasks.mjs && node scripts/sync-case-files.mjs && node scripts/vendor-assets.mjs && node scripts/render-plantuml.mjs",
     "import:case": "node scripts/import-case.mjs",
     "setup:plantuml": "node scripts/setup-plantuml.mjs",
-    "render:puml": "node scripts/render-plantuml.mjs --force"
+    "render:puml": "node scripts/render-plantuml.mjs --force",
+    "check:mermaid": "node scripts/check-mermaid.mjs",
+    "check:a11y": "node scripts/check-a11y.mjs",
+    "check:requests": "node scripts/check-requests.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.1",
@@ -36,6 +39,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/sql.js": "^1.4.11",
+    "axe-core": "^4.13.0",
     "github-slugger": "^2.0.0",
     "mdast-util-to-string": "^4.0.0",
     "remark-gfm": "^4.0.1",

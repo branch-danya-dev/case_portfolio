@@ -33,7 +33,7 @@ export const redocOptions = {
   pathInMiddlePanel: true,
   scrollYOffset: 'header.header',
   theme: {
-    colors: { primary: { main: '#0f766e' } },
+    colors: { primary: { main: '#115e59' } },
     typography: {
       fontFamily: "'Inter Variable', system-ui, sans-serif",
       fontSize: '15px',

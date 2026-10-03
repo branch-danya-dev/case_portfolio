@@ -138,7 +138,7 @@ export default function RaciBuilder() {
     '﻿' + [['Артефакт / работа', ...m.roles], ...m.rows.map((row) => [row.name, ...row.cells])].map((line) => line.map(csvCell).join(';')).join('\r\n') + '\r\n';
 
   return (
-    <div className="raci">
+    <div className="raci not-content">
       <div className="raci__bar">
         <button type="button" className="sa-btn" onClick={() => put(CASE)}>
           Матрица кейса

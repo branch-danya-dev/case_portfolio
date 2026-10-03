@@ -56,7 +56,7 @@ export default function RequirementsLinter() {
   const story = useMemo(() => analyzeStory(st.story, st.criteria), [st.story, st.criteria]);
 
   return (
-    <div className="rlint">
+    <div className="rlint not-content">
       <div className="rlint__tabs" role="tablist">
         <button type="button" role="tab" aria-selected={tab === 'reqs'} className={tab === 'reqs' ? 'is-active' : ''} onClick={() => setTab('reqs')}>
           Требования

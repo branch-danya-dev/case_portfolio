@@ -7,7 +7,9 @@
 | Команда | Что делает |
 |---|---|
 | `npm run dev` | Синхронизирует файлы кейса, рендерит PlantUML, запускает dev-сервер (поиск в dev не работает) |
-| `npm run build` | То же + сборка + проверка ссылок (starlight-links-validator) + проверка офлайна (`scripts/check-offline.mjs`) |
+| `npm run build` | То же + эталоны SQL-тренажёра (`check-sql-tasks.mjs`) + сборка + проверка ссылок + проверка офлайна (`check-offline.mjs`) + отрисовка всех Mermaid (`check-mermaid.mjs`, headless Chrome) |
+| `npm run check:a11y` | axe-core, WCAG 2.1 A/AA, тёмная и светлая тема; нужен запущенный preview; `-- --all`, `-- --pages=/a/,/b/`, `-- --detail=color-contrast` |
+| `npm run check:requests` | Все сетевые запросы в браузере — только к сайту (с ленивыми загрузками); нужен preview; `-- --all`, `-- --selftest` |
 | `npm run preview` | Раздаёт `dist/`; здесь работает поиск Pagefind |
 | `npm run setup:plantuml` | Один раз скачивает `vendor/plantuml.jar` (единственный шаг, которому нужна сеть) |
 | `npm run render:puml` | Принудительно перерисовать все `.puml` |
@@ -73,6 +75,11 @@ templates/topic-page.mdx     шаблон тематической страни�
 - Широкие страницы (Redoc, песочница, редактор) расширяют колонку через `:root:has(...)` в custom.css.
 - Острова React — `client:visible` (просмотрщики) или `client:load` (инструменты на отдельной странице).
 - localStorage — только через `src/scripts/storage.ts` (префикс `sa:`).
+- **Цвета:** не задавать цвет текста жёстко — только токены с вариантами для тем: `--sa-ok`, `--sa-warn`, `--sa-err`, `--sa-info`, `--sa-muted` (приглушённый текст; `gray-3` Starlight на карточках не проходит AA). Корневой блок инструмента — с классом `not-content`, иначе стили Markdown Starlight протекают внутрь.
+- **Клавиатура:** textarea, где Tab вставляет отступ, обязана отпускать фокус после Esc (см. MermaidSandbox, SqlTrainer).
+- В коде лигатуры шрифта отключены (custom.css): справочник по синтаксису должен показывать `->>`, а не стрелку-глиф.
+- **Git Bash и heredoc:** обратные слеши в `cat <<'EOF'` и в строках `node -e` теряются — регулярные выражения и `
+` в коде правьте через Edit/Write. Аргументы вида `/путь/` для node — с `MSYS_NO_PATHCONV=1`.
 - Markdown-процессор — `unified()` из `@astrojs/markdown-remark` (в Astro 7 по умолчанию Sätteri, а нам нужны remark-плагины).
 - Новый раздел: создать страницы → `ready: true` в `src/sections.mjs`. Новый инструмент: страница → `ready: true` в `src/tools.mjs`.
 

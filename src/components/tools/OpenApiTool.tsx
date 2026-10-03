@@ -102,7 +102,7 @@ export default function OpenApiTool() {
   const infoCount = review ? review.findings.filter((x) => x.level === 'info').length : 0;
 
   return (
-    <div className="oat">
+    <div className="oat not-content">
       <div className="oat__sources" role="radiogroup" aria-label="Источник спецификации">
         {(
           [

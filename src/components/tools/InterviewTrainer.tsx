@@ -171,7 +171,7 @@ export default function InterviewTrainer({ topics, questions }: { topics: Traine
     const topic = topicById.get(q.topic);
     const prev = progress[q.id];
     return (
-      <div className="trainer">
+      <div className="trainer not-content">
         <div className="trainer__bar">
           <span>
             {session.mode === 'exam' ? 'Экзамен' : 'Карточки'} · вопрос {session.index + 1} из {session.ids.length}
@@ -238,7 +238,7 @@ export default function InterviewTrainer({ topics, questions }: { topics: Traine
     const count = (r: Rating) => rated.filter(([, v]) => v === r).length;
     const weak = rated.filter(([, v]) => v !== 'known').map(([id]) => id);
     return (
-      <div className="trainer">
+      <div className="trainer not-content">
         <h2 className="trainer__title">Итоги</h2>
         <p>
           Оценено {rated.length} из {session.ids.length}.{' '}
@@ -291,7 +291,7 @@ export default function InterviewTrainer({ topics, questions }: { topics: Traine
   const totalKnown = questions.filter((q) => progress[q.id]?.s === 'known').length;
 
   return (
-    <div className="trainer">
+    <div className="trainer not-content">
       <fieldset className="trainer__group">
         <legend>Темы {settings.topics.length === 0 ? '(все)' : `(${settings.topics.length})`}</legend>
         <div className="trainer__chips">

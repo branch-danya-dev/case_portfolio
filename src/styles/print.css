@@ -14,6 +14,11 @@
     --sl-color-gray-1: #111;
     --sl-color-gray-2: #222;
     --sl-color-gray-3: #444;
+    --sa-muted: #444;
+    --sa-err: #b91c1c;
+    --sa-info: #1d4ed8;
+    --sa-ok: #15803d;
+    --sa-warn: #b45309;
     --sl-color-gray-5: #bbb;
     --sl-color-gray-6: #f3f3f3;
     --sl-color-black: #fff;
@@ -113,6 +118,13 @@
   .mermaid-figure.is-rendered .mermaid-code {
     display: none !important;
   }
+
+  /* Диаграммы Mermaid нарисованы в теме сайта. Перерисовать их к печати нельзя: beforeprint синхронный,
+     а mermaid.render — асинхронный. Поэтому тёмную диаграмму при печати инвертируем:
+     фон становится светлым, текст — тёмным, hue-rotate возвращает исходные оттенки цветов. */
+  :root[data-theme='dark'] .mermaid-render svg {
+    filter: invert(1) hue-rotate(180deg);
+  }
 }
 
 /* ---------- Шпаргалки для печати (cheatsheets/) ----------
@@ -189,6 +201,28 @@
   }
   .cheatsheet .expressive-code pre {
     padding: 1mm 2mm !important;
+  }
+  /* Заголовок блока кода («Mermaid», «PlantUML») — мелкой строкой, без вкладки и отступов */
+  .cheatsheet .expressive-code .frame .header {
+    padding: 0 !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    background: none !important;
+  }
+  .cheatsheet .expressive-code .frame .header .title {
+    padding: 0.5mm 2mm 0 !important;
+    font-size: 7pt !important;
+    font-weight: 600;
+    color: #000 !important;
+    background: none !important;
+    border: 0 !important;
+  }
+  .cheatsheet .expressive-code .frame .header .title::after,
+  .cheatsheet .expressive-code .frame .header::before {
+    display: none !important;
+  }
+  .cheatsheet .expressive-code {
+    margin-top: 1.5mm !important;
   }
   .cheatsheet-meta,
   .print-button {

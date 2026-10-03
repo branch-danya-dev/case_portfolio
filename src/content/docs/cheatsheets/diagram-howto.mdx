@@ -1,0 +1,262 @@
+---
+title: "Шпаргалка: синтаксис Mermaid и PlantUML"
+description: Минимальный рабочий синтаксис диаграмм на одном-двух листах A4 — sequence, state, activity и flowchart, class, ER, use case, C4; чем рисовать BPMN и DFD.
+sidebar:
+  order: 6
+  label: Синтаксис диаграмм
+---
+
+import PrintButton from '../../../components/PrintButton.astro';
+
+<p class="cheatsheet-meta">Краткая версия практикума «Диаграммы: как создавать». Подробно — на странице <a href="/diagram-howto/">Диаграммы: как создавать</a>. Все фрагменты проверены: Mermaid — отрисовкой, PlantUML — локальным plantuml.jar.</p>
+
+<PrintButton />
+
+<div class="cheatsheet">
+
+<section>
+
+## Что чем рисовать
+
+| Диаграмма | Mermaid | PlantUML | Иначе |
+|---|---|---|---|
+| Sequence, state, class, ER | да | да | — |
+| Activity | flowchart | да (дорожки, fork) | — |
+| Use case | нет | да | draw.io |
+| C4 | экспериментально | да (`!include <C4/…>`) | Structurizr |
+| BPMN | нет | нет | Camunda Modeler, bpmn.io, [BPMN-редактор](/tools/bpmn-editor/) |
+| DFD | приближение flowchart | приближение | draw.io |
+
+Стрелки: Mermaid `->>` синхронно, `-)` асинхронно, `-->>` ответ; PlantUML `->`, `->>`, `-->`.
+
+</section>
+
+<section>
+
+## Sequence
+
+```text title="Mermaid"
+sequenceDiagram
+  autonumber
+  participant A as Сервис
+  participant B as АБС
+  A->>B: POST /users
+  B-->>A: 201 Created
+  A-)B: асинхронно
+  alt успех
+    B-->>A: 200
+  else ошибка
+    B-->>A: 503
+  end
+  loop 3 попытки
+    A->>B: повтор
+  end
+  Note over A,B: Idempotency-Key
+```
+
+```text title="PlantUML"
+@startuml
+autonumber
+participant "Сервис" as A
+participant "АБС" as B
+queue Kafka as K
+A -> B : POST /users
+B --> A : 201 Created
+A ->> K : событие
+alt успех
+  B --> A : 200
+else ошибка
+  B --> A : 503
+end
+loop 3 попытки
+  A -> B : повтор
+end
+note over A, B : Idempotency-Key
+@enduml
+```
+
+</section>
+
+<section>
+
+## State
+
+```text title="Mermaid"
+stateDiagram-v2
+  [*] --> PLANNED
+  PLANNED --> CREATING: таймер
+  CREATING --> CREATED_DISABLED: успех
+  CREATING --> FAILED: повторы исчерпаны
+  state "Создана, заблокирована" as CREATED_DISABLED
+  CREATED_DISABLED --> [*]
+```
+
+```text title="PlantUML"
+@startuml
+[*] --> PLANNED
+PLANNED --> CREATING : таймер
+CREATING --> CREATED_DISABLED : успех
+CREATING --> FAILED : повторы исчерпаны
+state "Создана, заблокирована" as CREATED_DISABLED
+CREATED_DISABLED --> [*]
+@enduml
+```
+
+</section>
+
+<section>
+
+## Activity / flowchart
+
+```text title="Mermaid flowchart"
+flowchart TD
+  A([Начало]) --> B[Провести приказ]
+  B --> C{Роль найдена?}
+  C -- да --> D[Назначить роли]
+  C -- нет --> E[Базовая роль]
+  D & E --> F[(БД IdM)]
+  subgraph IdM
+    D
+    E
+  end
+```
+
+```text title="PlantUML activity"
+@startuml
+|HR|
+start
+:Провести приказ;
+|IdM|
+if (Роль найдена?) then (да)
+  :Назначить роли;
+else (нет)
+  :Базовая роль;
+endif
+fork
+  :AD;
+fork again
+  :АБС;
+end fork
+while (Есть ошибки?) is (да)
+  :Повторить;
+endwhile (нет)
+stop
+@enduml
+```
+
+</section>
+
+<section>
+
+## Class
+
+```text title="Mermaid"
+classDiagram
+  class Account {
+    +String login
+    +block()
+  }
+  Identity "1" --> "*" Account : владеет
+  Account <|-- AdAccount
+  Identity *-- Employment
+  Identity o-- Role
+```
+
+```text title="PlantUML"
+@startuml
+class Account {
+  +login : String
+  +block()
+}
+Identity "1" -- "*" Account : владеет
+Account <|-- AdAccount
+Identity *-- Employment
+Identity o-- Role
+@enduml
+```
+
+`<|--` наследование · `*--` композиция · `o--` агрегация.
+
+</section>
+
+<section>
+
+## ER
+
+```text title="Mermaid"
+erDiagram
+  IDENTITY ||--o{ ACCOUNT : "имеет"
+  IDENTITY {
+    int identity_id PK
+    string person_id
+  }
+  ACCOUNT {
+    int account_id PK
+    int identity_id FK
+    string login
+  }
+```
+
+```text title="PlantUML"
+@startuml
+entity identity {
+  * identity_id : int <<PK>>
+  --
+  * person_id : text
+}
+entity account {
+  * account_id : int <<PK>>
+  --
+  * identity_id : int <<FK>>
+  login : text
+}
+identity ||--o{ account
+@enduml
+```
+
+Кардинальность: `||` ровно один · `|o` ноль или один · `}o` ноль или много · `}|` один или много.
+
+</section>
+
+<section>
+
+## Use case (только PlantUML)
+
+```text title="PlantUML"
+@startuml
+left to right direction
+actor "Руководитель" as M
+rectangle IdM {
+  usecase "Запросить доступ" as UC1
+  usecase "Проверить SoD" as UC2
+}
+M --> UC1
+UC1 .> UC2 : <<include>>
+@enduml
+```
+
+</section>
+
+<section>
+
+## C4 (PlantUML)
+
+```text title="PlantUML — контейнеры"
+@startuml
+!include <C4/C4_Container>
+Person(hr, "HR-специалист")
+System_Ext(hrms, "HRMS")
+System_Boundary(idm, "IdM") {
+  Container(core, "Ядро", "Java", "Роли, заявки")
+  ContainerDb(db, "БД", "PostgreSQL")
+}
+Rel(hrms, core, "Кадровые события", "Kafka")
+Rel(core, db, "Читает и пишет", "JDBC")
+@enduml
+```
+
+Контекст — `C4_Context` и `System`, компоненты — `C4_Component` и `Component`.
+
+</section>
+
+</div>

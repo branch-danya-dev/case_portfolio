@@ -157,7 +157,7 @@ export default function JsonYaml() {
   }, [st.schema, st.doc]);
 
   return (
-    <div className="jy">
+    <div className="jy not-content">
       <div className="jy__tabs" role="tablist">
         <button type="button" role="tab" aria-selected={tab === 'format'} className={tab === 'format' ? 'is-active' : ''} onClick={() => setTab('format')}>
           Формат и конвертация
