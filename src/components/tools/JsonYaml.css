@@ -1,0 +1,120 @@
+:root:has(.jy) {
+  --sl-content-width: 100%;
+}
+.jy {
+  display: grid;
+  gap: 0.7rem;
+  margin-block: 1rem;
+}
+.jy__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.jy__tabs button {
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--sa-border);
+  border-radius: 999px;
+  background: none;
+  color: var(--sl-color-gray-2);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  cursor: pointer;
+}
+.jy__tabs button.is-active {
+  border-color: var(--sl-color-accent);
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-white);
+}
+.jy__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+  font-size: var(--sl-text-sm);
+}
+.jy select {
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--sa-border);
+  border-radius: 0.35rem;
+  background: var(--sl-color-bg);
+  color: var(--sl-color-white);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+}
+.jy__panes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.8rem;
+}
+@media (max-width: 56rem) {
+  .jy__panes {
+    grid-template-columns: 1fr;
+  }
+}
+.jy__pane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.jy__pane label {
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  color: var(--sl-color-white);
+}
+.jy__pane textarea {
+  min-height: 24rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--sa-border);
+  border-radius: 0.45rem;
+  background: var(--sl-color-bg);
+  color: var(--sl-color-white);
+  font-family: var(--sl-font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  resize: vertical;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+.jy__pane textarea[readonly] {
+  background: var(--sa-surface);
+}
+.jy__ok {
+  font-weight: 400;
+  color: var(--sa-ok);
+}
+.jy__err {
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  border-left: 3px solid #e5484d;
+  background: var(--sa-surface);
+  font-size: var(--sl-text-sm);
+  color: #e5484d;
+}
+.jy__status {
+  color: var(--sl-color-accent-high);
+}
+.jy__result {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--sa-border);
+  border-left-width: 4px;
+  border-radius: 0.45rem;
+  background: var(--sa-surface);
+  font-size: var(--sl-text-sm);
+}
+.jy__result.is-ok {
+  border-left-color: var(--sa-ok);
+  color: var(--sa-ok);
+}
+.jy__result.is-bad {
+  border-left-color: #e5484d;
+}
+.jy__result p {
+  margin: 0;
+  font-weight: 600;
+}
+.jy__result ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+}

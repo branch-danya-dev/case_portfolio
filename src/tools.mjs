@@ -8,7 +8,7 @@ export const tools = [
   { slug: 'tools/requirements-linter', label: 'Линтер требований', description: 'Размытые формулировки, атомарность, проверяемость, INVEST', ready: true },
   { slug: 'tools/prioritization', label: 'Приоритизация', description: 'MoSCoW-доска, RICE, WSJF с сортировкой и экспортом', ready: true },
   { slug: 'tools/raci', label: 'Конструктор RACI', description: 'Роли × артефакты, проверка «одна A», экспорт Markdown и CSV', ready: true },
-  { slug: 'tools/json-yaml', label: 'JSON / YAML', description: 'Форматирование, конвертация, JSON Schema', ready: false },
+  { slug: 'tools/json-yaml', label: 'JSON / YAML', description: 'Форматирование, конвертация, проверка по JSON Schema', ready: true },
   { slug: 'tools/sql-trainer', label: 'SQL-тренажёр', description: 'Учебная БД кейса, задания с проверкой', ready: false },
   { slug: 'tools/bpmn-editor', label: 'BPMN-редактор', description: 'Создать, открыть, отредактировать, сохранить .bpmn', ready: true },
   { slug: 'tools/openapi-viewer', label: 'Просмотрщик OpenAPI', description: 'Своя спецификация и спецификации кейса', ready: false },
