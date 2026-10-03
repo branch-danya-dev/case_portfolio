@@ -11,5 +11,5 @@ export const tools = [
   { slug: 'tools/json-yaml', label: 'JSON / YAML', description: 'Форматирование, конвертация, проверка по JSON Schema', ready: true },
   { slug: 'tools/sql-trainer', label: 'SQL-тренажёр', description: '17 заданий на учебной БД кейса с проверкой, свободный режим', ready: true },
   { slug: 'tools/bpmn-editor', label: 'BPMN-редактор', description: 'Создать, открыть, отредактировать, сохранить .bpmn', ready: true },
-  { slug: 'tools/openapi-viewer', label: 'Просмотрщик OpenAPI', description: 'Своя спецификация и спецификации кейса', ready: false },
+  { slug: 'tools/openapi-viewer', label: 'Просмотрщик OpenAPI', description: 'Своя спецификация и API кейса, ревью-чек контракта', ready: true },
 ];
