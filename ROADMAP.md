@@ -56,7 +56,7 @@
 - [x] 7. Приоритизация: MoSCoW, RICE, WSJF
 - [x] 8. Конструктор RACI
 - [x] 9. JSON / YAML + JSON Schema
-- [ ] 10. SQL-тренажёр (sql.js)
+- [x] 10. SQL-тренажёр (sql.js)
 - 11. BPMN-редактор — см. этап 2
 - [ ] 12. Просмотрщик OpenAPI
 

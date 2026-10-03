@@ -3,7 +3,7 @@
 //
 // Redoc: в бандле есть единственная сетевая загрузка — логотип Redocly в подвале меню
 // (https://cdn.redoc.ly/redoc/logo-mini.svg). Подменяем его локальным файлом, атрибуция сохраняется.
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const OUT = resolve('public/vendor/redoc');
@@ -25,3 +25,10 @@ console.log('[vendor] redoc.standalone.js скопирован (логотип �
 await mkdir(resolve('public/data'), { recursive: true });
 await writeFile(resolve('public/data/case-db.sql'), await readFile(resolve('src/data/case-db.sql'), 'utf8'));
 console.log('[vendor] case-db.sql скопирован в public/data/');
+
+// sql.js (SQLite в WebAssembly) для SQL-тренажёра. В браузерной сборке Vite берёт вариант из exports.browser —
+// dist/sql-wasm-browser.js, а он запрашивает парный sql-wasm-browser.wasm (не sql-wasm.wasm).
+await rm(resolve('public/vendor/sql.js'), { recursive: true, force: true });
+await mkdir(resolve('public/vendor/sql.js'), { recursive: true });
+await writeFile(resolve('public/vendor/sql.js/sql-wasm-browser.wasm'), await readFile(resolve('node_modules/sql.js/dist/sql-wasm-browser.wasm')));
+console.log('[vendor] sql-wasm-browser.wasm скопирован в public/vendor/sql.js/');

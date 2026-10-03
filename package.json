@@ -7,7 +7,7 @@
     "dev": "npm run prepare:assets && astro dev",
     "build": "npm run prepare:assets && astro build && node scripts/check-offline.mjs",
     "preview": "astro preview",
-    "prepare:assets": "node scripts/lint-mdx.mjs && node scripts/sync-case-files.mjs && node scripts/vendor-assets.mjs && node scripts/render-plantuml.mjs",
+    "prepare:assets": "node scripts/lint-mdx.mjs && node scripts/check-sql-tasks.mjs && node scripts/sync-case-files.mjs && node scripts/vendor-assets.mjs && node scripts/render-plantuml.mjs",
     "import:case": "node scripts/import-case.mjs",
     "setup:plantuml": "node scripts/setup-plantuml.mjs",
     "render:puml": "node scripts/render-plantuml.mjs --force"
@@ -28,12 +28,14 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "redoc": "^2.5.4",
+    "sql.js": "^1.14.2",
     "starlight-links-validator": "^0.26.0",
     "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@types/sql.js": "^1.4.11",
     "github-slugger": "^2.0.0",
     "mdast-util-to-string": "^4.0.0",
     "remark-gfm": "^4.0.1",
