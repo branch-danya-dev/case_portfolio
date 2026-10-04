@@ -1598,3 +1598,68 @@
   topic: idm
   match: ['/(?:BRL|BR|FR|NFR|UC|US|EPIC|TC|INT|SEQ|SEC)-\d+/']
   seeAlso: [traceability]
+
+# ── Вход в проект ───────────────────────────────────────────────────
+
+- id: greenfield
+  term: Greenfield и brownfield
+  en: Greenfield, brownfield
+  definition: Greenfield — проект «с чистого листа», где решения ещё нет. Brownfield — развитие или замена уже работающей системы, где новое строится с учётом существующих данных, интеграций и ограничений.
+  topic: onboarding
+  match: ['~greenfield', '~brownfield']
+  seeAlso: [legacy]
+
+- id: legacy
+  term: Legacy-система
+  en: Legacy system
+  definition: Давно работающая и важная для бизнеса система, которую трудно менять — устаревшие технологии, неполная документация, ушедшие авторы.
+  topic: onboarding
+  match: ['~legacy']
+  seeAlso: [reverse-engineering, greenfield]
+
+- id: reverse-engineering
+  term: Обратное проектирование
+  en: Reverse engineering
+  definition: Восстановление того, как система работает на самом деле, по её интерфейсу, API, данным, логам, интеграциям, коду и рассказам пользователей — когда документации нет или ей нельзя верить.
+  topic: onboarding
+  match: ['обратн* проектировани*', '~reverse engineering']
+  seeAlso: [legacy]
+
+- id: source-of-truth
+  term: Источник истины
+  en: Source of truth
+  definition: Место, которому команда договорилась верить, — например, конкретное пространство вики с требованиями или репозиторий с контрактами; остальные копии считаются вторичными.
+  topic: onboarding
+  match: ['источник* истины', '~source of truth']
+
+- id: project-state-assessment
+  term: Оценка состояния проекта
+  en: Project State Assessment
+  definition: Сводка для входа в идущий проект — что реализовано, что в работе, что согласовано, но не начато, что изменилось, какие решения открыты, зависимости и расхождения документации с системой.
+  topic: onboarding
+  match: ['~Project State Assessment', 'оценк* состояния проекта']
+  seeAlso: [traceability]
+
+- id: cutover
+  term: Переключение и откат
+  en: Cutover, rollback
+  definition: Переключение (cutover) — момент перевода работы со старой системы на новую. Откат (rollback) — возврат на старую систему по заранее оговорённым критериям, если после переключения что-то пошло не так.
+  topic: onboarding
+  match: ['~cutover', '~rollback']
+  seeAlso: [parallel-run]
+
+- id: parallel-run
+  term: Параллельная эксплуатация
+  en: Parallel run
+  definition: Период, когда старая и новая системы работают одновременно, а их результаты сверяются; снижает риск замены ценой двойной работы.
+  topic: onboarding
+  match: ['параллельн* эксплуатаци*']
+  seeAlso: [cutover, reconciliation]
+
+- id: strangler-fig
+  term: Постепенное вытеснение
+  en: Strangler fig
+  definition: Стратегия замены большой системы по частям — функции одна за другой переносятся в новую систему, запросы к ним перенаправляются, пока старая не станет ненужной.
+  topic: onboarding
+  match: ['~strangler fig', 'постепенн* вытеснени*']
+  seeAlso: [cutover]
