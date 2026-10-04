@@ -19,6 +19,13 @@ export const sections = [
   { id: 'data', label: 'Данные', description: 'Модели данных, ER, нормализация, SQL, транзакции, индексы, НСИ', icon: 'database', ready: true, kind: 'topic' },
   { id: 'integrations', label: 'Интеграции', description: 'REST, SOAP, gRPC, GraphQL, брокеры, паттерны надёжности, контракты, безопасность', icon: 'link', ready: true, kind: 'topic' },
   { id: 'architecture', label: 'Архитектура для аналитика', description: 'Монолит и микросервисы, кэширование, НФТ и ISO/IEC 25010, CAP, ADR', icon: 'server', ready: true, kind: 'topic' },
+  { id: 'security', label: 'Безопасность', description: 'Аутентификация и авторизация, RBAC и ABAC, токены и сессии, шифрование, секреты, ПДн, журнал аудита, моделирование угроз, ограничение частоты', icon: 'padlock', ready: true, kind: 'topic', sidebar: [
+    { autogenerate: { directory: 'security' } },
+    { label: 'Подробно в «Интеграциях»', items: [
+      { label: 'OAuth 2.0, OIDC, JWT', link: '/integrations/security-oauth/' },
+      { label: 'mTLS, SSO, Kerberos', link: '/integrations/mtls-sso/' },
+    ] },
+  ] },
   { id: 'documentation', label: 'Документирование', description: 'ТЗ по ГОСТ 34, шаблоны, docs-as-code, практики Confluence', icon: 'open-book', ready: true, kind: 'topic' },
   { id: 'methodologies', label: 'Методологии', description: 'Waterfall, Scrum, Kanban, гибриды и место аналитика в каждой', icon: 'clock', ready: true, kind: 'topic' },
   { id: 'testing', label: 'Тестирование для аналитика', description: 'Виды тестирования, тест-дизайн, ПМИ, UAT', icon: 'approve-check', ready: true, kind: 'topic' },

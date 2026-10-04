@@ -2,7 +2,7 @@
 /** Сводка банка вопросов: тема → число вопросов по уровням → ссылка на страницу темы в разделе «Собеседование». */
 import { getCollection } from 'astro:content';
 
-const ORDER = ['role', 'onboarding', 'elicitation', 'requirements', 'bpmn', 'processes', 'diagrams', 'data', 'integrations', 'architecture', 'documentation', 'methodologies', 'testing', 'release', 'operations', 'software', 'case'];
+const ORDER = ['role', 'onboarding', 'elicitation', 'requirements', 'bpmn', 'processes', 'diagrams', 'data', 'integrations', 'architecture', 'security', 'documentation', 'methodologies', 'testing', 'release', 'operations', 'software', 'case'];
 /** Темы, у которых нет страницы в interview/questions/: ведём на их собственную страницу. */
 const href = (t: { id: string; data: { page?: string } }) =>
   t.id === 'case' ? `/${t.data.page}/` : `/interview/questions/${t.id}/`;

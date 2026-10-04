@@ -401,7 +401,7 @@
   en: Trust boundary
   definition: Граница между зонами с разным уровнем доверия (сеть, организация, контур безопасности); потоки данных через неё требуют защиты и анализа угроз.
   topic: diagrams
-  seeAlso: [dfd]
+  seeAlso: [dfd, threat-modeling]
   match: [границ* доверия]
 
 - id: primary-key
@@ -1907,3 +1907,149 @@
   definition: Период, когда выкладки в продуктив запрещены или разрешены только аварийные — например, перед закрытием года или массовым событием.
   topic: release
   match: ['~change freeze', 'мораторий* на изменения']
+
+# ── Безопасность ────────────────────────────────────────────────────
+
+- id: authentication
+  term: Аутентификация
+  en: Authentication
+  definition: Проверка, что субъект — тот, за кого себя выдаёт, по паролю, сертификату, токену, Kerberos-билету, второму фактору. При неудаче API отвечает 401.
+  topic: security
+  match: ['аутентификаци*', '~authentication']
+  seeAlso: [authorization, mfa]
+  notToConfuse: Авторизация — проверка, что уже известному субъекту можно сделать.
+
+- id: authorization
+  term: Авторизация
+  en: Authorization
+  definition: Проверка, что известному субъекту разрешено выполнить операцию над конкретным объектом. При отказе API отвечает 403 (или 404, если нельзя раскрывать существование объекта).
+  topic: security
+  match: ['авторизаци*', '~authorization']
+  seeAlso: [authentication, rbac, abac, object-level-authorization]
+
+- id: abac
+  term: ABAC
+  en: Attribute-based access control
+  definition: Модель доступа, в которой решение принимается по атрибутам пользователя (подразделение, должность), объекта (владелец, сумма) и контекста (время, канал). Часто дополняет RBAC — роль даёт операцию, атрибуты ограничивают объекты.
+  topic: security
+  match: [ABAC]
+  seeAlso: [rbac]
+
+- id: object-level-authorization
+  term: Авторизация на уровне объекта
+  en: Object-level authorization
+  definition: Проверка, что пользователю можно работать именно с этим объектом (сотрудником, заявкой, счётом), а не только вызывать операцию. Её отсутствие позволяет перебором идентификаторов получать чужие данные — самая частая уязвимость API (BOLA).
+  topic: security
+  match: ['на уровне объекта', '~BOLA']
+  seeAlso: [authorization]
+
+- id: least-privilege
+  term: Минимальные привилегии
+  en: Least privilege
+  definition: Принцип ИБ — у пользователя или системы только те права, которые нужны для работы, и только на время работы.
+  topic: security
+  match: ['минимальн* привилеги*', '~least privilege']
+  seeAlso: [sod, need-to-know]
+
+- id: need-to-know
+  term: Необходимость знать
+  en: Need-to-know
+  definition: Принцип ИБ — данные видит только тот, кому они нужны для выполнения задачи, даже если формально уровень доступа позволяет больше.
+  topic: security
+  match: ['необходимост* знать', '~need-to-know']
+  seeAlso: [least-privilege]
+
+- id: mfa
+  term: Многофакторная аутентификация
+  en: Multi-factor authentication, MFA
+  definition: Аутентификация минимум двумя факторами разных типов — знание (пароль), владение (телефон, токен), свойство (биометрия). Два пароля — не MFA.
+  topic: security
+  match: [MFA, 2FA, 'многофакторн* аутентификаци*', 'двухфакторн* аутентификаци*']
+  seeAlso: [authentication]
+
+- id: service-account
+  term: Сервисная учётная запись
+  en: Service account
+  definition: Учётная запись, под которой работает система или интеграция, а не человек. Нужны владелец, минимальные права, отдельная запись на интеграцию и среду, секрет в хранилище со сроком замены.
+  topic: security
+  match: ['сервисн* учётн* запис*', '~service account']
+  seeAlso: [least-privilege, secrets-store, pam]
+
+- id: access-token
+  term: Токен доступа
+  en: Access token
+  definition: Короткоживущий токен, который клиент предъявляет API (обычно в заголовке Authorization Bearer). Если это JWT, API проверяет его локально, поэтому до истечения срока его нельзя отозвать — срок делают коротким.
+  topic: security
+  match: ['токен* доступа', '~access token']
+  seeAlso: [refresh-token, jwt, oauth2]
+
+- id: refresh-token
+  term: Токен обновления
+  en: Refresh token
+  definition: Долгоживущий токен для получения нового токена доступа без повторного входа. Хранится и проверяется сервером авторизации, поэтому его можно отозвать — через это выход и блокировка прекращают доступ.
+  topic: security
+  match: ['токен* обновления', '~refresh token']
+  seeAlso: [access-token]
+
+- id: session-timeout
+  term: Тайм-аут бездействия
+  en: Idle timeout
+  definition: Время без действий пользователя, после которого сессия завершается и нужен повторный вход. Задаётся вместе с абсолютным сроком сессии по требованиям ИБ.
+  topic: security
+  match: ['тайм-аут* бездействия', '~idle timeout']
+  seeAlso: [access-token]
+
+- id: encryption-transit-rest
+  term: Шифрование при передаче и при хранении
+  en: Encryption in transit, at rest
+  definition: При передаче — защищённый канал (TLS, mTLS) на каждом соединении. При хранении — шифрование дисков, БД, резервных копий и при необходимости отдельных полей; ключи хранятся отдельно от данных.
+  topic: security
+  match: ['~in transit', '~at rest']
+  seeAlso: [tls, mtls, secrets-store]
+
+- id: hashing
+  term: Хэширование паролей
+  en: Password hashing
+  definition: Хранение пароля в виде необратимого хэша, вычисленного специальной медленной функцией с солью. В отличие от шифрования, исходный пароль восстановить нельзя — только сбросить.
+  topic: security
+  match: ['хэширован*', 'хэш паро*', '~hashing']
+
+- id: data-minimization
+  term: Минимизация данных
+  en: Data minimization
+  definition: Принцип защиты ПДн — собирать, передавать и хранить только те данные, которые нужны для заявленной цели, и не дольше, чем нужно.
+  topic: security
+  match: ['минимизаци* ПДн', 'минимизаци* данных']
+  seeAlso: [pdn, masking]
+
+- id: masking
+  term: Маскирование данных
+  en: Data masking
+  definition: Отображение чувствительных данных частично (последние цифры номера карты, телефона) или подмена их в копиях для тестов и аналитики (обезличивание).
+  topic: security
+  match: ['маскировани*', 'обезличивани*', 'обезличенн*']
+  seeAlso: [data-minimization, pdn]
+
+- id: audit-log
+  term: Журнал аудита
+  en: Audit log, audit trail
+  definition: Неизменяемый журнал действий — кто, что, над чем, на каком основании, с каким результатом и когда. Хранится годы, читают ИБ и аудит; в отличие от технических логов служит доказательством, а не средством отладки.
+  topic: security
+  match: ['журнал* аудита', '~audit log', '~audit trail']
+  seeAlso: [siem, trace-id]
+
+- id: threat-modeling
+  term: Моделирование угроз
+  en: Threat modeling
+  definition: Систематический поиск угроз системе по схеме потоков данных и границам доверия, например по STRIDE, с мерой и статусом для каждой угрозы.
+  topic: security
+  match: ['моделировани* угроз', 'модел* угроз', 'threat model*']
+  seeAlso: [stride, trust-boundary]
+
+- id: stride
+  term: STRIDE
+  en: Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege
+  definition: Шесть категорий угроз для моделирования — подмена, изменение, отказ от авторства, раскрытие информации, отказ в обслуживании, повышение привилегий.
+  topic: security
+  match: [STRIDE]
+  seeAlso: [threat-modeling]

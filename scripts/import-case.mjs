@@ -54,6 +54,7 @@ const SHORT = {
   '04_integrations/02_scenarios.md': 'Сценарии (sequence)',
   '04_integrations/03_data-mapping.md': 'Маппинг данных',
   '05_security/01_security-requirements.md': 'Требования ИБ',
+  '05_security/02_threat-model.md': 'Модель угроз и доступ к API',
   '06_rollout/01_migration-strategy.md': 'Стратегия миграции',
   '06_rollout/02_rollout-plan.md': 'План внедрения',
   '06_rollout/03_release-plan.md': 'План релиза',
@@ -84,7 +85,7 @@ const API_PAGES = {
 
 // ---------- ID артефактов ----------
 
-const ID_PREFIXES = ['G', 'R', 'P', 'BRL', 'GAP', 'BR', 'UC', 'FR', 'NFR', 'ENT', 'ROLE', 'RULE', 'SOD', 'EPIC', 'US', 'ADR', 'INT', 'SEQ', 'SEC', 'TC', 'ALR', 'RB', 'INC', 'PRB', 'CHG'];
+const ID_PREFIXES = ['G', 'R', 'P', 'BRL', 'GAP', 'BR', 'UC', 'FR', 'NFR', 'ENT', 'ROLE', 'RULE', 'SOD', 'EPIC', 'US', 'ADR', 'INT', 'SEQ', 'SEC', 'TC', 'THR', 'ALR', 'RB', 'INC', 'PRB', 'CHG'];
 const ID_RE = new RegExp(`(?<![A-Za-z0-9_-])((?:${ID_PREFIXES.join('|')})-\\d{1,3})(?![A-Za-z0-9_-]|\\.\\d)`, 'g');
 const ID_FULL = new RegExp(`^(?:${ID_PREFIXES.join('|')})-\\d{1,3}$`);
 
@@ -109,6 +110,7 @@ const HOME = {
   INT: '04_integrations/01_integration-map.md',
   SEQ: '04_integrations/02_scenarios.md',
   SEC: '05_security/01_security-requirements.md',
+  THR: '05_security/02_threat-model.md',
   TC: '07_testing/02_test-cases.md',
   ALR: '08_operations/03_monitoring-alerting.md',
   RB: '08_operations/02_runbook.md',
