@@ -9,6 +9,7 @@ export const CASE_LAYERS = [
   { source: '05_security', dir: '05-security', label: '05 · Безопасность', question: 'Какие ограничения ИБ действуют', contents: 'Требования ИБ' },
   { source: '06_rollout', dir: '06-rollout', label: '06 · Внедрение: как перейти', question: 'Как перейти от старого к новому', contents: 'Миграция данных, план внедрения' },
   { source: '07_testing', dir: '07-testing', label: '07 · Тестирование: как доказать', question: 'Как доказать, что работает', contents: 'ПМИ, тест-кейсы' },
+  { source: '08_operations', dir: '08-operations', label: '08 · Эксплуатация: как жить дальше', question: 'Как сопровождать систему и разбирать сбои', contents: 'Модель сопровождения, runbook, мониторинг, инцидент, разбор проблемы, запрос на изменение' },
 ];
 
 /** Элементы сайдбара раздела «Кейс IDM-JOINER». */

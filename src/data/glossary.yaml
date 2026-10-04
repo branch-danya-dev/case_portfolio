@@ -1594,9 +1594,9 @@
 - id: case-ids
   term: Идентификаторы артефактов кейса
   en: Artifact IDs
-  definition: "Префиксы ID в кейсе IDM-JOINER: BR — бизнес-требование, BRL — бизнес-правило, FR — функциональное требование, NFR — нефункциональное требование, UC — вариант использования, US — пользовательская история, EPIC — эпик, TC — тест-кейс, INT — интеграция, SEQ — sequence-диаграмма, SEC — требование ИБ, ADR — архитектурное решение. По ID артефакты связываются в матрице трассировки."
+  definition: "Префиксы ID в кейсе IDM-JOINER: BR — бизнес-требование, BRL — бизнес-правило, FR — функциональное требование, NFR — нефункциональное требование, UC — вариант использования, US — пользовательская история, EPIC — эпик, TC — тест-кейс, INT — интеграция, SEQ — sequence-диаграмма, SEC — требование ИБ, ADR — архитектурное решение, ALR — алерт, RB — процедура runbook, INC — инцидент, PRB — проблема, CHG — запрос на изменение. По ID артефакты связываются в матрице трассировки."
   topic: idm
-  match: ['/(?:BRL|BR|FR|NFR|UC|US|EPIC|TC|INT|SEQ|SEC)-\d+/']
+  match: ['/(?:BRL|BR|FR|NFR|UC|US|EPIC|TC|INT|SEQ|SEC|ALR|RB|INC|PRB|CHG)-\d+/']
   seeAlso: [traceability]
 
 # ── Вход в проект ───────────────────────────────────────────────────
@@ -1689,3 +1689,84 @@
   topic: role
   match: ['проверк* на продуктиве', '~production verification']
   seeAlso: [smoke-test, regression]
+
+# ── Эксплуатация ────────────────────────────────────────────────────
+
+- id: incident
+  term: Инцидент
+  en: Incident
+  definition: Незапланированное прерывание или ухудшение работы системы. Цель работы с инцидентом — как можно быстрее восстановить работу для пострадавших, в том числе обходным путём.
+  topic: operations
+  match: ['инцидент*']
+  seeAlso: [problem, support-lines]
+  notToConfuse: Проблема — причина инцидентов; её ищут и устраняют отдельно.
+
+- id: problem
+  term: Проблема (в эксплуатации)
+  en: Problem
+  definition: Причина одного или нескольких инцидентов. Работа с проблемой — найти корневую причину и устранить её, чтобы инцидент не повторился.
+  topic: operations
+  seeAlso: [incident, rca]
+
+- id: rca
+  term: Анализ корневых причин (RCA)
+  en: Root cause analysis
+  definition: Разбор проблемы — хронология, «5 почему», несколько причин разных типов (процесс, требования, проектирование, мониторинг, тесты), исправляющие и предупреждающие действия с владельцами.
+  topic: operations
+  match: ['корнев* причин*']
+  seeAlso: [problem, five-whys, postmortem]
+
+- id: postmortem
+  term: Разбор без поиска виноватых
+  en: Blameless postmortem
+  definition: Формат разбора серьёзного сбоя, в котором ищут слабые места системы и процесса, а не виноватого человека, — так участники честно рассказывают, что произошло.
+  topic: operations
+  match: ['~postmortem', '~blameless']
+  seeAlso: [rca]
+
+- id: support-lines
+  term: Линии поддержки (L1, L2, L3)
+  en: Support tiers
+  definition: Уровни сопровождения — L1 принимает обращения и решает типовое, L2 диагностирует по процедурам и восстанавливает работу, L3 исправляет код, конфигурацию и контракты.
+  topic: operations
+  match: ['лини* поддержки']
+  seeAlso: [incident, runbook]
+
+- id: runbook
+  term: Runbook
+  en: Runbook
+  definition: Инструкция сопровождения для типовой ситуации — признаки, что проверить, какие действия выполнить и когда эскалировать.
+  topic: operations
+  seeAlso: [alert, support-lines]
+
+- id: alert
+  term: Алерт
+  en: Alert
+  definition: Автоматическое уведомление мониторинга о превышении порога (задержка, доля ошибок, рост очереди) с приоритетом, получателем и ссылкой на процедуру runbook.
+  topic: operations
+  match: ['алерт*', '~alert']
+  seeAlso: [runbook]
+
+- id: trace-id
+  term: Сквозной идентификатор (traceId)
+  en: Trace ID, correlation ID
+  definition: Идентификатор, который передаётся во все вызовы одной операции между системами и пишется в логи и журнал аудита — по нему собирают путь операции. Стандартный способ передачи — заголовок traceparent (W3C Trace Context).
+  topic: operations
+  match: [traceId, correlationId, traceparent]
+  seeAlso: [alert]
+
+- id: replay
+  term: Повторный запуск (replay)
+  en: Replay
+  definition: Повторное выполнение операций или повторная отправка сообщений после устранения причины сбоя. Безопасен, если операции идемпотентны, результат не сделан вручную и операция всё ещё нужна.
+  topic: operations
+  match: ['~replay', 'повторн* запуск*']
+  seeAlso: [idempotency, dlq]
+
+- id: rate-limit
+  term: Ограничение частоты запросов
+  en: Rate limiting
+  definition: Защита сервиса от перегрузки — не более заданного числа запросов от клиента за период. При превышении принято отвечать 429 Too Many Requests и указывать в Retry-After, когда повторить.
+  topic: integrations
+  match: ['~rate limit*', 'ограничени* частоты']
+  seeAlso: [backward-compatibility]

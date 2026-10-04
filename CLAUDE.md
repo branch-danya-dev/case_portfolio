@@ -18,7 +18,7 @@
 ## Структура
 
 ```
-source/idm-joiner-docs/      исходники кейса — НЕ редактировать (канон; копируются в public/case-files/)
+source/idm-joiner-docs/      исходники кейса — канон (копируются в public/case-files/); правки — только осознанно и с import:case. Слой 08_operations и правки README/CHEATSHEET под него добавлены в рамках проекта
 src/content/docs/case/       кейс: сгенерировано scripts/import-case.mjs (GENERATED) + ручные страницы (diagrams, downloads, api-*)
 src/case.mjs                 слои кейса и сайдбар раздела
 src/content/docs/<раздел>/   страницы (MDX); разделы перечислены в src/sections.mjs

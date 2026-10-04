@@ -58,6 +58,12 @@ const SHORT = {
   '06_rollout/02_rollout-plan.md': 'План внедрения',
   '07_testing/01_test-program.md': 'ПМИ',
   '07_testing/02_test-cases.md': 'Тестовые сценарии',
+  '08_operations/01_support-model.md': 'Модель сопровождения',
+  '08_operations/02_runbook.md': 'Runbook',
+  '08_operations/03_monitoring-alerting.md': 'Мониторинг и алерты',
+  '08_operations/04_incident-example.md': 'Инцидент: учётные записи АБС не создаются',
+  '08_operations/05_problem-rca.md': 'Проблема и анализ корневых причин',
+  '08_operations/06_change-request.md': 'Запрос на изменение',
 };
 
 /** Слаг страницы сайта для исходного .md (без слэшей по краям). */
@@ -77,7 +83,7 @@ const API_PAGES = {
 
 // ---------- ID артефактов ----------
 
-const ID_PREFIXES = ['G', 'R', 'P', 'BRL', 'GAP', 'BR', 'UC', 'FR', 'NFR', 'ENT', 'ROLE', 'RULE', 'SOD', 'EPIC', 'US', 'ADR', 'INT', 'SEQ', 'SEC', 'TC'];
+const ID_PREFIXES = ['G', 'R', 'P', 'BRL', 'GAP', 'BR', 'UC', 'FR', 'NFR', 'ENT', 'ROLE', 'RULE', 'SOD', 'EPIC', 'US', 'ADR', 'INT', 'SEQ', 'SEC', 'TC', 'ALR', 'RB', 'INC', 'PRB', 'CHG'];
 const ID_RE = new RegExp(`(?<![A-Za-z0-9_-])((?:${ID_PREFIXES.join('|')})-\\d{1,3})(?![A-Za-z0-9_-]|\\.\\d)`, 'g');
 const ID_FULL = new RegExp(`^(?:${ID_PREFIXES.join('|')})-\\d{1,3}$`);
 
@@ -103,6 +109,11 @@ const HOME = {
   SEQ: '04_integrations/02_scenarios.md',
   SEC: '05_security/01_security-requirements.md',
   TC: '07_testing/02_test-cases.md',
+  ALR: '08_operations/03_monitoring-alerting.md',
+  RB: '08_operations/02_runbook.md',
+  INC: '08_operations/04_incident-example.md',
+  PRB: '08_operations/05_problem-rca.md',
+  CHG: '08_operations/06_change-request.md',
 };
 
 const anchorOf = (id) => id.toLowerCase();
