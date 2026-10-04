@@ -299,7 +299,7 @@
   definition: Оценка того, что затронет изменение требования — другие требования, данные, интеграции, тесты, документы, сроки.
   topic: requirements
   seeAlso: [traceability, change-request]
-  match: [анализ* влияния]
+  match: [анализ* влияния, ~impact analysis]
 
 - id: change-request
   term: Запрос на изменение
@@ -1663,3 +1663,29 @@
   topic: onboarding
   match: ['~strangler fig', 'постепенн* вытеснени*']
   seeAlso: [cutover]
+
+# ── Доработка существующей системы ──────────────────────────────────
+
+- id: backward-compatibility
+  term: Обратная совместимость
+  en: Backward compatibility
+  definition: Свойство изменения, при котором существующие клиенты API, потребители событий и пользователи продолжают работать без доработок. Новое необязательное поле обычно совместимо, удаление поля или новое значение enum в ответе — часто нет.
+  topic: integrations
+  match: ['обратн* совместимост*', '~backward compatibility']
+  seeAlso: [tolerant-reader, impact-analysis]
+
+- id: tolerant-reader
+  term: Tolerant reader
+  en: Tolerant reader
+  definition: Принцип для потребителя API или событий — читать только нужные поля и спокойно пропускать незнакомые поля и значения, чтобы изменения провайдера не ломали клиента.
+  topic: integrations
+  match: ['~tolerant reader']
+  seeAlso: [backward-compatibility]
+
+- id: prod-verification
+  term: Проверка на продуктиве
+  en: Production verification
+  definition: Подтверждение после релиза, что доработка решает задачу на реальных данных — новая функция используется, метрики и ошибки в норме, смежные системы получают ожидаемое. В отличие от smoke-проверки может длиться дни.
+  topic: role
+  match: ['проверк* на продуктиве', '~production verification']
+  seeAlso: [smoke-test, regression]

@@ -93,7 +93,7 @@ CREATE TABLE access_request (
   request_id    INTEGER PRIMARY KEY,
   employment_id INTEGER NOT NULL REFERENCES employment(employment_id),
   requester_identity_id INTEGER NOT NULL REFERENCES identity(identity_id),
-  status        TEXT NOT NULL,              -- SUBMITTED, APPROVED, REJECTED, PARTIALLY_COMPLETED, COMPLETED, CANCELLED
+  status        TEXT NOT NULL,              -- DRAFT, ON_APPROVAL, APPROVED, REJECTED, PROVISIONING, COMPLETED, PARTIALLY_COMPLETED, CANCELLED (как в state-access-request и OpenAPI)
   created_at    TEXT NOT NULL
 );
 
@@ -101,7 +101,7 @@ CREATE TABLE request_item (
   item_id        INTEGER PRIMARY KEY,
   request_id     INTEGER NOT NULL REFERENCES access_request(request_id),
   entitlement_id TEXT NOT NULL REFERENCES entitlement(entitlement_id),
-  status         TEXT NOT NULL              -- PENDING, APPROVED, REJECTED, GRANTED
+  status         TEXT NOT NULL              -- ON_APPROVAL, APPROVED, REJECTED, GRANTED, FAILED (как в OpenAPI)
 );
 
 -- ---------- Данные ----------
@@ -209,12 +209,12 @@ INSERT INTO provisioning_task VALUES
 INSERT INTO access_request VALUES
   (300, 11, 5, 'COMPLETED', '2026-09-20 11:00'),
   (301, 12, 6, 'PARTIALLY_COMPLETED', '2026-09-22 15:30'),
-  (302, 10, 5, 'SUBMITTED', '2027-03-11 10:00'),
+  (302, 10, 5, 'ON_APPROVAL', '2027-03-11 10:00'),
   (303, 15, 5, 'REJECTED', '2026-09-25 09:15');
 
 INSERT INTO request_item VALUES
   (400, 300, 'VPN', 'GRANTED'),
   (401, 301, 'VPN', 'GRANTED'),
   (402, 301, 'ABS-CTRL', 'REJECTED'),
-  (403, 302, 'VPN', 'PENDING'),
+  (403, 302, 'VPN', 'ON_APPROVAL'),
   (404, 303, 'AD-IT', 'REJECTED');

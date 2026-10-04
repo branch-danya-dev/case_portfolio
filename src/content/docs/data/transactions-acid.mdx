@@ -78,8 +78,8 @@ sequenceDiagram
     participant A as Согласующий 1
     participant DB as БД
     participant B as Согласующий 2
-    A->>DB: прочитать позицию (status = PENDING)
-    B->>DB: прочитать позицию (status = PENDING)
+    A->>DB: прочитать позицию (status = ON_APPROVAL)
+    B->>DB: прочитать позицию (status = ON_APPROVAL)
     A->>DB: записать APPROVED
     B->>DB: записать REJECTED
     Note over DB: решение A потеряно —<br/>в журнале одно, в данных другое

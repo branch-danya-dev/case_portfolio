@@ -35,9 +35,9 @@ import PlantUmlDiagram from '../../../components/PlantUmlDiagram.astro';
 
 ```mermaid title="Минимальная статусная модель"
 stateDiagram-v2
-    [*] --> SUBMITTED: отправлена
-    SUBMITTED --> APPROVED: все позиции согласованы
-    SUBMITTED --> REJECTED: все позиции отклонены
+    [*] --> ON_APPROVAL: отправлена
+    ON_APPROVAL --> APPROVED: все позиции согласованы
+    ON_APPROVAL --> REJECTED: все позиции отклонены
     APPROVED --> COMPLETED: полномочия выданы
     REJECTED --> [*]
     COMPLETED --> [*]
@@ -114,11 +114,11 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
-    [*] --> SUBMITTED: отправлена руководителем
-    SUBMITTED --> APPROVED: все позиции согласованы
-    SUBMITTED --> PARTIALLY_COMPLETED: часть позиций отклонена
-    SUBMITTED --> REJECTED: все позиции отклонены
-    SUBMITTED --> CANCELLED: отозвана / HIRE_CANCELLED
+    [*] --> ON_APPROVAL: отправлена руководителем
+    ON_APPROVAL --> APPROVED: все позиции согласованы
+    ON_APPROVAL --> PARTIALLY_COMPLETED: часть позиций отклонена
+    ON_APPROVAL --> REJECTED: все позиции отклонены
+    ON_APPROVAL --> CANCELLED: отозвана / HIRE_CANCELLED
     APPROVED --> COMPLETED: полномочия выданы
     COMPLETED --> [*]
     PARTIALLY_COMPLETED --> [*]

@@ -105,7 +105,7 @@ RFC 9457 (2023) заменил RFC 7807 (2016); формат совместим.
 <TabItem label="Пагинация и фильтры">
 
 ```http title="Курсорная пагинация"
-GET /api/v1/access-requests?status=SUBMITTED&sort=-createdAt&limit=50&cursor=eyJpZCI6MzAyfQ
+GET /api/v1/access-requests?status=ON_APPROVAL&sort=-createdAt&limit=50&cursor=eyJpZCI6MzAyfQ
 
 200 OK
 {
