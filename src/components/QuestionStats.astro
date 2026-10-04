@@ -1,17 +1,14 @@
 ---
-/** Сводка банка вопросов: тема → число вопросов по уровням → ссылка на страницу темы в разделе «Собеседование». */
+/** Сводка банка вопросов: тема → число вопросов по уровням и частых → ссылка на страницу темы в разделе «Собеседование». */
 import { getCollection } from 'astro:content';
+import { topicRank } from '../question-topics.mjs';
 
-const ORDER = ['role', 'onboarding', 'elicitation', 'requirements', 'bpmn', 'processes', 'diagrams', 'data', 'integrations', 'architecture', 'security', 'documentation', 'methodologies', 'testing', 'release', 'operations', 'software', 'case'];
 /** Темы, у которых нет страницы в interview/questions/: ведём на их собственную страницу. */
 const href = (t: { id: string; data: { page?: string } }) =>
   t.id === 'case' ? `/${t.data.page}/` : `/interview/questions/${t.id}/`;
-const topics = (await getCollection('questions')).sort((a, b) => {
-  const ia = ORDER.indexOf(a.id);
-  const ib = ORDER.indexOf(b.id);
-  return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
-});
+const topics = (await getCollection('questions')).sort((a, b) => topicRank(a.id) - topicRank(b.id));
 const count = (items: { level: string }[], l: string) => items.filter((q) => q.level === l).length;
+const frequent = (items: { frequent: boolean }[]) => items.filter((q) => q.frequent).length;
 const total = topics.reduce((s, t) => s + t.data.items.length, 0);
 ---
 
@@ -22,6 +19,7 @@ const total = topics.reduce((s, t) => s + t.data.items.length, 0);
       <th>junior</th>
       <th>middle</th>
       <th>senior</th>
+      <th>Частые</th>
       <th>Всего</th>
     </tr>
   </thead>
@@ -35,6 +33,7 @@ const total = topics.reduce((s, t) => s + t.data.items.length, 0);
           <td>{count(t.data.items, 'junior')}</td>
           <td>{count(t.data.items, 'middle')}</td>
           <td>{count(t.data.items, 'senior')}</td>
+          <td>{frequent(t.data.items) || '—'}</td>
           <td>{t.data.items.length}</td>
         </tr>
       ))
@@ -46,6 +45,7 @@ const total = topics.reduce((s, t) => s + t.data.items.length, 0);
       <th>{topics.reduce((s, t) => s + count(t.data.items, 'junior'), 0)}</th>
       <th>{topics.reduce((s, t) => s + count(t.data.items, 'middle'), 0)}</th>
       <th>{topics.reduce((s, t) => s + count(t.data.items, 'senior'), 0)}</th>
+      <th>{topics.reduce((s, t) => s + frequent(t.data.items), 0)}</th>
       <th>{total}</th>
     </tr>
   </tfoot>

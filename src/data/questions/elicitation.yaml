@@ -16,6 +16,7 @@ items:
 
   - id: elic-techniques
     level: junior
+    frequent: true
     question: Какие техники выявления требований вы знаете и когда какую применять?
     tags: [техники]
     answer: |

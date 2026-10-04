@@ -2,30 +2,52 @@
 /**
  * Вопросы на собеседовании из банка src/data/questions/<topic>.yaml.
  * Ответы спрятаны в раскрывающиеся блоки. Те же записи использует тренажёр.
+ * Без topic и с frequent — частые вопросы всех тем, сгруппированные по темам.
  */
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import { marked } from 'marked';
+import { topicRank } from '../question-topics.mjs';
 
 interface Props {
-  topic: string;
+  topic?: string;
   /** Показать только эти вопросы (по id) и в этом порядке. По умолчанию — все. */
   ids?: string[];
-  /** Панель над списком: фильтр по уровню и «Раскрыть все» (страницы раздела «Собеседование»). */
+  /** Панель над списком: фильтр по уровню и частоте, «Раскрыть все» (страницы раздела «Собеседование»). */
   toolbar?: boolean;
+  /** Только вопросы, которые часто задают на собеседованиях. */
+  frequent?: boolean;
 }
-const { topic, ids, toolbar = false } = Astro.props;
+const { topic, ids, toolbar = false, frequent = false } = Astro.props;
 
-const entry = await getEntry('questions', topic);
-if (!entry) throw new Error(`<InterviewQuestions>: нет файла src/data/questions/${topic}.yaml`);
+type Item = { id: string; level: 'junior' | 'middle' | 'senior'; frequent: boolean; question: string; answer: string };
+type Group = { title?: string; href?: string; items: Item[] };
 
-const items = ids
-  ? ids.map((id) => {
-      const q = entry.data.items.find((i) => i.id === id);
-      if (!q) throw new Error(`<InterviewQuestions>: в теме «${topic}» нет вопроса «${id}»`);
-      return q;
-    })
-  : entry.data.items;
+let groups: Group[];
+if (topic) {
+  const entry = await getEntry('questions', topic);
+  if (!entry) throw new Error(`<InterviewQuestions>: нет файла src/data/questions/${topic}.yaml`);
+  const items = ids
+    ? ids.map((id) => {
+        const q = entry.data.items.find((i) => i.id === id);
+        if (!q) throw new Error(`<InterviewQuestions>: в теме «${topic}» нет вопроса «${id}»`);
+        return q;
+      })
+    : entry.data.items;
+  groups = [{ items: frequent ? items.filter((q) => q.frequent) : items }];
+} else {
+  if (!frequent) throw new Error('<InterviewQuestions>: без topic поддерживается только режим frequent');
+  const all = (await getCollection('questions')).sort((a, b) => topicRank(a.id) - topicRank(b.id));
+  groups = all
+    .map((t) => ({
+      title: t.data.title,
+      href: t.id === 'case' ? `/${t.data.page}/` : `/interview/questions/${t.id}/`,
+      items: t.data.items.filter((q) => q.frequent),
+    }))
+    .filter((g) => g.items.length > 0);
+}
 
+const all = groups.flatMap((g) => g.items);
+const hasFrequent = !frequent && all.some((q) => q.frequent);
 const levelLabel = { junior: 'junior', middle: 'middle', senior: 'senior' } as const;
 ---
 
@@ -35,27 +57,46 @@ const levelLabel = { junior: 'junior', middle: 'middle', senior: 'senior' } as c
       <span class="questions-toolbar__label">Уровень:</span>
       {(['junior', 'middle', 'senior'] as const).map((l) => (
         <label>
-          <input type="checkbox" value={l} checked /> {l} ({items.filter((q) => q.level === l).length})
+          <input type="checkbox" value={l} checked data-level-filter /> {l} ({all.filter((q) => q.level === l).length})
         </label>
       ))}
+      {hasFrequent && (
+        <label>
+          <input type="checkbox" data-frequent-filter /> только частые ({all.filter((q) => q.frequent).length})
+        </label>
+      )}
       <button type="button" class="sa-btn" data-expand>Раскрыть все</button>
       <button type="button" class="sa-btn" data-collapse>Свернуть все</button>
     </div>
   )
 }
 
-<div class="questions">
+<div class="questions" data-questions>
   {
-    items.map((q) => (
-      <details class="question" id={`q-${q.id}`} data-level={q.level}>
-        <summary>
-          <span class="q-text">{q.question}</span>
-          <span class="level-badge" data-level={q.level} title="Уровень вопроса">
-            {levelLabel[q.level]}
-          </span>
-        </summary>
-        <div class="answer" set:html={marked.parse(q.answer, { async: false })} />
-      </details>
+    groups.map((g) => (
+      <>
+        {g.title && (
+          <h2 class="questions-group">
+            <a href={g.href}>{g.title}</a>
+          </h2>
+        )}
+        {g.items.map((q) => (
+          <details class="question" id={`q-${q.id}`} data-level={q.level} data-frequent={q.frequent ? '' : undefined}>
+            <summary>
+              <span class="q-text">{q.question}</span>
+              {q.frequent && !frequent && (
+                <span class="frequent-badge" title="Часто задают на собеседованиях">
+                  частый
+                </span>
+              )}
+              <span class="level-badge" data-level={q.level} title="Уровень вопроса">
+                {levelLabel[q.level]}
+              </span>
+            </summary>
+            <div class="answer" set:html={marked.parse(q.answer, { async: false })} />
+          </details>
+        ))}
+      </>
     ))
   }
 </div>
@@ -76,12 +117,13 @@ const levelLabel = { junior: 'junior', middle: 'middle', senior: 'senior' } as c
   document.querySelectorAll<HTMLElement>('[data-questions-toolbar]').forEach((bar) => {
     const list = bar.nextElementSibling as HTMLElement;
     const all = [...list.querySelectorAll<HTMLDetailsElement>('details.question')];
-    const boxes = [...bar.querySelectorAll<HTMLInputElement>('input[type=checkbox]')];
+    const levels = [...bar.querySelectorAll<HTMLInputElement>('[data-level-filter]')];
+    const onlyFrequent = bar.querySelector<HTMLInputElement>('[data-frequent-filter]');
     const apply = () => {
-      const on = new Set(boxes.filter((b) => b.checked).map((b) => b.value));
-      for (const d of all) d.hidden = !on.has(d.dataset.level!);
+      const on = new Set(levels.filter((b) => b.checked).map((b) => b.value));
+      for (const d of all) d.hidden = !on.has(d.dataset.level!) || (!!onlyFrequent?.checked && !('frequent' in d.dataset));
     };
-    boxes.forEach((b) => b.addEventListener('change', apply));
+    [...levels, ...(onlyFrequent ? [onlyFrequent] : [])].forEach((b) => b.addEventListener('change', apply));
     bar.querySelector('[data-expand]')!.addEventListener('click', () => all.forEach((d) => !d.hidden && (d.open = true)));
     bar.querySelector('[data-collapse]')!.addEventListener('click', () => all.forEach((d) => (d.open = false)));
   });

@@ -3,6 +3,7 @@ page: diagrams/choose
 items:
   - id: diag-uml-types
     level: junior
+    frequent: true
     question: Какие диаграммы есть в UML? Какими пользуется аналитик?
     tags: [uml]
     answer: |
@@ -54,6 +55,7 @@ items:
 
   - id: diag-sequence-elements
     level: junior
+    frequent: true
     question: Какие элементы есть на sequence-диаграмме?
     tags: [sequence]
     answer: |

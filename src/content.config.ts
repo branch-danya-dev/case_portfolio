@@ -28,6 +28,8 @@ const questions = defineCollection({
       z.object({
         id: z.string().regex(/^[a-z0-9-]+$/),
         level: z.enum(['junior', 'middle', 'senior']),
+        /** Часто задают на реальных собеседованиях (по открытым подборкам вопросов). */
+        frequent: z.boolean().default(false),
         question: z.string(),
         /** Ответ в Markdown. */
         answer: z.string(),

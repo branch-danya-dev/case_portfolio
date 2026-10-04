@@ -3,6 +3,7 @@ page: documentation/tz-gost34
 items:
   - id: doc-gost34-what
     level: junior
+    frequent: true
     question: Что такое ГОСТ 34 и где он применяется?
     tags: [гост]
     answer: |

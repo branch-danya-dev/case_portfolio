@@ -12,6 +12,8 @@ export interface TrainerQuestion {
   id: string;
   topic: string;
   level: 'junior' | 'middle' | 'senior';
+  /** Часто задают на собеседованиях. */
+  frequent: boolean;
   question: string;
   answerHtml: string;
 }
@@ -30,6 +32,7 @@ interface Settings {
   topics: string[]; // пусто — все темы
   levels: TrainerQuestion['level'][];
   onlyWeak: boolean;
+  onlyFrequent: boolean;
   examSize: number;
 }
 interface Session {
@@ -45,7 +48,7 @@ const PROGRESS_KEY = 'interview-trainer:progress';
 const SETTINGS_KEY = 'interview-trainer:settings';
 const LEVELS: TrainerQuestion['level'][] = ['junior', 'middle', 'senior'];
 const RATING_LABEL: Record<Rating, string> = { unknown: 'Не знаю', review: 'Повторить', known: 'Знаю' };
-const DEFAULT_SETTINGS: Settings = { topics: [], levels: [...LEVELS], onlyWeak: false, examSize: 10 };
+const DEFAULT_SETTINGS: Settings = { topics: [], levels: [...LEVELS], onlyWeak: false, onlyFrequent: false, examSize: 10 };
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -88,7 +91,8 @@ export default function InterviewTrainer({ topics, questions }: { topics: Traine
         (q) =>
           (settings.topics.length === 0 || settings.topics.includes(q.topic)) &&
           settings.levels.includes(q.level) &&
-          (!settings.onlyWeak || progress[q.id]?.s !== 'known'),
+          (!settings.onlyWeak || progress[q.id]?.s !== 'known') &&
+          (!settings.onlyFrequent || q.frequent),
       ),
     [questions, settings, progress],
   );
@@ -190,6 +194,7 @@ export default function InterviewTrainer({ topics, questions }: { topics: Traine
             <span className="level-badge" data-level={q.level}>
               {q.level}
             </span>
+            {q.frequent && <span className="frequent-badge">частый</span>}
             {prev && <span className={`trainer__prev trainer__prev--${prev.s}`}>в прошлый раз: {RATING_LABEL[prev.s].toLowerCase()}</span>}
           </header>
           <p className="trainer__question">{q.question}</p>
@@ -319,6 +324,10 @@ export default function InterviewTrainer({ topics, questions }: { topics: Traine
         <label>
           <input type="checkbox" checked={settings.onlyWeak} onChange={(e) => updateSettings({ onlyWeak: e.target.checked })} /> только
           не освоенные
+        </label>
+        <label>
+          <input type="checkbox" checked={settings.onlyFrequent} onChange={(e) => updateSettings({ onlyFrequent: e.target.checked })} />{' '}
+          только частые ({questions.filter((q) => q.frequent).length})
         </label>
         <label>
           Вопросов в экзамене:{' '}
