@@ -7,7 +7,7 @@ import { getCollection } from 'astro:content';
 import { marked } from 'marked';
 import InterviewTrainer, { type TrainerQuestion, type TrainerTopic } from './InterviewTrainer';
 
-const ORDER = ['role', 'onboarding', 'elicitation', 'requirements', 'bpmn', 'processes', 'diagrams', 'data', 'integrations', 'architecture', 'documentation', 'methodologies', 'testing', 'operations', 'software', 'case'];
+const ORDER = ['role', 'onboarding', 'elicitation', 'requirements', 'bpmn', 'processes', 'diagrams', 'data', 'integrations', 'architecture', 'documentation', 'methodologies', 'testing', 'release', 'operations', 'software', 'case'];
 const rank = (id: string) => (ORDER.includes(id) ? ORDER.indexOf(id) : 99);
 const collection = (await getCollection('questions')).sort((a, b) => rank(a.id) - rank(b.id));
 

@@ -1768,5 +1768,142 @@
   en: Rate limiting
   definition: Защита сервиса от перегрузки — не более заданного числа запросов от клиента за период. При превышении принято отвечать 429 Too Many Requests и указывать в Retry-After, когда повторить.
   topic: integrations
-  match: ['~rate limit*', 'ограничени* частоты']
+  match: ['rate limit*', 'ограничени* частоты']
   seeAlso: [backward-compatibility]
+
+# ── Релиз и прод ────────────────────────────────────────────────────
+
+- id: environment
+  term: Среда (стенд)
+  en: Environment
+  definition: Отдельная установка системы со своей конфигурацией, данными и смежными системами — DEV, TEST, UAT, PREPROD, PROD. На всех средах должна работать одна и та же сборка; отличаются только конфигурация и секреты.
+  topic: release
+  match: ['стенд*', '~environment']
+  seeAlso: [preprod, prod]
+
+- id: preprod
+  term: PREPROD
+  en: Pre-production, staging
+  definition: Среда, максимально похожая на продуктив по конфигурации, объёму данных и смежным системам. На ней проводят нагрузочные тесты и репетируют выкладку, миграцию и откат.
+  topic: release
+  match: [PREPROD, '~staging', 'препрод*']
+  seeAlso: [environment, prod]
+
+- id: prod
+  term: Продуктив (PROD)
+  en: Production
+  definition: Среда, где система работает с реальными пользователями и данными. Изменения сюда попадают только через выкладку релиза или запрос на изменение.
+  topic: release
+  match: [PROD, 'продуктив*']
+  seeAlso: [environment, preprod]
+
+- id: secrets-store
+  term: Хранилище секретов
+  en: Secrets management, vault
+  definition: Защищённое хранилище паролей, ключей API, сертификатов и других секретов с контролем доступа и журналом обращений. В репозитории и конфигурации хранится только имя секрета, а значение приложение получает при запуске.
+  topic: release
+  match: ['хранилищ* секретов', '~vault']
+  seeAlso: [environment]
+
+- id: db-migration
+  term: Скрипт миграции БД
+  en: Database migration script
+  definition: Версионированный скрипт изменения схемы БД, который применяется один раз при выкладке; номер применённой версии хранится в самой БД. Не путать с миграцией данных — переносом данных из старой системы.
+  topic: release
+  match: ['скрипт* миграции', 'migration script*']
+  seeAlso: [expand-contract]
+  notToConfuse: Миграция данных — загрузка существующих данных из старых систем, отдельный шаг внедрения.
+
+- id: expand-contract
+  term: Расширение и сужение
+  en: Expand and contract, parallel change
+  definition: Способ несовместимого изменения в несколько совместимых шагов — сначала добавить новое рядом со старым, перевести на него всех потребителей и только потом удалить старое.
+  topic: release
+  match: ['~expand/contract', '~expand and contract', '~parallel change', 'расширени* и сужени*']
+  seeAlso: [backward-compatibility, db-migration]
+
+- id: provider-consumer
+  term: Поставщик и потребитель
+  en: Provider, consumer
+  definition: Поставщик (provider) — сторона, которая предоставляет API или публикует события; потребитель (consumer) — сторона, которая вызывает API или читает события. От того, кто должен понять изменение первым, зависит порядок выкладки.
+  topic: release
+  match: ['~provider', 'поставщик* API']
+  seeAlso: [backward-compatibility, tolerant-reader]
+
+- id: deployment
+  term: Выкладка
+  en: Deployment
+  definition: Установка новой версии на среду. Может не совпадать с выпуском (release) — моментом, когда изменения становятся доступны пользователям, например при включении фича-флага.
+  topic: release
+  match: ['выкладк*', 'выкатк*']
+  seeAlso: [feature-flag]
+
+- id: feature-flag
+  term: Фича-флаг
+  en: Feature flag, feature toggle
+  definition: Настройка, которая включает или выключает функцию без новой выкладки — для всех, для части пользователей или подразделений. Позволяет выложить код заранее, включать постепенно и откатывать выключением.
+  topic: release
+  match: ['фича-флаг*', 'feature flag*', 'feature toggle*']
+  seeAlso: [deployment, canary]
+
+- id: release-notes
+  term: Release notes
+  en: Release notes
+  definition: Описание релиза для тех, кого он касается — что изменилось, что нового нужно знать сопровождению и пользователям, известные ограничения.
+  topic: release
+  match: ['~release notes', 'заметк* к релиз*']
+
+- id: go-no-go
+  term: Go/no-go
+  en: Go/no-go decision
+  definition: Решение перед выкладкой или включением — выпускать или нет — по заранее согласованным критериям. Если критерий не выполнен, выпуск переносится.
+  topic: release
+  match: ['~go/no-go']
+  seeAlso: [release-notes]
+
+- id: roll-forward
+  term: Исправление вперёд
+  en: Roll forward, fix forward
+  definition: Устранение проблемы после релиза выпуском исправленной версии вместо отката на предыдущую. Выбирают, когда откат невозможен или дороже исправления.
+  topic: release
+  match: ['~roll forward', '~fix forward', 'исправлени* вперёд']
+  seeAlso: [cutover]
+
+- id: canary
+  term: Канареечный релиз
+  en: Canary release
+  definition: Выпуск новой версии сначала на малую долю трафика или пользователей с наблюдением за метриками; доля растёт, только если метрики в норме.
+  topic: release
+  match: ['~canary', 'канареечн*']
+  seeAlso: [blue-green, feature-flag]
+
+- id: blue-green
+  term: Сине-зелёное развёртывание
+  en: Blue-green deployment
+  definition: Две одинаковые копии продуктива — работающая и новая. Новая версия выкладывается на свободную копию, проверяется и получает трафик переключением; откат — переключение обратно.
+  topic: release
+  match: ['~blue-green', 'сине-зелён*']
+  seeAlso: [canary]
+
+- id: hypercare
+  term: Усиленное сопровождение
+  en: Hypercare
+  definition: Период сразу после запуска, когда команда проекта вместе с сопровождением ежедневно смотрит метрики и разбирает каждое отклонение. Заканчивается по критерию, после чего действует обычная модель сопровождения.
+  topic: release
+  match: ['~hypercare', 'усиленн* сопровождени*']
+  seeAlso: [prod-verification]
+
+- id: semver
+  term: Семантическое версионирование
+  en: Semantic versioning, SemVer
+  definition: Схема номера версии MAJOR.MINOR.PATCH — MAJOR растёт при несовместимых изменениях, MINOR — при совместимых новых возможностях, PATCH — при исправлениях.
+  topic: release
+  match: ['~SemVer', 'семантическ* версионировани*']
+  seeAlso: [backward-compatibility]
+
+- id: change-freeze
+  term: Мораторий на изменения
+  en: Change freeze
+  definition: Период, когда выкладки в продуктив запрещены или разрешены только аварийные — например, перед закрытием года или массовым событием.
+  topic: release
+  match: ['~change freeze', 'мораторий* на изменения']

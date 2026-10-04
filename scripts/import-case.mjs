@@ -56,6 +56,7 @@ const SHORT = {
   '05_security/01_security-requirements.md': 'Требования ИБ',
   '06_rollout/01_migration-strategy.md': 'Стратегия миграции',
   '06_rollout/02_rollout-plan.md': 'План внедрения',
+  '06_rollout/03_release-plan.md': 'План релиза',
   '07_testing/01_test-program.md': 'ПМИ',
   '07_testing/02_test-cases.md': 'Тестовые сценарии',
   '08_operations/01_support-model.md': 'Модель сопровождения',
