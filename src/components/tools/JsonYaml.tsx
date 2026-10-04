@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import YAML from 'yaml';
-import Ajv, { type ErrorObject } from 'ajv';
+import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { locateJsonError } from '../../lib/json-locate';
+import { ruError } from '../../lib/ajv-ru';
 import { EMPLOYEE_EVENT_BAD, EMPLOYEE_EVENT_EXAMPLES, EMPLOYEE_EVENT_SCHEMA } from '../../data/json-examples';
 import { copyText, downloadText } from '../../lib/share';
 import { load, save } from '../../scripts/storage';
@@ -64,43 +65,6 @@ function sortKeys(v: unknown): unknown {
 }
 const toJson = (v: unknown, min = false) => JSON.stringify(v, null, min ? 0 : 2);
 const toYaml = (v: unknown) => YAML.stringify(v, { lineWidth: 0 });
-
-/** Сообщения ajv по-русски — для самых частых ключевых слов. */
-function ruError(e: ErrorObject): string {
-  const p = e.params as Record<string, unknown>;
-  switch (e.keyword) {
-    case 'required':
-      return `нет обязательного поля «${p.missingProperty}»`;
-    case 'additionalProperties':
-      return `лишнее поле «${p.additionalProperty}» — схема запрещает поля, которых нет в описании`;
-    case 'type':
-      return `неверный тип: ожидается ${p.type}`;
-    case 'enum':
-      return `значение не из списка: ${(p.allowedValues as unknown[]).join(', ')}`;
-    case 'const':
-      return `должно быть ровно ${JSON.stringify(p.allowedValue)}`;
-    case 'pattern':
-      return `не соответствует шаблону ${p.pattern}`;
-    case 'format':
-      return `не соответствует формату ${p.format}`;
-    case 'minLength':
-      return `короче ${p.limit} символов`;
-    case 'maxLength':
-      return `длиннее ${p.limit} символов`;
-    case 'minimum':
-      return `меньше ${p.limit}`;
-    case 'maximum':
-      return `больше ${p.limit}`;
-    case 'minItems':
-      return `элементов меньше ${p.limit}`;
-    case 'maxItems':
-      return `элементов больше ${p.limit}`;
-    case 'if':
-      return `не выполнено условие ветки «${p.failingKeyword}»`;
-    default:
-      return e.message ?? e.keyword;
-  }
-}
 
 interface Saved {
   input: string;
