@@ -233,3 +233,12 @@
     text-decoration: none;
   }
 }
+
+@media print {
+  .term__tip {
+    display: none !important;
+  }
+  .term {
+    text-decoration: none;
+  }
+}

@@ -8,6 +8,7 @@ import { sections } from '../sections.mjs';
 
 const TOPIC_EXTRA: Record<string, string> = {
   idm: 'Кейс: управление доступом (IdM)',
+  general: 'Общие сокращения и понятия',
 };
 const topicLabel = (t: string) => TOPIC_EXTRA[t] ?? sections.find((s) => s.id === t)?.label ?? t;
 

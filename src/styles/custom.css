@@ -999,3 +999,71 @@ kbd,
   font-variant-ligatures: none;
   font-feature-settings: 'calt' 0, 'liga' 0;
 }
+
+/* ---------- Термины: подсказка при первом упоминании (src/plugins/remark-terms.mjs) ---------- */
+.term {
+  position: relative;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--sl-color-accent);
+  text-underline-offset: 0.2em;
+  cursor: help;
+}
+.term:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.term__tip {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  top: 100%;
+  width: max-content;
+  max-width: min(24rem, 80vw);
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--sa-border);
+  border-radius: 0.45rem;
+  background: var(--sl-color-bg-nav, var(--sl-color-bg));
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.35);
+  color: var(--sl-color-text);
+  font-size: var(--sl-text-sm);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.45;
+  text-align: start;
+  white-space: normal;
+  cursor: auto;
+}
+.term:hover > .term__tip,
+.term:focus-within > .term__tip {
+  display: block;
+}
+.term__tip strong {
+  color: var(--sl-color-white);
+}
+.term__tip a {
+  color: var(--sl-color-text-accent);
+  white-space: nowrap;
+}
+/* Позицию у края экрана подправляет src/scripts/terms.ts: сдвигает подсказку внутрь окна
+   и открывает её над словом, если снизу нет места. position: fixed здесь не годится —
+   у части предков (абзацы в <Steps>) есть transform, и fixed превращается в absolute. */
+.term__tip.is-above {
+  top: auto;
+  bottom: 100%;
+}
+/* <Steps> Starlight сдвигает первый абзац шага через transform — это отдельный контекст наложения,
+   и следующий шаг рисуется поверх подсказки. Шаг с открытой подсказкой поднимаем над соседями. */
+.sl-steps > li:has(.term:hover, .term:focus-within),
+.sl-steps > li > :first-child:has(.term:hover, .term:focus-within) {
+  position: relative;
+  z-index: 30;
+}
+.page-terms ul {
+  padding-left: 1.1rem;
+}
+.page-terms li {
+  margin-top: 0.35rem;
+  font-size: var(--sl-text-sm);
+}

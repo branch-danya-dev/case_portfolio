@@ -5,6 +5,7 @@ import react from '@astrojs/react';
 import starlightLinksValidator from 'starlight-links-validator';
 import { unified } from '@astrojs/markdown-remark';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
+import remarkTerms from './src/plugins/remark-terms.mjs';
 import { sections } from './src/sections.mjs';
 
 const sidebar = sections
@@ -58,6 +59,9 @@ export default defineConfig({
             ['CaseRef', 'href'],
             ['DownloadButton', 'href'],
           ],
+          // Якоря терминов (/glossary/#id) рисует компонент Glossary — валидатор их не видит.
+          // Ссылки на них ставит только remark-terms, а id берёт из того же glossary.yaml.
+          exclude: ({ link }) => link.startsWith('/glossary/#'),
         }),
       ],
     }),
@@ -65,7 +69,7 @@ export default defineConfig({
   ],
   markdown: {
     // remark-плагины работают на unified-процессоре (в Astro 7 по умолчанию Sätteri).
-    processor: unified({ remarkPlugins: [remarkMermaid] }),
+    processor: unified({ remarkPlugins: [remarkMermaid, remarkTerms] }),
   },
   vite: {
     // bpmn-js и mermaid тяжёлые: отдельные чанки грузятся только там, где нужны.

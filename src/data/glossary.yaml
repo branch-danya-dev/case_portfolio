@@ -1,4 +1,5 @@
-# Глоссарий. Поля: id (латиницей), term, en, definition, topic, seeAlso (id других терминов), notToConfuse.
+# Глоссарий. Поля: id (латиницей), term, en, definition, topic, seeAlso (id других терминов), notToConfuse,
+# match — как термин пишется в текстах (для подсказок на страницах, см. src/plugins/remark-terms.mjs).
 # topic — раздел сайта (processes, requirements, integrations…). Список будет расти с каждым разделом.
 
 - id: bpmn
@@ -38,6 +39,7 @@
   topic: processes
   seeAlso: [pool]
   notToConfuse: Поток операций (sequence flow) — порядок шагов внутри пула.
+  match: [поток* сообщений]
 
 - id: as-is
   term: AS-IS
@@ -82,6 +84,7 @@
   topic: role
   seeAlso: [system-analyst]
   notToConfuse: Системный аналитик детализирует требования, но не определяет приоритеты.
+  match: [PO]
 
 - id: stakeholder
   term: Стейкхолдер
@@ -89,6 +92,7 @@
   definition: Любой, кто влияет на проект или кого он затрагивает — заказчик, пользователи, владельцы смежных систем, ИБ, аудит.
   topic: role
   seeAlso: [raci]
+  match: [стейкхолдер*]
 
 - id: raci
   term: RACI
@@ -104,6 +108,7 @@
   definition: Результат работы на проекте, который можно передать и утвердить — документ, диаграмма, модель, контракт, бэклог.
   topic: role
   seeAlso: [raci]
+  match: [артефакт*]
 
 - id: dor
   term: DoR
@@ -133,6 +138,7 @@
   topic: elicitation
   seeAlso: [stakeholder, workshop]
   notToConfuse: «Сбор требований» — пассивная запись того, что сказали; выявление предполагает уточнение и проверку.
+  match: [выявлени* требований]
 
 - id: workshop
   term: Воркшоп
@@ -141,6 +147,7 @@
   topic: elicitation
   seeAlso: [elicitation]
   notToConfuse: Совещание — обсуждение без обязательного артефакта на выходе.
+  match: [воркшоп*]
 
 - id: mendelow-matrix
   term: Матрица Менделоу
@@ -148,6 +155,7 @@
   definition: Матрица «влияние × интерес» для выбора стратегии работы со стейкхолдером — управлять плотно, держать удовлетворёнными, держать в курсе, наблюдать.
   topic: elicitation
   seeAlso: [stakeholder]
+  match: [Менделоу]
 
 - id: five-whys
   term: «5 почему»
@@ -155,6 +163,7 @@
   definition: Техника поиска корневой причины — на каждый ответ задаётся вопрос «почему?», пока не найдена причина, которую можно устранить.
   topic: elicitation
   seeAlso: [elicitation]
+  match: [~5 почему]
 
 - id: data-profiling
   term: Профилирование данных
@@ -162,6 +171,7 @@
   definition: Анализ фактического содержимого данных — объёмы, заполненность полей, уникальность, распределения, аномалии. Выполняется перед миграцией и интеграцией.
   topic: elicitation
   seeAlso: [reconciliation]
+  match: [профилировани* данных]
 
 - id: shadowing
   term: Наблюдение
@@ -197,6 +207,7 @@
   definition: Правило бизнеса, которое система должна соблюдать («если…, то…»); ведётся отдельно от ФТ, потому что меняется чаще и используется в нескольких местах.
   topic: requirements
   seeAlso: [business-requirement]
+  match: [бизнес-правил*]
 
 - id: user-story
   term: Пользовательская история
@@ -205,6 +216,7 @@
   topic: requirements
   seeAlso: [invest, acceptance-criteria, epic]
   notToConfuse: Use case — полное описание взаимодействия с альтернативами.
+  match: [user stor*, пользовательск* истори*]
 
 - id: invest
   term: INVEST
@@ -219,6 +231,7 @@
   definition: Крупная цель или функциональность, которая режется на несколько историй и занимает несколько спринтов.
   topic: requirements
   seeAlso: [user-story]
+  match: [эпик*]
 
 - id: use-case
   term: Вариант использования
@@ -226,6 +239,7 @@
   definition: Описание взаимодействия актора с системой ради значимого для актора результата — основной поток, альтернативы, исключения, пред- и постусловия.
   topic: requirements
   seeAlso: [user-story]
+  match: [use case*]
 
 - id: acceptance-criteria
   term: Критерии приёмки
@@ -233,6 +247,7 @@
   definition: Условия, при которых требование или история считаются выполненными; пишутся до разработки и проверяются тестом.
   topic: requirements
   seeAlso: [gherkin, user-story]
+  match: [критери* приёмки]
 
 - id: gherkin
   term: Gherkin
@@ -268,6 +283,7 @@
   definition: Классификация функций по влиянию на удовлетворённость — обязательные, одномерные, привлекательные, безразличные, обратные.
   topic: requirements
   seeAlso: [moscow]
+  match: [Кано]
 
 - id: traceability
   term: Трассировка требований
@@ -275,6 +291,7 @@
   definition: Связи между целями, требованиями разных уровней, элементами решения и тестами — для анализа влияния, поиска «сирот» и приёмки.
   topic: requirements
   seeAlso: [impact-analysis, change-request]
+  match: [трассировк*]
 
 - id: impact-analysis
   term: Анализ влияния
@@ -282,6 +299,7 @@
   definition: Оценка того, что затронет изменение требования — другие требования, данные, интеграции, тесты, документы, сроки.
   topic: requirements
   seeAlso: [traceability, change-request]
+  match: [анализ* влияния]
 
 - id: change-request
   term: Запрос на изменение
@@ -289,6 +307,7 @@
   definition: Формальный запрос на изменение согласованного требования или скоупа с анализом влияния и решением владельца.
   topic: requirements
   seeAlso: [baseline, impact-analysis]
+  match: [CR]
 
 - id: baseline
   term: Базовая линия требований
@@ -296,6 +315,7 @@
   definition: Согласованная и зафиксированная версия набора требований, от которой отсчитываются изменения.
   topic: requirements
   seeAlso: [change-request]
+  match: [базов* лини*]
 
 - id: business-process
   term: Бизнес-процесс
@@ -303,6 +323,7 @@
   definition: Последовательность действий участников, которая по событию-триггеру приводит к результату, ценному для клиента или организации.
   topic: processes
   seeAlso: [bpmn, as-is, to-be]
+  match: [бизнес-процесс*]
 
 - id: fit-gap
   term: Fit-gap анализ
@@ -311,6 +332,7 @@
   topic: processes
   seeAlso: [gap-analysis]
   notToConfuse: Gap-анализ сравнивает AS-IS и TO-BE, а не требования и продукт.
+  match: [~fit-gap]
 
 - id: process-waste
   term: Потери в процессе
@@ -332,6 +354,7 @@
   definition: UML-диаграмма порядка сообщений между участниками во времени в одном сценарии, включая ответы и ошибки. Главный инструмент проектирования интеграций.
   topic: diagrams
   seeAlso: [uml]
+  match: [sequence-диаграмм*, диаграмм* последовательности]
 
 - id: state-machine
   term: Статусная модель
@@ -339,6 +362,7 @@
   definition: Описание жизненного цикла одного объекта — состояния и переходы «событие [условие] / действие». Каждый переход — тест, каждый запрещённый переход — негативный тест.
   topic: diagrams
   seeAlso: [uml]
+  match: [статусн* модел*]
 
 - id: activity-diagram
   term: Диаграмма деятельности
@@ -347,6 +371,7 @@
   topic: diagrams
   seeAlso: [bpmn, uml]
   notToConfuse: BPMN описывает бизнес-процесс с участниками и обменом между организациями.
+  match: [activity-диаграмм*, диаграмм* деятельности]
 
 - id: c4
   term: C4
@@ -369,6 +394,7 @@
   definition: Роль внешнего участника, взаимодействующего с системой, — человек, другая система или время (таймер).
   topic: diagrams
   seeAlso: [use-case]
+  match: [актор*]
 
 - id: trust-boundary
   term: Граница доверия
@@ -376,6 +402,7 @@
   definition: Граница между зонами с разным уровнем доверия (сеть, организация, контур безопасности); потоки данных через неё требуют защиты и анализа угроз.
   topic: diagrams
   seeAlso: [dfd]
+  match: [границ* доверия]
 
 - id: primary-key
   term: Первичный ключ
@@ -383,6 +410,7 @@
   definition: Столбец или набор столбцов, однозначно идентифицирующий строку таблицы; не NULL, один на таблицу.
   topic: data
   seeAlso: [foreign-key, surrogate-key]
+  match: [PK]
 
 - id: foreign-key
   term: Внешний ключ
@@ -390,6 +418,7 @@
   definition: Столбец, ссылающийся на первичный ключ другой таблицы; обеспечивает ссылочную целостность.
   topic: data
   seeAlso: [primary-key]
+  match: [FK]
 
 - id: surrogate-key
   term: Суррогатный ключ
@@ -397,6 +426,7 @@
   definition: Технический ключ без бизнес-смысла (uuid, последовательность); не меняется. Обычно сочетается с уникальным натуральным ключом.
   topic: data
   seeAlso: [natural-key, primary-key]
+  match: [суррогатн* ключ*]
 
 - id: natural-key
   term: Натуральный ключ
@@ -404,6 +434,7 @@
   definition: Ключ из предметной области — табельный номер, ИНН, идентификатор из системы-источника. По нему объект узнают в других системах.
   topic: data
   seeAlso: [surrogate-key]
+  match: [натуральн* ключ*]
 
 - id: normalization
   term: Нормализация
@@ -411,6 +442,7 @@
   definition: Приведение модели данных к нормальным формам (1НФ, 2НФ, 3НФ…) для устранения дублирования и аномалий изменения.
   topic: data
   seeAlso: [primary-key]
+  match: [нормализаци*]
 
 - id: cardinality
   term: Кардинальность
@@ -418,6 +450,7 @@
   definition: Сколько экземпляров одной сущности может быть связано с экземпляром другой — ноль, один, много; записывается с обеих сторон связи.
   topic: data
   seeAlso: [normalization]
+  match: [кардинальност*]
 
 - id: join
   term: Соединение таблиц
@@ -425,6 +458,7 @@
   definition: Операция SQL, объединяющая строки таблиц по условию — INNER (только пары), LEFT, RIGHT, FULL, CROSS.
   topic: data
   seeAlso: [window-function]
+  match: [JOIN]
 
 - id: window-function
   term: Оконная функция
@@ -432,6 +466,7 @@
   definition: Функция SQL, вычисляющая значение по группе связанных строк (окну) без их схлопывания — ROW_NUMBER, RANK, LAG, агрегаты с OVER.
   topic: data
   seeAlso: [join]
+  match: [оконн* функци*]
 
 - id: acid
   term: ACID
@@ -446,6 +481,7 @@
   definition: Насколько транзакция видит изменения параллельных транзакций — Read Uncommitted, Read Committed, Repeatable Read, Serializable.
   topic: data
   seeAlso: [acid]
+  match: [уров* изоляции]
 
 - id: index
   term: Индекс
@@ -453,6 +489,7 @@
   definition: Структура данных (чаще B-дерево) для быстрого поиска строк по значению столбцов; ускоряет чтение, замедляет запись.
   topic: data
   seeAlso: [primary-key]
+  match: [индекс*]
 
 - id: reference-data
   term: НСИ
@@ -474,6 +511,7 @@
   definition: Сравнение данных двух систем для поиска и исправления расхождений; в кейсе — ежедневная сверка IdM с HRMS (UC-10).
   topic: data
   seeAlso: [reference-data]
+  match: [сверк*]
 
 - id: idempotency
   term: Идемпотентность
@@ -481,6 +519,7 @@
   definition: Свойство операции давать тот же результат при повторном вызове, что и при первом. Делает повторы безопасными; для POST обеспечивается ключом идемпотентности.
   topic: integrations
   seeAlso: [at-least-once, dlq]
+  match: [идемпотентн*]
 
 - id: at-least-once
   term: At-least-once
@@ -509,6 +548,7 @@
   definition: Паттерн — событие записывается в таблицу outbox в той же транзакции, что и изменение данных, а затем публикуется в брокер; решает проблему двойной записи.
   topic: integrations
   seeAlso: [saga, idempotency]
+  match: [~outbox]
 
 - id: saga
   term: Сага
@@ -516,6 +556,7 @@
   definition: Длинная бизнес-операция из локальных транзакций в разных сервисах с компенсирующими действиями при ошибке; хореография или оркестрация.
   topic: integrations
   seeAlso: [outbox]
+  match: [сага, саги, сагу, сагой]
 
 - id: circuit-breaker
   term: Circuit breaker
@@ -523,6 +564,7 @@
   definition: «Автоматический выключатель» вызовов зависимого сервиса — после серии ошибок вызовы сразу отклоняются, через время пропускается пробный вызов.
   topic: integrations
   seeAlso: [saga]
+  match: [~circuit breaker]
 
 - id: webhook
   term: Webhook
@@ -558,6 +600,7 @@
   definition: Язык описания структуры JSON — типы, обязательность, ограничения, условия; используется в OpenAPI 3.1 и AsyncAPI.
   topic: integrations
   seeAlso: [openapi]
+  match: [JSON Schema]
 
 - id: problem-details
   term: Problem Details
@@ -565,6 +608,7 @@
   definition: Стандартный формат ошибок HTTP API (application/problem+json) с полями type, title, status, detail, instance; RFC 9457 заменил RFC 7807.
   topic: integrations
   seeAlso: [rest]
+  match: [Problem Details]
 
 - id: kafka
   term: Kafka
@@ -580,6 +624,7 @@
   topic: integrations
   seeAlso: [oidc, jwt]
   notToConfuse: OpenID Connect — аутентификация пользователя поверх OAuth 2.0.
+  match: [OAuth]
 
 - id: oidc
   term: OpenID Connect
@@ -587,6 +632,7 @@
   definition: Слой аутентификации поверх OAuth 2.0 — добавляет ID-токен с данными о пользователе, userinfo и discovery.
   topic: integrations
   seeAlso: [oauth2, jwt]
+  match: [OIDC]
 
 - id: jwt
   term: JWT
@@ -622,6 +668,7 @@
   definition: Архитектура из независимо разворачиваемых сервисов вокруг бизнес-возможностей, каждый со своими данными.
   topic: architecture
   seeAlso: [modular-monolith, saga]
+  match: [микросервис*]
 
 - id: modular-monolith
   term: Модульный монолит
@@ -629,6 +676,7 @@
   definition: Одно разворачиваемое приложение с чёткими границами модулей, каждый из которых владеет своими данными; частый разумный старт вместо микросервисов.
   topic: architecture
   seeAlso: [microservices]
+  match: [модульн* монолит*]
 
 - id: iso-25010
   term: ISO/IEC 25010
@@ -636,6 +684,7 @@
   definition: Стандарт модели качества продукта; характеристики (производительность, надёжность, защищённость, сопровождаемость и др.) используют как чек-лист НФТ.
   topic: architecture
   seeAlso: [non-functional-requirement]
+  match: [ISO/IEC 25010]
 
 - id: availability
   term: Доступность
@@ -643,6 +692,7 @@
   definition: Доля времени, когда система работает; задаётся в процентах («девятках») с указанием периода и того, что считается недоступностью.
   topic: architecture
   seeAlso: [rto, rpo]
+  match: [доступност*]
 
 - id: rto
   term: RTO
@@ -671,6 +721,7 @@
   definition: Копия данных ближе к потребителю для ускорения ответа и разгрузки источника; ключевое требование — допустимое устаревание данных.
   topic: architecture
   seeAlso: [ttl]
+  match: [кэш*]
 
 - id: ttl
   term: TTL
@@ -685,6 +736,7 @@
   definition: При разделении сети распределённая система не может быть одновременно согласованной и доступной — приходится выбирать поведение.
   topic: architecture
   seeAlso: [eventual-consistency]
+  match: [CAP]
 
 - id: eventual-consistency
   term: Согласованность в конечном счёте
@@ -692,6 +744,7 @@
   definition: Данные в разных узлах или системах могут временно различаться, но при отсутствии новых изменений придут к одному состоянию.
   topic: architecture
   seeAlso: [cap, reconciliation]
+  match: [~eventual consistency, согласованност* в конечном счёте]
 
 - id: adr
   term: ADR
@@ -713,6 +766,7 @@
   definition: Комплекс стандартов на автоматизированные системы — стадии создания, виды документов и требования к их содержанию, в том числе к ТЗ (ГОСТ 34.602).
   topic: documentation
   seeAlso: [tz]
+  match: [ГОСТ 34]
 
 - id: docs-as-code
   term: Docs-as-code
@@ -734,6 +788,7 @@
   definition: Подход с последовательными этапами (требования, проектирование, разработка, тестирование, внедрение), каждый завершается утверждённым результатом.
   topic: methodologies
   seeAlso: [scrum, v-model]
+  match: [~waterfall, каскадн* модел*]
 
 - id: v-model
   term: V-модель
@@ -762,6 +817,7 @@
   definition: Итерация Scrum фиксированной длины (до месяца), в течение которой команда создаёт инкремент для достижения цели спринта.
   topic: methodologies
   seeAlso: [scrum]
+  match: [спринт*]
 
 - id: refinement
   term: Рефайнмент
@@ -769,6 +825,7 @@
   definition: Постоянная работа по уточнению, декомпозиции и оценке элементов бэклога, чтобы они были готовы к взятию в спринт.
   topic: methodologies
   seeAlso: [dor, scrum]
+  match: [рефайнмент*, ~refinement]
 
 - id: kanban
   term: Kanban
@@ -797,6 +854,7 @@
   definition: Модульное, интеграционное, системное и приёмочное тестирование — от отдельных функций до проверки, что система решает задачу заказчика.
   topic: testing
   seeAlso: [uat, regression]
+  match: [уровн* тестирования]
 
 - id: regression
   term: Регрессионное тестирование
@@ -804,6 +862,7 @@
   definition: Проверка, что изменения не сломали работавшую функциональность.
   topic: testing
   seeAlso: [smoke-test]
+  match: [регрессионн*]
 
 - id: smoke-test
   term: Дымовое тестирование
@@ -811,6 +870,7 @@
   definition: Быстрая проверка ключевых функций после сборки, чтобы решить, имеет ли смысл тестировать дальше.
   topic: testing
   seeAlso: [regression]
+  match: [~smoke, дымов* тест*]
 
 - id: equivalence-partitioning
   term: Классы эквивалентности
@@ -818,6 +878,7 @@
   definition: Техника тест-дизайна — входные значения делятся на группы с одинаковым поведением системы; из каждой группы проверяется одно значение.
   topic: testing
   seeAlso: [boundary-value-analysis]
+  match: [класс* эквивалентности]
 
 - id: boundary-value-analysis
   term: Анализ граничных значений
@@ -825,6 +886,7 @@
   definition: Техника тест-дизайна — проверка значений на границах диапазонов и рядом с ними, где чаще всего ошибки.
   topic: testing
   seeAlso: [equivalence-partitioning]
+  match: [граничн* значени*]
 
 - id: decision-table
   term: Таблица решений
@@ -832,18 +894,21 @@
   definition: Таблица комбинаций условий и соответствующих действий; каждая комбинация (правило) даёт тест и выявляет пропуски в требованиях.
   topic: testing
   seeAlso: [equivalence-partitioning]
+  match: [таблиц* решений]
 
 - id: pairwise
   term: Попарное тестирование
   en: Pairwise testing
   definition: Подбор минимального набора тестов, покрывающего все пары значений любых двух параметров, вместо полного перебора комбинаций.
   topic: testing
+  match: [~pairwise, попарн* тестировани*]
 
 - id: severity-priority
   term: Серьёзность и приоритет дефекта
   en: Severity, priority
   definition: Серьёзность — насколько дефект влияет на работу системы; приоритет — насколько срочно его исправлять с точки зрения бизнеса.
   topic: testing
+  match: [серьёзност* дефект*]
 
 - id: pmi
   term: ПМИ
@@ -871,6 +936,7 @@
   definition: Описание диаграмм текстом (PlantUML, Mermaid, Structurizr DSL), который хранится в Git, проходит ревью и рендерится в картинку.
   topic: software
   seeAlso: [docs-as-code]
+  match: [диаграмм* как код]
 
 - id: mock-server
   term: Заглушка (mock-сервер)
@@ -878,6 +944,7 @@
   definition: Программа, которая отвечает вместо настоящей системы по заданным правилам или по контракту; позволяет тестировать интеграцию и сценарии ошибок без провайдера.
   topic: software
   seeAlso: [openapi]
+  match: [заглушк*, ~mock]
 
 - id: consumer-lag
   term: Отставание потребителя
@@ -885,6 +952,7 @@
   definition: Разница между последним записанным в партицию сообщением и последним прочитанным группой потребителей; растущий lag означает, что потребитель не успевает.
   topic: software
   seeAlso: [dlq]
+  match: [~lag, отставани* потребител*]
 
 - id: star
   term: STAR
@@ -907,6 +975,7 @@
   definition: Три базовых кадровых процесса управления доступом — приём, перевод и увольнение сотрудника. В кейсе волна 1 автоматизирует Joiner, Mover и Leaver — волна 2.
   topic: idm
   seeAlso: [idm]
+  match: [Joiner, Mover, Leaver]
 
 - id: identity
   term: Идентичность
@@ -915,6 +984,7 @@
   topic: idm
   seeAlso: [employment, account]
   notToConfuse: Учётная запись — запись пользователя в конкретной системе; у одной идентичности их несколько.
+  match: [идентичност*]
 
 - id: employment
   term: Трудоустройство
@@ -922,6 +992,7 @@
   definition: Конкретный трудовой договор сотрудника. У совместителя несколько трудоустройств одновременно, у повторно принятого — несколько во времени.
   topic: idm
   seeAlso: [identity]
+  match: [трудоустройств*]
 
 - id: account
   term: Учётная запись
@@ -929,6 +1000,7 @@
   definition: Запись пользователя в конкретной целевой системе — логин в AD, пользователь АБС.
   topic: idm
   seeAlso: [identity, target-system]
+  match: [учётн* запис*]
 
 - id: target-system
   term: Целевая система
@@ -936,6 +1008,7 @@
   definition: Система, в которой IdM создаёт учётные записи и выдаёт права; в кейсе — AD, Exchange, АБС, СЭД.
   topic: idm
   notToConfuse: Источник данных (HRMS) — откуда IdM получает сведения о сотрудниках.
+  match: [целев* систем*]
 
 - id: entitlement
   term: Полномочие
@@ -944,6 +1017,7 @@
   topic: idm
   seeAlso: [business-role]
   notToConfuse: Бизнес-роль — набор полномочий в разных системах.
+  match: [полномочи*]
 
 - id: business-role
   term: Бизнес-роль
@@ -951,6 +1025,7 @@
   definition: Набор полномочий в разных системах, нужный для работы на должности; назначается по правилу «тип подразделения + должность» или по заявке.
   topic: idm
   seeAlso: [entitlement, birthright, rbac]
+  match: [бизнес-рол*]
 
 - id: birthright
   term: Базовая роль
@@ -958,6 +1033,7 @@
   definition: Бизнес-роль, которую каждый сотрудник получает без запроса — например, учётная запись AD, почта, доступ к СЭД.
   topic: idm
   seeAlso: [business-role]
+  match: [базов* рол*]
 
 - id: rbac
   term: Ролевая модель доступа
@@ -965,6 +1041,7 @@
   definition: Подход, при котором права выдаются через роли, соответствующие обязанностям, а не каждому пользователю по отдельности.
   topic: idm
   seeAlso: [business-role, sod]
+  match: [RBAC]
 
 - id: sod
   term: SoD-конфликт
@@ -972,6 +1049,7 @@
   definition: Сочетание полномочий, которое нельзя выдавать одному сотруднику, например ввод и подтверждение операции. Принцип разделения обязанностей снижает риск мошенничества и ошибок.
   topic: idm
   seeAlso: [rbac]
+  match: [SoD, SOD]
 
 - id: provisioning
   term: Провижининг
@@ -979,6 +1057,7 @@
   definition: Создание учётной записи и выдача полномочий в целевой системе; обратная операция — депровижининг (блокировка, удаление, отзыв прав).
   topic: idm
   seeAlso: [connector, account]
+  match: [провижининг*]
 
 - id: connector
   term: Коннектор
@@ -986,6 +1065,7 @@
   definition: Компонент IdM, который выполняет провижининг в конкретной целевой системе по её протоколу (LDAP, PowerShell, REST).
   topic: idm
   notToConfuse: Адаптер АБС в кейсе — отдельный сервис на стороне АБС, который вызывает коннектор IdM.
+  match: [коннектор*]
 
 - id: recertification
   term: Ресертификация прав
@@ -993,6 +1073,7 @@
   definition: Периодический пересмотр выданных прав руководителями и владельцами ресурсов — подтвердить нужные, отозвать лишние.
   topic: idm
   seeAlso: [idm]
+  match: [ресертификаци*]
 
 - id: orphan-account
   term: Учётная запись-сирота
@@ -1000,6 +1081,7 @@
   definition: Учётная запись в целевой системе, которой не соответствует ни один сотрудник в кадровой системе; кандидат на блокировку или на обоснование (сервисная, тестовая).
   topic: idm
   seeAlso: [reconciliation]
+  match: [сирот*]
 
 - id: resource-owner
   term: Владелец ресурса
@@ -1007,6 +1089,7 @@
   definition: Сотрудник, отвечающий за доступ к целевой системе и согласующий выдачу прав в ней.
   topic: idm
   notToConfuse: Администратор ресурса технически исполняет выдачу прав, но не решает, выдавать ли их.
+  match: [владел* ресурс*]
 
 - id: hrms
   term: HRMS
@@ -1014,3 +1097,504 @@
   definition: Кадровая система — источник данных о сотрудниках, должностях, подразделениях и приказах; для IdM — авторитетный источник.
   topic: idm
   seeAlso: [identity]
+
+# ── Общие сокращения и понятия ──────────────────────────────────────
+
+- id: ib
+  term: Информационная безопасность (ИБ)
+  en: Information security
+  definition: Защита информации от несанкционированного доступа, изменения и уничтожения. В тексте «ИБ» чаще всего — подразделение информационной безопасности банка, которое согласует доступы и требования к защите.
+  topic: general
+  seeAlso: [ciso, sod]
+
+- id: ciso
+  term: CISO
+  en: Chief Information Security Officer
+  definition: Директор по информационной безопасности — руководитель, отвечающий за защиту информации в компании; в банке обычно согласует решения, затрагивающие доступы и данные.
+  topic: general
+  seeAlso: [ib, cio]
+
+- id: cio
+  term: CIO
+  en: Chief Information Officer
+  definition: Директор по информационным технологиям; в кейсе — спонсор проекта.
+  topic: general
+  seeAlso: [ciso]
+
+- id: it
+  term: ИТ
+  en: Information technology
+  definition: Информационные технологии; в тексте также — ИТ-подразделение компании.
+  topic: general
+
+- id: abs
+  term: АБС
+  en: Core banking system
+  definition: "Автоматизированная банковская система — основная учётная система банка: клиенты, счета, операции. В кейсе — целевая система, пользователей которой IdM создаёт через REST-адаптер."
+  topic: general
+  seeAlso: [target-system]
+
+- id: sed
+  term: СЭД
+  en: Electronic document management system
+  definition: Система электронного документооборота — приказы, договоры, согласования. В кейсе у СЭД нет автоматического подключения, доступ выдаётся через задачу в ServiceDesk.
+  topic: general
+
+- id: hr
+  term: HR
+  en: Human resources
+  definition: Управление персоналом и кадровая служба компании; в кейсе — HR-специалисты, которые проводят приказы о приёме в кадровой системе.
+  topic: general
+  seeAlso: [hrd, hrms]
+
+- id: hrd
+  term: HRD
+  en: HR director
+  definition: Директор по персоналу; в кейсе — бизнес-заказчик проекта.
+  topic: general
+  seeAlso: [hr]
+
+- id: rp
+  term: РП
+  en: Project manager
+  definition: Руководитель проекта — отвечает за сроки, бюджет, ресурсы и управление рисками проекта.
+  topic: general
+  seeAlso: [raci]
+
+- id: dit
+  term: ДИТ
+  en: IT department
+  definition: Департамент информационных технологий; в кейсе — подразделение головного офиса, одно из двух подразделений пилота.
+  topic: idm
+
+- id: qa
+  term: QA
+  en: Quality assurance
+  definition: Обеспечение качества; в командах так называют специалистов по тестированию.
+  topic: testing
+  seeAlso: [test-levels]
+
+- id: devops
+  term: DevOps
+  en: Development and operations
+  definition: Практики и роль, объединяющие разработку и эксплуатацию — автоматическая сборка, развёртывание, мониторинг, инфраструктура как код.
+  topic: general
+  seeAlso: [ci-cd]
+
+- id: ci-cd
+  term: CI/CD
+  en: Continuous integration / continuous delivery
+  definition: Непрерывная интеграция и доставка — каждое изменение кода автоматически собирается, проверяется тестами и готовится к выпуску (или выпускается).
+  topic: general
+  match: [CI/CD, CI]
+  seeAlso: [devops]
+
+- id: api
+  term: API
+  en: Application programming interface
+  definition: Программный интерфейс — набор операций, через которые одна система обращается к другой. Описывается контрактом (OpenAPI, AsyncAPI, WSDL).
+  topic: integrations
+  seeAlso: [rest, openapi]
+
+- id: ui
+  term: UI
+  en: User interface
+  definition: Пользовательский интерфейс — экраны и элементы, с которыми работает человек.
+  topic: general
+
+- id: crud
+  term: CRUD
+  en: Create, read, update, delete
+  definition: Четыре базовые операции над данными — создать, прочитать, изменить, удалить.
+  topic: data
+
+- id: db
+  term: БД
+  en: Database
+  definition: База данных — организованное хранилище данных, с которым работает система через СУБД.
+  topic: data
+  seeAlso: [dbms]
+
+- id: dbms
+  term: СУБД
+  en: Database management system
+  definition: Система управления базами данных — программа, которая хранит данные и выполняет запросы к ним (PostgreSQL, Oracle, MS SQL Server).
+  topic: data
+  seeAlso: [db, sql]
+
+- id: dba
+  term: DBA
+  en: Database administrator
+  definition: Администратор баз данных — отвечает за работу, производительность и резервное копирование СУБД.
+  topic: data
+
+- id: sql
+  term: SQL
+  en: Structured Query Language
+  definition: Язык запросов к реляционным базам данных — выборка, изменение данных, описание таблиц.
+  topic: data
+  seeAlso: [join]
+
+- id: cte
+  term: CTE
+  en: Common table expression
+  definition: Именованный подзапрос в начале SQL-запроса (конструкция WITH); упрощает чтение сложных запросов.
+  topic: data
+  seeAlso: [sql]
+
+- id: er
+  term: ER-диаграмма
+  en: Entity-relationship diagram
+  definition: Диаграмма «сущность — связь» — показывает сущности данных, их атрибуты и связи с кардинальностью.
+  topic: data
+  match: [ER]
+  seeAlso: [cardinality]
+
+- id: cdc
+  term: CDC
+  en: Change data capture
+  definition: Захват изменений — изменения в базе данных читаются из её журнала и публикуются как события для других систем.
+  topic: integrations
+  seeAlso: [outbox]
+
+- id: http
+  term: HTTP
+  en: Hypertext Transfer Protocol
+  definition: "Протокол запросов и ответов, на котором работают веб и REST API: методы (GET, POST…), коды ответов, заголовки. HTTPS — HTTP поверх шифрованного соединения TLS."
+  topic: integrations
+  match: [HTTP, HTTPS]
+  seeAlso: [rest, tls]
+
+- id: tls
+  term: TLS
+  en: Transport Layer Security
+  definition: Протокол шифрования соединения между клиентом и сервером; HTTPS — это HTTP поверх TLS. mTLS — вариант, где сертификат предъявляют обе стороны.
+  topic: integrations
+  seeAlso: [mtls, http]
+
+- id: rfc
+  term: RFC
+  en: Request for Comments
+  definition: Серия документов, в которой IETF публикует стандарты интернета — например, HTTP описан в RFC 9110, OAuth 2.0 — в RFC 6749.
+  topic: integrations
+  seeAlso: [ietf]
+
+- id: ietf
+  term: IETF
+  en: Internet Engineering Task Force
+  definition: Международное сообщество, которое разрабатывает стандарты интернета и публикует их как RFC.
+  topic: integrations
+  seeAlso: [rfc]
+
+- id: xml
+  term: XML
+  en: Extensible Markup Language
+  definition: Язык разметки для структурированных данных в виде вложенных тегов; основа SOAP, WSDL и XSD.
+  topic: integrations
+  seeAlso: [soap, xsd]
+
+- id: json
+  term: JSON
+  en: JavaScript Object Notation
+  definition: Текстовый формат данных из объектов, массивов, строк, чисел и логических значений; основной формат REST API и сообщений в брокерах.
+  topic: integrations
+  seeAlso: [json-schema, yaml]
+
+- id: yaml
+  term: YAML
+  en: YAML Ain't Markup Language
+  definition: Человекочитаемый формат данных, где вложенность задаётся отступами; на нём часто пишут OpenAPI, AsyncAPI и конфигурации.
+  topic: integrations
+  seeAlso: [json]
+
+- id: soap
+  term: SOAP
+  en: Simple Object Access Protocol
+  definition: Протокол обмена XML-сообщениями (конверт Envelope с заголовком и телом); операции и типы сервиса описываются в WSDL.
+  topic: integrations
+  seeAlso: [wsdl, xsd, rest]
+
+- id: wsdl
+  term: WSDL
+  en: Web Services Description Language
+  definition: XML-описание SOAP-сервиса — операции, сообщения, адрес; по нему генерируют клиентов и пример запроса.
+  topic: integrations
+  seeAlso: [soap, xsd]
+
+- id: xsd
+  term: XSD
+  en: XML Schema Definition
+  definition: Язык описания структуры XML-документа — элементы, типы, обязательность; используется для проверки сообщений SOAP.
+  topic: integrations
+  seeAlso: [soap, wsdl]
+
+- id: grpc
+  term: gRPC
+  en: gRPC Remote Procedure Calls
+  definition: Фреймворк удалённого вызова процедур поверх HTTP/2 с контрактом в Protocol Buffers; быстрый двоичный обмен между сервисами, поддерживает потоковую передачу.
+  topic: integrations
+  seeAlso: [rest, graphql]
+
+- id: graphql
+  term: GraphQL
+  en: GraphQL
+  definition: Язык запросов к API, в котором клиент сам указывает, какие поля ему нужны; одна точка входа вместо множества REST-ресурсов.
+  topic: integrations
+  seeAlso: [rest, grpc]
+
+- id: rabbitmq
+  term: RabbitMQ
+  en: RabbitMQ
+  definition: Брокер сообщений с обменниками (exchange), очередями и правилами маршрутизации; сообщение удаляется из очереди после подтверждения получения.
+  topic: integrations
+  seeAlso: [kafka, dlx]
+
+- id: dlx
+  term: DLX
+  en: Dead letter exchange
+  definition: Обменник RabbitMQ, куда перенаправляются сообщения, которые не удалось обработать или у которых истёк срок; аналог DLQ.
+  topic: integrations
+  seeAlso: [dlq, rabbitmq]
+
+- id: hmac
+  term: HMAC
+  en: Hash-based message authentication code
+  definition: Код проверки подлинности сообщения на основе хеш-функции и общего секретного ключа; так подписывают webhook, чтобы получатель убедился, кто его отправил.
+  topic: integrations
+  seeAlso: [webhook]
+
+- id: pkce
+  term: PKCE
+  en: Proof Key for Code Exchange
+  definition: Расширение OAuth 2.0 (RFC 7636), защищающее код авторизации от перехвата; рекомендуется для всех клиентов, особенно мобильных и браузерных.
+  topic: integrations
+  seeAlso: [oauth2]
+
+- id: saml
+  term: SAML
+  en: Security Assertion Markup Language
+  definition: XML-стандарт обмена данными об аутентификации между поставщиком удостоверений и приложением; распространённый способ SSO в корпоративных системах.
+  topic: integrations
+  seeAlso: [sso, oidc]
+
+- id: ldap
+  term: LDAP
+  en: Lightweight Directory Access Protocol
+  definition: Протокол доступа к службам каталогов, например к Active Directory; LDAPS — LDAP поверх TLS.
+  topic: integrations
+  match: [LDAP, LDAPS]
+  seeAlso: [ad]
+
+- id: sasl
+  term: SASL
+  en: Simple Authentication and Security Layer
+  definition: Каркас аутентификации, встраиваемый в сетевые протоколы; например, им проверяют клиентов Kafka.
+  topic: integrations
+  seeAlso: [kafka]
+
+- id: kdc
+  term: KDC
+  en: Key Distribution Center
+  definition: Центр распределения ключей Kerberos — выдаёт билеты, по которым пользователь входит в сервисы без повторного ввода пароля; в домене Windows эту роль выполняет контроллер домена.
+  topic: integrations
+  seeAlso: [kerberos, tgt]
+
+- id: tgt
+  term: TGT
+  en: Ticket-granting ticket
+  definition: Билет Kerberos, который пользователь получает при входе; по нему KDC выдаёт билеты к конкретным сервисам.
+  topic: integrations
+  seeAlso: [kerberos, kdc]
+
+- id: spnego
+  term: SPNEGO
+  en: Simple and Protected GSSAPI Negotiation Mechanism
+  definition: Механизм согласования аутентификации, через который браузер прозрачно передаёт билет Kerberos веб-приложению (заголовок Negotiate).
+  topic: integrations
+  seeAlso: [kerberos, sso]
+
+- id: ad
+  term: Active Directory (AD)
+  en: Active Directory
+  definition: Служба каталогов Microsoft — учётные записи, группы и политики домена Windows; через неё сотрудники входят в компьютеры и многие корпоративные системы.
+  topic: idm
+  seeAlso: [ou, ldap]
+
+- id: ou
+  term: OU
+  en: Organizational unit
+  definition: Контейнер в Active Directory для группировки учётных записей и применения политик, например по подразделениям.
+  topic: idm
+  seeAlso: [ad]
+
+- id: pam
+  term: PAM
+  en: Privileged access management
+  definition: Управление привилегированным доступом — контроль, выдача по запросу и запись сеансов администраторов и сервисных учётных записей.
+  topic: idm
+  seeAlso: [idm]
+
+- id: siem
+  term: SIEM
+  en: Security information and event management
+  definition: Система сбора и анализа событий безопасности из разных источников; помогает ИБ обнаруживать инциденты. В кейсе получает события журнала аудита IdM.
+  topic: general
+  seeAlso: [ib]
+
+- id: pdn
+  term: ПДн
+  en: Personal data
+  definition: Персональные данные — любая информация, относящаяся к прямо или косвенно определённому физическому лицу; их обработку в России регулирует 152-ФЗ «О персональных данных».
+  topic: general
+  seeAlso: [ib]
+
+- id: dr
+  term: DR
+  en: Disaster recovery
+  definition: Восстановление после аварии — план и средства для возобновления работы системы после серьёзного сбоя; «учения DR» проверяют, что RTO и RPO достижимы.
+  topic: architecture
+  seeAlso: [rto, rpo]
+
+- id: mtbf-mttr
+  term: MTBF и MTTR
+  en: Mean time between failures, mean time to repair
+  definition: Среднее время между отказами и среднее время восстановления; доступность = MTBF / (MTBF + MTTR).
+  topic: architecture
+  match: [MTBF, MTTR]
+  seeAlso: [availability]
+
+- id: lru
+  term: LRU
+  en: Least recently used
+  definition: Политика вытеснения из кэша — при нехватке места удаляется элемент, к которому дольше всего не обращались.
+  topic: architecture
+  seeAlso: [cache, ttl]
+
+- id: pacelc
+  term: PACELC
+  en: PACELC
+  definition: Расширение теоремы CAP — при разделении сети (P) выбирают между доступностью и согласованностью (A или C), а в обычной работе (E) — между задержкой и согласованностью (L или C).
+  topic: architecture
+  seeAlso: [cap]
+
+- id: utc
+  term: UTC
+  en: Coordinated Universal Time
+  definition: Всемирное координированное время — точка отсчёта часовых поясов; московское время (МСК) — UTC+3.
+  topic: general
+  match: [UTC, МСК]
+
+- id: saas
+  term: SaaS
+  en: Software as a service
+  definition: Программное обеспечение как услуга — приложение работает в облаке поставщика, клиент пользуется им через браузер по подписке.
+  topic: software
+
+- id: ide
+  term: IDE
+  en: Integrated development environment
+  definition: Интегрированная среда разработки — редактор кода с отладкой, подсказками и сборкой (IntelliJ IDEA, VS Code).
+  topic: software
+
+- id: vm
+  term: ВМ
+  en: Virtual machine
+  definition: Виртуальная машина — программно эмулируемый компьютер со своей операционной системой на общем физическом сервере.
+  topic: architecture
+
+- id: crm
+  term: CRM
+  en: Customer relationship management
+  definition: Система управления взаимоотношениями с клиентами — карточки клиентов, сделки, обращения.
+  topic: general
+
+- id: kpi
+  term: KPI
+  en: Key performance indicator
+  definition: Ключевой показатель эффективности — измеримая метрика, по которой оценивают результат работы или процесса.
+  topic: general
+
+- id: mvp
+  term: MVP
+  en: Minimum viable product
+  definition: Минимально жизнеспособный продукт — первая версия с минимумом функций, достаточным, чтобы проверить ценность на реальных пользователях.
+  topic: methodologies
+
+- id: rpa
+  term: RPA
+  en: Robotic process automation
+  definition: Роботизированная автоматизация процессов — программа-робот выполняет действия пользователя в интерфейсе другой системы; хрупка при изменениях интерфейса.
+  topic: integrations
+
+- id: as
+  term: АС
+  en: Automated system
+  definition: Автоматизированная система — термин стандартов ГОСТ 34 для системы, состоящей из персонала и комплекса средств автоматизации его деятельности.
+  topic: documentation
+  seeAlso: [gost-34, tz]
+
+- id: cod
+  term: CoD
+  en: Cost of Delay
+  definition: Стоимость задержки — сколько ценности теряется, пока работа не сделана; в WSJF складывается из ценности для бизнеса, критичности по времени и снижения риска.
+  topic: requirements
+  seeAlso: [wsjf]
+
+- id: cfd
+  term: CFD
+  en: Cumulative flow diagram
+  definition: Накопительная диаграмма потока в Kanban — сколько задач находится в каждом статусе по дням; показывает узкие места и рост незавершённой работы.
+  topic: methodologies
+  seeAlso: [kanban, wip]
+
+- id: pi
+  term: PI
+  en: Program increment
+  definition: Инкремент программы в SAFe — период из нескольких спринтов, который планируют совместно все команды поезда на сессии PI Planning.
+  topic: methodologies
+  seeAlso: [safe]
+
+- id: rasci-daci
+  term: RASCI и DACI
+  en: RASCI, DACI
+  definition: Варианты RACI. RASCI добавляет S (Support) — тех, кто помогает исполнителю. DACI применяют для решений — Driver (ведёт), Approver (утверждает), Contributors (дают вклад), Informed (информируются).
+  topic: role
+  match: [RASCI, DACI]
+  seeAlso: [raci]
+
+- id: dmn
+  term: DMN
+  en: Decision Model and Notation
+  definition: Нотация OMG для описания бизнес-решений, прежде всего таблиц решений; дополняет BPMN.
+  topic: processes
+  seeAlso: [bpmn, decision-table]
+
+- id: bpmn-gateway
+  term: Шлюз BPMN
+  en: Gateway
+  definition: Ромб на BPMN-схеме, где поток ветвится или сходится. Исключающий (XOR) — ровно одна ветка; параллельный (AND) — все ветки; включающий (OR) — одна или несколько.
+  topic: processes
+  match: [XOR]
+  seeAlso: [bpmn, token]
+
+- id: plantuml
+  term: PlantUML
+  en: PlantUML
+  definition: Инструмент «диаграммы как код» — UML, C4 и другие диаграммы описываются текстом и отрисовываются в картинку; работает на Java.
+  topic: software
+  seeAlso: [mermaid, diagrams-as-code]
+
+- id: mermaid
+  term: Mermaid
+  en: Mermaid
+  definition: Библиотека «диаграммы как код» на JavaScript — flowchart, sequence, state, ER и другие диаграммы из текста; отображается в GitLab, GitHub и многих вики.
+  topic: software
+  seeAlso: [plantuml, diagrams-as-code]
+
+- id: case-ids
+  term: Идентификаторы артефактов кейса
+  en: Artifact IDs
+  definition: "Префиксы ID в кейсе IDM-JOINER: BR — бизнес-требование, BRL — бизнес-правило, FR — функциональное требование, NFR — нефункциональное требование, UC — вариант использования, US — пользовательская история, EPIC — эпик, TC — тест-кейс, INT — интеграция, SEQ — sequence-диаграмма, SEC — требование ИБ, ADR — архитектурное решение. По ID артефакты связываются в матрице трассировки."
+  topic: idm
+  match: ['/(?:BRL|BR|FR|NFR|UC|US|EPIC|TC|INT|SEQ|SEC)-\d+/']
+  seeAlso: [traceability]
