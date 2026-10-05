@@ -1,42 +1,139 @@
 ---
 title: Маршрут изучения
-description: План на 6 недель — от роли аналитика и требований до интеграций и подготовки к собеседованию, с практикой на кейсе IDM-JOINER.
+description: "Маршрут от нуля до работы с реальными задачами: 10 модулей — база профессии, моделирование, данные, интеграции, проектирование решения, работа на проекте, delivery, production, собеседование и итоговая аттестация. В каждом — что изучить, практика, инструменты и критерий перехода."
 sidebar:
   order: 3
 ---
 
-import { Steps } from '@astrojs/starlight/components';
+import ModuleProgress from '../../../components/ModuleProgress.astro';
 
-Маршрут рассчитан на 6 недель по 5–7 часов в неделю. Если у вас уже есть опыт (например, в банке), проходите быстрее: читайте «Кратко» и вопросы, а подробно — только темы, где ответ не получился сразу.
+Маршрут ведёт от «что делает аналитик» к «могу провести задачу через весь цикл: требования, модели, данные, API, безопасность, релиз и эксплуатацию». Модули идут по порядку: каждый опирается на предыдущие. Внутри модуля порядок страниц — рекомендуемый.
 
-Порядок повторяет жизненный цикл проекта: от «зачем» к «как» и «как проверить». Каждая неделя заканчивается практикой на кейсе IDM-JOINER.
+**Как проходить модуль.** Прочитать страницы → сделать практику → проверить себя по критерию «можно дальше». Отмечайте страницы кнопкой «Отметить как изученное» — прогресс модуля виден прямо здесь. Критерий важнее отметок: если он не выполняется, вернитесь к теме, а не идите дальше.
 
-<Steps>
+**Темп.** Ориентир — 5–8 часов в неделю: модули 1–4 занимают по 1–2 недели, 5–8 — по неделе, весь маршрут — 3–4 месяца. С опытом работы (например, в банке) идите быстрее: читайте блоки «Кратко», решайте практику и углубляйтесь только там, где практика не получилась.
 
-1. **Неделя 1. Роль и требования.**
-   Темы: [СА и БА](/role/sa-vs-ba/), [жизненный цикл](/role/lifecycle/), [артефакты по этапам](/role/artifacts-by-stage/), [RACI](/role/raci/); [вход в проект](/onboarding/) — шесть сценариев первых дней; затем выявление требований, уровни и свойства требований.
-   Практика: прочитать [устав](/case/00-project/project-charter/) и [RACI кейса](/case/00-project/stakeholders-raci/). Ответить: кто утверждает ФТ и почему ролевую модель утверждает ИБ?
+**Проверка.** После модуля 4 — базовый экзамен (Foundation), после модуля 9 — итоговый (System Analyst Final) в разделе «Аттестация». Экзамены не открываются автоматически: решите сами, когда готовы.
 
-2. **Неделя 2. Процессы и требования к системе.**
-   Темы: [BPMN 2.0](/processes/bpmn/), AS-IS и TO-BE, gap-анализ; user stories, use cases, критерии приёмки, приоритизация, трассировка.
-   Практика: сравнить [AS-IS](/case/01-business/as-is/) и [TO-BE](/case/01-business/to-be/); нарисовать в [BPMN-редакторе](/tools/bpmn-editor/) процесс Leaver (увольнение).
+## Модуль 1. База профессии
 
-3. **Неделя 3. Диаграммы.**
-   Темы: какую диаграмму выбрать, use case, activity, sequence, state, class, C4, DFD; практикум «как нарисовать».
-   Практика: в [песочнице Mermaid](/tools/mermaid-sandbox/) — activity генерации логина (FR-06) и state трудоустройства; разобрать [все диаграммы кейса](/case/diagrams/).
+Кто такой системный аналитик, как устроен проект и команда, что такое требование, как его получить и записать, как описать процесс.
 
-4. **Неделя 4. Данные.**
-   Темы: модели данных и ER, ключи и нормализация, SQL (SELECT → JOIN → агрегаты → подзапросы → оконные функции), транзакции, индексы, НСИ.
-   Практика: [модель данных кейса](/case/03-architecture/data-model/) и SQL-задачи на её основе.
+<ModuleProgress pages={['role/sa-vs-ba', 'role/lifecycle', 'role/artifacts-by-stage', 'role/raci', 'methodologies/comparison', 'methodologies/scrum', 'methodologies/kanban', 'methodologies/waterfall', 'methodologies/hybrid', 'elicitation/sources', 'elicitation/interviews', 'elicitation/workshops', 'elicitation/document-system-analysis', 'elicitation/stakeholders', 'elicitation/conflicts', 'requirements/levels', 'requirements/quality', 'requirements/user-stories', 'requirements/use-cases', 'requirements/acceptance-criteria', 'requirements/prioritization', 'requirements/traceability', 'processes/bpmn', 'processes/as-is-to-be', 'processes/gap-analysis']} />
 
-5. **Неделя 5. Интеграции и архитектура.**
-   Темы: стили интеграции, REST и ошибки, SOAP, gRPC, GraphQL, Kafka и RabbitMQ, паттерны надёжности, контракты, безопасность; НФТ, ADR, монолит и микросервисы.
-   Практика: [карта интеграций](/case/04-integrations/integration-map/), [сценарии](/case/04-integrations/scenarios/), [API адаптера АБС](/case/04-integrations/api-abs-adapter/) — объяснить, зачем `Idempotency-Key`.
+| | |
+|---|---|
+| **Изучить** | Роль: [СА и БА](/role/sa-vs-ba/), [жизненный цикл проекта](/role/lifecycle/), [артефакты по этапам](/role/artifacts-by-stage/), [RACI](/role/raci/). Процесс команды: [сравнение подходов](/methodologies/comparison/), [Scrum](/methodologies/scrum/), [Kanban](/methodologies/kanban/), [Waterfall](/methodologies/waterfall/), [гибриды](/methodologies/hybrid/). Выявление: [источники и техники](/elicitation/sources/), [интервью](/elicitation/interviews/), [воркшопы](/elicitation/workshops/), [анализ документов и систем](/elicitation/document-system-analysis/), [стейкхолдеры](/elicitation/stakeholders/), [конфликты](/elicitation/conflicts/). Требования: [уровни](/requirements/levels/), [свойства](/requirements/quality/), [user stories](/requirements/user-stories/), [use cases](/requirements/use-cases/), [критерии приёмки и Gherkin](/requirements/acceptance-criteria/), [приоритизация](/requirements/prioritization/), [трассировка](/requirements/traceability/). Процессы: [BPMN 2.0](/processes/bpmn/), [AS-IS и TO-BE](/processes/as-is-to-be/), [gap-анализ](/processes/gap-analysis/) |
+| **Практика** | Прочитать [устав](/case/00-project/project-charter/), [стейкхолдеров и RACI](/case/00-project/stakeholders-raci/), [бизнес-требования](/case/01-business/business-requirements/) и [ФТ](/case/02-requirements/functional-requirements/) кейса IDM-JOINER — проследить одну цепочку «цель → БТ → ФТ». Сравнить [AS-IS](/case/01-business/as-is/) и [TO-BE](/case/01-business/to-be/). Решить [задачу на требования](/interview/tasks/requirements/) |
+| **Инструменты** | [Линтер требований](/tools/requirements-linter/) — прогнать 5 своих требований; [генератор артефактов](/tools/artifact-generator/) — user story с Gherkin; [конструктор RACI](/tools/raci/); [приоритизация](/tools/prioritization/); [BPMN-редактор](/tools/bpmn-editor/) — нарисовать процесс увольнения сотрудника (Leaver) с исключениями |
+| **Можно дальше, если** | Объясняете разницу СА и БА и уровни требований; пишете 5 функциональных требований с критериями приёмки, на которые линтер не находит ошибок; рисуете AS-IS с пулами, дорожками, шлюзами и хотя бы одним исключением; составляете RACI с одной A на артефакт |
 
-6. **Неделя 6. Документирование, методологии, тестирование и собеседование.**
-   Темы: ТЗ по ГОСТ 34, docs-as-code, Scrum / Kanban / гибриды, тест-дизайн, ПМИ, UAT; вопросы по темам и практические задачи.
-   Практика: ответить на 15 вопросов по кейсу из [шпаргалки кейса](/case/cheatsheet/#10-вопросы-для-самопроверки-и-упражнения); пройти тренажёр по всем темам.
+## Модуль 2. Моделирование
 
-</Steps>
+Какую диаграмму выбрать под задачу и как нарисовать её быстро и правильно.
 
-Темы без ссылок ещё пишутся — их статус виден на [главной](/). Маршрут будет обновляться по мере готовности разделов.
+<ModuleProgress pages={['diagrams/choose', 'diagrams/use-case', 'diagrams/activity', 'diagrams/sequence', 'diagrams/state', 'diagrams/class', 'diagrams/component-deployment', 'diagrams/c4', 'diagrams/dfd']} />
+
+| | |
+|---|---|
+| **Изучить** | [Какую диаграмму выбрать](/diagrams/choose/), [use case](/diagrams/use-case/), [activity](/diagrams/activity/), [sequence](/diagrams/sequence/), [state](/diagrams/state/), [class](/diagrams/class/), [компоненты и развёртывание](/diagrams/component-deployment/), [C4](/diagrams/c4/), [DFD](/diagrams/dfd/). Практикум «[Диаграммы: как создавать](/diagram-howto/)» — минимум [sequence](/diagram-howto/sequence/), [state](/diagram-howto/state/), [activity](/diagram-howto/activity/), [C4 L1](/diagram-howto/c4-context/) и [L2](/diagram-howto/c4-container/) |
+| **Практика** | Упражнения в конце страниц практикума (решение — после попытки). Разобрать [все диаграммы кейса](/case/diagrams/) и [сценарии взаимодействия](/case/04-integrations/scenarios/). Решить [задачу на sequence](/interview/tasks/sequence/) |
+| **Инструменты** | [Песочница Mermaid](/tools/mermaid-sandbox/) — sequence создания учётной записи с ветками ошибок и state-диаграмма трудоустройства; [BPMN-редактор](/tools/bpmn-editor/) |
+| **Можно дальше, если** | Для пяти ситуаций выбираете диаграмму и объясняете почему; рисуете sequence с `alt` для ошибки и тайм-аута; рисуете state-диаграмму с событиями и условиями переходов; читаете C4 L1–L2 и объясняете, что такое контейнер |
+
+## Модуль 3. Данные
+
+Как устроены данные системы и как достать из них ответ самому.
+
+<ModuleProgress pages={['data/models-er', 'data/keys-normalization', 'data/sql-select', 'data/sql-joins-aggregates', 'data/sql-subqueries-window', 'data/transactions-acid', 'data/indexes', 'data/reference-data']} />
+
+| | |
+|---|---|
+| **Изучить** | [Модели данных и ER](/data/models-er/), [ключи и нормализация](/data/keys-normalization/), SQL: [SELECT и фильтры](/data/sql-select/), [JOIN и агрегаты](/data/sql-joins-aggregates/), [подзапросы и оконные функции](/data/sql-subqueries-window/); [транзакции и ACID](/data/transactions-acid/), [индексы](/data/indexes/), [справочники и НСИ](/data/reference-data/). Практикум: [как нарисовать ER](/diagram-howto/er/) |
+| **Практика** | [Модель данных кейса](/case/03-architecture/data-model/) — объяснить каждую связь. Решить [задачу на SQL](/interview/tasks/sql/) |
+| **Инструменты** | [SQL-тренажёр](/tools/sql-trainer/) — все задания уровней «база» и «средний» |
+| **Можно дальше, если** | Решаете задания SQL-тренажёра уровней «база» и «средний» без подсказок; приводите таблицу к 3НФ и объясняете, когда денормализация оправдана; объясняете, что будет с данными при сбое посреди операции без транзакции |
+
+## Модуль 4. Интеграции
+
+Как системы обмениваются данными, как читать и проектировать контракт, что делать с ошибками.
+
+<ModuleProgress pages={['integrations/styles', 'integrations/rest', 'integrations/rest-design', 'integrations/formats', 'integrations/contracts', 'integrations/soap', 'integrations/grpc', 'integrations/graphql', 'integrations/messaging', 'integrations/reliability', 'integrations/webhooks']} />
+
+| | |
+|---|---|
+| **Изучить** | [Стили интеграции](/integrations/styles/), HTTP по [справочнику HTTP](/tools/http-reference/), [REST](/integrations/rest/), [проектирование REST API](/integrations/rest-design/), [JSON, XML, JSON Schema](/integrations/formats/), [OpenAPI и AsyncAPI](/integrations/contracts/), [SOAP](/integrations/soap/), [gRPC](/integrations/grpc/), [GraphQL](/integrations/graphql/), [Kafka и RabbitMQ](/integrations/messaging/), [паттерны надёжности](/integrations/reliability/), [webhooks](/integrations/webhooks/) |
+| **Практика** | [Карта интеграций](/case/04-integrations/integration-map/) и [API адаптера АБС](/case/04-integrations/api-abs-adapter/) кейса — объяснить, зачем `Idempotency-Key`. Решить [задачу на проектирование интеграции](/interview/tasks/integration/) |
+| **Инструменты** | [API Lab](/tools/api-lab/) — все 14 заданий и цепочка «контракт → мок → запрос»; [JSON / YAML](/tools/json-yaml/) — проверка по схеме; [просмотрщик OpenAPI](/tools/openapi-viewer/) — ревью контракта кейса |
+| **Можно дальше, если** | Решили не меньше 12 заданий API Lab; объясняете идемпотентность и как сделать POST идемпотентным; выбираете код ответа для типовых ошибок; описываете обработку ошибок и повторов для асинхронной интеграции |
+
+**Контрольная точка — Foundation Exam** (раздел «Аттестация»). Модули 1–4 — фундамент: требования, процессы, моделирование, данные и интеграции. Сдайте базовый экзамен, прежде чем идти дальше: по результату видно, какие области повторить.
+
+## Модуль 5. Проектирование решения
+
+Нефункциональные требования, архитектурные решения и безопасность — то, что превращает «работает» в «работает надёжно и безопасно».
+
+<ModuleProgress pages={['architecture/monolith-microservices', 'architecture/nfr-iso25010', 'architecture/caching', 'architecture/cap', 'architecture/adr', 'security/overview', 'security/access-control', 'security/privileged-access', 'security/tokens-sessions', 'security/oauth', 'security/mtls-sso', 'security/data-protection', 'security/audit', 'security/threat-modeling']} />
+
+| | |
+|---|---|
+| **Изучить** | Архитектура: [монолит и микросервисы](/architecture/monolith-microservices/), [НФТ и ISO/IEC 25010](/architecture/nfr-iso25010/), [кэширование](/architecture/caching/), [CAP](/architecture/cap/), [ADR](/architecture/adr/). Безопасность: [обзор](/security/overview/), [аутентификация и авторизация](/security/access-control/), [привилегированный доступ](/security/privileged-access/), [токены и сессии](/security/tokens-sessions/), [OAuth 2.0 и JWT](/security/oauth/), [mTLS и SSO](/security/mtls-sso/), [защита данных](/security/data-protection/), [журнал аудита](/security/audit/), [моделирование угроз](/security/threat-modeling/) |
+| **Практика** | [НФТ](/case/02-requirements/non-functional-requirements/), [ADR](/case/03-architecture/adr/), [требования ИБ](/case/05-security/security-requirements/) и [модель угроз](/case/05-security/threat-model/) кейса. Для одной интеграции из модуля 4 составить таблицу «граница доверия — угроза — мера» |
+| **Инструменты** | [Калькулятор доступности](/tools/availability/); [генератор артефактов](/tools/artifact-generator/) — ADR и НФТ |
+| **Можно дальше, если** | Формулируете измеримые НФТ; пишете ADR с вариантами и последствиями; отличаете аутентификацию от авторизации и проверку операции от проверки объекта; проходите по STRIDE поток данных и называете меры |
+
+## Модуль 6. Работа на реальном проекте
+
+Почти никогда проект не начинается с чистого листа. Как войти в проект в любой ситуации и как провести доработку существующей системы.
+
+<ModuleProgress pages={['onboarding/greenfield', 'onboarding/mature-system', 'onboarding/mid-project', 'onboarding/legacy', 'onboarding/replacement', 'onboarding/single-integration', 'role/change-lifecycle', 'requirements/impact-analysis', 'documentation/tz-gost34', 'documentation/templates', 'documentation/docs-as-code', 'documentation/confluence']} />
+
+| | |
+|---|---|
+| **Изучить** | [Вход в проект](/onboarding/) и шесть сценариев: [новый проект](/onboarding/greenfield/), [зрелая система](/onboarding/mature-system/), [середина реализации](/onboarding/mid-project/), [legacy](/onboarding/legacy/), [замена системы](/onboarding/replacement/), [одна интеграция](/onboarding/single-integration/). [Жизненный цикл доработки](/role/change-lifecycle/), [анализ влияния](/requirements/impact-analysis/). Документирование: [ТЗ по ГОСТ 34](/documentation/tz-gost34/), [шаблоны](/documentation/templates/), [docs-as-code](/documentation/docs-as-code/), [Confluence](/documentation/confluence/) |
+| **Практика** | Задачи: [пришли на зрелую систему](/interview/tasks/mature-system/), [ФТ расходятся с API](/interview/tasks/mid-project/), [legacy без документации](/interview/tasks/legacy/), [заказчик меняет бизнес-правило](/interview/tasks/requirement-change/). Сначала решить самому, потом открыть эталон |
+| **Инструменты** | [SQL-тренажёр](/tools/sql-trainer/) в свободном режиме — восстановить статусную модель по данным; [просмотрщик OpenAPI](/tools/openapi-viewer/) |
+| **Можно дальше, если** | Для любого из шести сценариев называете план первой недели и первый результат; проводите анализ влияния изменения по всем слоям (требования, API, данные, процессы, тесты, мониторинг, документация); отделяете просьбу заказчика от потребности |
+
+## Модуль 7. Delivery: тестирование и релиз
+
+Как доказать, что система работает, и выложить изменение, никого не сломав.
+
+<ModuleProgress pages={['testing/test-types', 'testing/test-design', 'testing/pmi', 'testing/uat', 'release/environments', 'release/compatibility', 'release/feature-flags', 'release/go-live']} />
+
+| | |
+|---|---|
+| **Изучить** | Тестирование: [виды](/testing/test-types/), [тест-дизайн](/testing/test-design/), [ПМИ](/testing/pmi/), [UAT](/testing/uat/). Релиз: [среды и конфигурация](/release/environments/), [совместимость и порядок выкладки](/release/compatibility/), [фича-флаги и откат](/release/feature-flags/), [выпуск: от release notes до мониторинга](/release/go-live/) |
+| **Практика** | [ПМИ](/case/07-testing/test-program/) и [тест-кейсы](/case/07-testing/test-cases/), [стратегия миграции](/case/06-rollout/migration-strategy/), [план внедрения](/case/06-rollout/rollout-plan/), [план релиза](/case/06-rollout/release-plan/) кейса. Задача [обязательное поле в API шести систем](/interview/tasks/api-change/) |
+| **Инструменты** | [API Lab](/tools/api-lab/) — вкладка «Контракт»: добавить поле совместимо и проверить запросом |
+| **Можно дальше, если** | Выводите тесты из статусной модели и граничных значений; объясняете, кто выкладывается первым — поставщик или потребитель — и почему; разбиваете несовместимое изменение на совместимые шаги; описываете откат и то, что откатом не вернуть |
+
+## Модуль 8. Production: эксплуатация
+
+Жизнь системы после запуска: сбои, разборы, изменения по их итогам.
+
+<ModuleProgress pages={['operations/support', 'operations/incident-analysis', 'operations/rca', 'operations/observability']} />
+
+| | |
+|---|---|
+| **Изучить** | [Сопровождение и роль аналитика](/operations/support/), [разбор инцидента](/operations/incident-analysis/), [проблема и анализ корневых причин](/operations/rca/), [мониторинг, логи и runbook](/operations/observability/) |
+| **Практика** | Документы кейса: [модель сопровождения](/case/08-operations/support-model/), [runbook](/case/08-operations/runbook/), [мониторинг](/case/08-operations/monitoring-alerting/), [инцидент INC-01](/case/08-operations/incident-example/), [разбор проблемы](/case/08-operations/problem-rca/), [запрос на изменение](/case/08-operations/change-request/). Задачи: [разбор инцидента](/interview/tasks/incident/), [рост 500 после релиза](/interview/tasks/errors-500/) |
+| **Инструменты** | [API Lab](/tools/api-lab/) — задания на 429, 503 и тайм-аут как модель сбоев |
+| **Можно дальше, если** | Разбираете инцидент по шести вопросам (где ошибка → что ожидалось → источник → дефект или контракт → данные → повторный запуск); отличаете инцидент, проблему и изменение; формулируете требования к логам и алертам |
+
+## Модуль 9. Подготовка к собеседованию
+
+Перевести знания в ответы: коротко, с примером, вслух.
+
+| | |
+|---|---|
+| **Изучить** | [Как готовиться](/interview/), [частые вопросы](/interview/questions/frequent/), [вопросы об опыте](/interview/questions/experience/), [вопросы по темам](/interview/questions/), [разбор кейса](/interview/tasks/case-review/) |
+| **Практика** | Все [практические задачи](/interview/tasks/integration/) — сначала самостоятельно, с таймером. Подготовить рассказ о проекте по STAR на 2–3 минуты и 3–4 истории о трудностях |
+| **Инструменты** | [Тренажёр для собеседования](/tools/interview-trainer/) — флажок «только частые», затем все темы; [шпаргалки для печати](/cheatsheets/) |
+| **Можно дальше, если** | В тренажёре отмечено «Знаю» не меньше 80% частых вопросов; рассказ о проекте укладывается в 3 минуты и содержит вашу роль и результат |
+
+## Модуль 10. Итоговая аттестация
+
+**System Analyst Final** в разделе «Аттестация»: теория, техническая практика на инструментах и сквозной кейс — незнакомый проект, который нужно провести от запроса заказчика до разбора инцидента в продуктиве. Результат — профиль по 11 областям и список тем для повторения.
+
+Аттестация — оценка освоения материалов справочника, а не профессиональная сертификация и не грейд на рынке.

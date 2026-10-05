@@ -1,0 +1,71 @@
+---
+/**
+ * Прогресс модуля маршрута: сколько страниц модуля отмечено «Изучено».
+ * pages — слаги страниц модуля (проверяются на сборке); считаются только страницы с trackProgress.
+ */
+import { getEntry } from 'astro:content';
+
+interface Props {
+  pages: string[];
+  label?: string;
+}
+const { pages, label = 'Изучено страниц модуля' } = Astro.props;
+
+const tracked: string[] = [];
+for (const slug of pages) {
+  const entry = await getEntry('docs', slug);
+  if (!entry) throw new Error(`<ModuleProgress>: страница «${slug}» не найдена`);
+  if (entry.data.trackProgress) tracked.push(slug);
+}
+---
+
+<div class="module-progress not-content" data-module-pages={JSON.stringify(tracked)}>
+  <span class="module-progress__label">{label}: <strong data-count>0</strong> из {tracked.length}</span>
+  <div class="module-progress__bar" role="progressbar" aria-label={label} aria-valuemin="0" aria-valuemax={tracked.length} aria-valuenow="0">
+    <div class="module-progress__fill"></div>
+  </div>
+</div>
+
+<script>
+  import { getStudied } from '../scripts/storage';
+
+  const render = () => {
+    const studied = new Set(getStudied());
+    document.querySelectorAll<HTMLElement>('[data-module-pages]').forEach((root) => {
+      const pages: string[] = JSON.parse(root.dataset.modulePages ?? '[]');
+      const done = pages.filter((p) => studied.has(p)).length;
+      root.querySelector('[data-count]')!.textContent = String(done);
+      root.querySelector('[role=progressbar]')!.setAttribute('aria-valuenow', String(done));
+      root.querySelector<HTMLElement>('.module-progress__fill')!.style.width = pages.length ? `${(done / pages.length) * 100}%` : '0';
+      root.classList.toggle('is-done', pages.length > 0 && done === pages.length);
+    });
+  };
+  window.addEventListener('sa-storage', render);
+  render();
+</script>
+
+<style>
+  .module-progress {
+    display: grid;
+    gap: 0.3rem;
+    max-width: 26rem;
+    margin-block: 0.75rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sa-muted);
+  }
+  .module-progress__bar {
+    height: 0.4rem;
+    border-radius: 999px;
+    background: var(--sa-border);
+    overflow: hidden;
+  }
+  .module-progress__fill {
+    height: 100%;
+    width: 0;
+    background: var(--sl-color-accent);
+    transition: width 0.2s;
+  }
+  .module-progress.is-done .module-progress__fill {
+    background: var(--sa-ok);
+  }
+</style>
