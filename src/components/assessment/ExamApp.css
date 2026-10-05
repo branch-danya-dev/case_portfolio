@@ -535,3 +535,7 @@
 .exam-explain > div > :first-child {
   margin-top: 0.3rem;
 }
+.exam-case__doc td:first-child,
+.exam-case__doc th:first-child {
+  white-space: nowrap;
+}

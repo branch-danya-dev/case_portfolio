@@ -25,6 +25,8 @@ console.log('[vendor] redoc.standalone.js скопирован (логотип �
 await mkdir(resolve('public/data'), { recursive: true });
 await writeFile(resolve('public/data/case-db.sql'), await readFile(resolve('src/data/case-db.sql'), 'utf8'));
 console.log('[vendor] case-db.sql скопирован в public/data/');
+await writeFile(resolve('public/data/assessment-limits.sql'), await readFile(resolve('src/data/assessment/cases/limits.sql'), 'utf8'));
+console.log('[vendor] БД экзаменационного кейса скопирована в public/data/');
 
 // sql.js (SQLite в WebAssembly) для SQL-тренажёра. В браузерной сборке Vite берёт вариант из exports.browser —
 // dist/sql-wasm-browser.js, а он запрашивает парный sql-wasm-browser.wasm (не sql-wasm.wasm).

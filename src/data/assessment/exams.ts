@@ -38,4 +38,43 @@ export const FOUNDATION: Exam = {
   ],
 };
 
-export const EXAMS: Exam[] = [FOUNDATION];
+
+
+export const FINAL: Exam = {
+  id: 'final',
+  title: 'System Analyst Final',
+  short: 'Итоговый экзамен',
+  description:
+    'Итоговая проверка после всего маршрута: способность провести задачу через жизненный цикл — от запроса заказчика до релиза и разбора инцидента. Сквозной кейс — незнакомый проект с неполными и противоречивыми данными.',
+  pass: 75,
+  cases: ['limits'],
+  sections: [
+    {
+      id: 'theory',
+      kind: 'theory',
+      title: 'Теория',
+      share: 25,
+      pick: [
+        { competency: 'requirements', count: 1 },
+        { competency: 'modeling', count: 1 },
+        { competency: 'data', count: 1 },
+        { competency: 'integrations', count: 2 },
+        { competency: 'architecture', count: 1 },
+        { competency: 'security', count: 2 },
+        { competency: 'project', count: 2 },
+        { competency: 'testing', count: 1 },
+        { competency: 'delivery', count: 2 },
+        { competency: 'operations', count: 1 },
+      ],
+    },
+    {
+      id: 'practice',
+      kind: 'practice',
+      title: 'Техническая практика',
+      share: 35,
+      fixed: ['fin-sql-last-task', 'fin-http-payment', 'fin-http-etag', 'fin-json-limit-event'],
+    },
+    { id: 'case', kind: 'case', title: 'Сквозной кейс', share: 40 },
+  ],
+};
+export const EXAMS: Exam[] = [FOUNDATION, FINAL];

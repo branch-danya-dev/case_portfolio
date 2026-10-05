@@ -154,6 +154,11 @@ async function checkContent(C) {
         fail(`${exam.id}: ${e.message}`);
         break;
       }
+      if (exam.id === 'final') {
+        const covered = new Set(p.sections.flatMap((x) => x.items).map((id) => C.itemById(id).competency));
+        const missing = C.COMPETENCIES.filter((c) => !covered.has(c.id)).map((c) => c.id);
+        if (missing.length) fail(`final: seed ${s}: не покрыты области ${missing.join(', ')}`);
+      }
       for (const sec of exam.sections)
         for (const rule of sec.pick ?? []) {
           const got = p.sections.find((x) => x.id === sec.id).items.filter((id) => C.itemById(id).competency === rule.competency).length;
