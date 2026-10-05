@@ -7,7 +7,7 @@
 | Команда | Что делает |
 |---|---|
 | `npm run dev` | Синхронизирует файлы кейса, рендерит PlantUML, запускает dev-сервер (поиск в dev не работает) |
-| `npm run build` | То же + эталоны SQL-тренажёра (`check-sql-tasks.mjs`) + сборка + проверка ссылок + проверка офлайна (`check-offline.mjs`) + отрисовка всех Mermaid (`check-mermaid.mjs`, headless Chrome) |
+| `npm run build` | То же + эталоны SQL-тренажёра (`check-sql-tasks.mjs`), задания API Lab (`check-api-lab.mjs`), аттестация (`check-assessment.mjs`) + сборка + проверка ссылок + проверка офлайна (`check-offline.mjs`) + отрисовка всех Mermaid (`check-mermaid.mjs`, headless Chrome) |
 | `npm run check:a11y` | axe-core, WCAG 2.1 A/AA, тёмная и светлая тема; нужен запущенный preview; `-- --all`, `-- --pages=/a/,/b/`, `-- --detail=color-contrast` |
 | `npm run check:requests` | Все сетевые запросы в браузере — только к сайту (с ленивыми загрузками); нужен preview; `-- --all`, `-- --selftest` |
 | `npm run preview` | Раздаёт `dist/`; здесь работает поиск Pagefind |
@@ -27,6 +27,7 @@ src/tools.mjs                список инструментов для гла
 src/data/questions/<тема>.yaml  банк вопросов (коллекция questions)
 src/data/glossary.yaml       глоссарий (коллекция glossary) → <Glossary> на /glossary/; topic = id раздела или idm
 src/data/software.yaml       каталог ПО (коллекция software) → <SoftwareCatalog group="…">
+src/data/assessment/         аттестация: задания, кейсы, схемы экзаменов (дизайн — ASSESSMENT.md); движок — src/lib/assessment, UI — src/components/assessment
 src/components/              компоненты шаблона, просмотрщики; overrides/ — переопределения Starlight
 src/plugins/remark-mermaid.mjs  ```mermaid → <figure data-mermaid>, рисует src/scripts/mermaid.ts
 src/diagrams/**.puml         PlantUML-примеры сайта → public/diagrams/site/
@@ -84,6 +85,14 @@ templates/topic-page.mdx     шаблон тематической страни�
 ` в коде правьте через Edit/Write. Аргументы вида `/путь/` для node — с `MSYS_NO_PATHCONV=1`.
 - Markdown-процессор — `unified()` из `@astrojs/markdown-remark` (в Astro 7 по умолчанию Sätteri, а нам нужны remark-плагины).
 - Новый раздел: создать страницы → `ready: true` в `src/sections.mjs`. Новый инструмент: страница → `ready: true` в `src/tools.mjs`.
+
+## Аттестация
+
+- Раздел `assessment/` — не тренажёр собеседования: ответы скрыты до завершения попытки, практика проверяется автоматически, результат — профиль по 11 компетенциям (те же области, что на карте знаний).
+- Задания — ситуационные, не «что такое X»; у каждого разбор и `refs`. Итоговый кейс — не IDM-JOINER.
+- В UI попытки не выводить эталоны, разборы и ссылки на разборы до завершения.
+- Результат — «оценка освоения материалов справочника», не сертификация и не грейд; не писать «вы middle».
+- Новый кейс или задание — см. README, раздел «Как добавить задание в аттестацию»; `check-assessment.mjs` проверит пул, покрытие и эталоны.
 
 ## Порядок работы
 

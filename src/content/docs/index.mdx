@@ -14,6 +14,7 @@ hero:
 import OverallProgress from '../../components/home/OverallProgress.astro';
 import SectionCards from '../../components/home/SectionCards.astro';
 import ToolLinks from '../../components/home/ToolLinks.astro';
+import AssessmentSummary from '../../components/assessment/AssessmentSummary';
 
 ## Ваш прогресс
 
@@ -27,19 +28,26 @@ import ToolLinks from '../../components/home/ToolLinks.astro';
 
 ## Маршрут изучения
 
-Порядок повторяет жизненный цикл проекта: от «зачем» к «как» и «как проверить». Подробный план по неделям — в [маршруте изучения](/start/learning-path/); как устроены страницы — в [инструкции](/start/how-to-use/).
+Десять модулей от нуля до работы с реальными задачами. В каждом — что изучить, практика, инструменты и критерий «можно дальше». Подробно — в [маршруте изучения](/start/learning-path/); как устроены страницы — в [инструкции](/start/how-to-use/).
 
 <ol class="route not-content">
-  <li><strong>Роль и процесс.</strong> Чем <a href="/role/sa-vs-ba/">СА отличается от БА</a>, какие <a href="/role/artifacts-by-stage/">артефакты</a> появляются на каком этапе <a href="/role/lifecycle/">проекта</a>, кто за что отвечает (<a href="/role/raci/">RACI</a>).</li>
-  <li><strong>Выявление требований.</strong> Интервью, воркшопы, анализ документов и систем, конфликты стейкхолдеров.</li>
-  <li><strong>Процессы.</strong> <a href="/processes/bpmn/">BPMN 2.0</a>, AS-IS и TO-BE, gap-анализ: как увидеть потери и договориться о целевом процессе.</li>
-  <li><strong>Требования.</strong> Уровни, свойства хорошего требования, user stories и use cases, критерии приёмки, приоритизация, трассировка.</li>
-  <li><strong>Диаграммы.</strong> UML, C4, DFD и практикум «как нарисовать»: какую диаграмму выбрать и как сделать её за 15 минут.</li>
-  <li><strong>Данные.</strong> Модели, ER, нормализация, SQL для аналитика, транзакции и справочники.</li>
-  <li><strong>Интеграции.</strong> REST, SOAP, брокеры, паттерны надёжности, контракты OpenAPI и AsyncAPI, безопасность.</li>
-  <li><strong>Архитектура, документирование, методологии, тестирование.</strong> То, что нужно аналитику, чтобы говорить с архитектором, QA и заказчиком на одном языке.</li>
-  <li><strong>Кейс и собеседование.</strong> Пройти кейс IDM-JOINER целиком, затем — вопросы по темам и практические задачи.</li>
+  <li><strong>База профессии.</strong> Роль аналитика, жизненный цикл, RACI, методологии, выявление требований, требования, процессы и BPMN.</li>
+  <li><strong>Моделирование.</strong> Какую диаграмму выбрать; use case, activity, sequence, state, C4 и практикум «как нарисовать».</li>
+  <li><strong>Данные.</strong> Модели и ER, нормализация, SQL, транзакции, индексы, НСИ.</li>
+  <li><strong>Интеграции.</strong> HTTP и REST, контракты OpenAPI, форматы и схемы, SOAP, gRPC, брокеры, надёжность, API Lab. Затем — <a href="/assessment/foundation/">Foundation Exam</a>.</li>
+  <li><strong>Проектирование решения.</strong> НФТ, ADR, архитектура; безопасность — доступ, токены, данные, аудит, угрозы.</li>
+  <li><strong>Работа на реальном проекте.</strong> Вход в проект в шести сценариях, жизненный цикл доработки, анализ влияния, документирование.</li>
+  <li><strong>Delivery.</strong> Тестирование, UAT, среды, совместимость и порядок выкладки, флаги, откат, выпуск.</li>
+  <li><strong>Production.</strong> Сопровождение, разбор инцидентов, анализ корневых причин, мониторинг и runbook.</li>
+  <li><strong>Собеседование.</strong> Частые вопросы, практические задачи, рассказ о проекте.</li>
+  <li><strong>Итоговая аттестация.</strong> <a href="/assessment/final/">System Analyst Final</a> со сквозным незнакомым кейсом.</li>
 </ol>
+
+## Аттестация
+
+Проверка освоения программы: ответы открываются только после завершения, практика — на инструментах, результат — профиль по 11 областям. Это оценка освоения материалов справочника, а не сертификация. Подробно — в разделе [«Аттестация»](/assessment/).
+
+<AssessmentSummary client:only="react" compact />
 
 ## Инструменты
 

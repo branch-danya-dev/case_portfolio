@@ -1080,3 +1080,9 @@ kbd,
   margin-top: 0.35rem;
   font-size: var(--sl-text-sm);
 }
+
+/* Ссылки внутри блоков not-content на главной и в маршруте — цвет темы, а не браузерный */
+.route a,
+.exam-status a {
+  color: var(--sl-color-text-accent);
+}
