@@ -1,7 +1,8 @@
 // Self-test аттестации: алгоритм выборки и подсчёта баллов (на синтетическом банке) и контент экзаменов
 // (эталоны SQL, HTTP, JSON Schema, OpenAPI проходят собственные проверки). Запуск: node scripts/check-assessment.mjs
 import { build } from 'esbuild';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { join, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 
@@ -128,7 +129,7 @@ async function checkContent(C) {
   const dup = ids.filter((id, i) => ids.indexOf(id) !== i);
   if (dup.length) fail(`повторяющиеся id: ${dup.join(', ')}`);
   const comps = new Set(C.COMPETENCIES.map((c) => c.id));
-  const docs = new Set(C.DOC_SLUGS);
+  const docs = new Set(docSlugs('src/content/docs'));
   for (const it of all) {
     if (!comps.has(it.competency)) fail(`${it.id}: неизвестная компетенция ${it.competency}`);
     if (!it.explanation?.trim()) fail(`${it.id}: нет разбора`);
@@ -230,4 +231,18 @@ function runHttp(it) {
 if (failed) {
   console.error(`[assessment] проблем: ${failed}`);
   process.exit(1);
+}
+
+/** Слаги страниц сайта: путь файла без расширения, index — слаг папки. */
+function docSlugs(root) {
+  const out = [];
+  const walk = (d) => {
+    for (const f of readdirSync(d)) {
+      const full = join(d, f);
+      if (statSync(full).isDirectory()) walk(full);
+      else if (/\.mdx?$/.test(f)) out.push(relative(root, full).split('\\').join('/').replace(/\.mdx?$/, '').replace(/\/?index$/, ''));
+    }
+  };
+  walk(root);
+  return out;
 }

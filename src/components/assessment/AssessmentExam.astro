@@ -1,0 +1,21 @@
+---
+/**
+ * Экзамен на странице раздела «Аттестация». Названия страниц для ссылок «Повторить» собираются при сборке,
+ * а сам экзамен — React-остров без серверного рендера (состояние живёт только в браузере).
+ */
+import { getCollection } from 'astro:content';
+import { ALL_ITEMS, COMPETENCIES } from '../../data/assessment';
+import type { ExamId } from '../../data/assessment/types';
+import ExamApp from './ExamApp';
+
+interface Props {
+  exam: ExamId;
+}
+const { exam } = Astro.props;
+
+const slugs = new Set([...ALL_ITEMS.flatMap((i) => i.refs), ...COMPETENCIES.flatMap((c) => c.refs)]);
+const docs = await getCollection('docs', (e) => slugs.has(e.id));
+const titles = Object.fromEntries(docs.map((d) => [d.id, d.data.title]));
+---
+
+<ExamApp client:only="react" examId={exam} titles={titles} />

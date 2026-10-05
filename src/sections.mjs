@@ -32,6 +32,7 @@ export const sections = [
     { label: 'Вопросы по темам', collapsed: true, items: [{ autogenerate: { directory: 'interview/questions' } }] },
     { label: 'Практические задачи', items: [{ autogenerate: { directory: 'interview/tasks' } }] },
   ] },
+  { id: 'assessment', label: 'Аттестация', description: 'Foundation Exam и System Analyst Final: теория, практика на инструментах, сквозной кейс, профиль по 11 областям', icon: 'approve-check-circle', ready: true, kind: 'practice' },
   { id: 'tools', label: 'Инструменты', description: 'Генераторы, песочницы, калькуляторы, тренажёры — всё работает в браузере', icon: 'setting', ready: true, kind: 'tools' },
   { id: 'cheatsheets', label: 'Шпаргалки для печати', description: 'Каждый раздел на 1–2 листах A4', icon: 'add-document', ready: true, collapsed: true, kind: 'reference' },
   { id: 'glossary', label: 'Глоссарий', description: 'Термины с английским оригиналом и фильтром', icon: 'magnifier', ready: true, kind: 'reference' },

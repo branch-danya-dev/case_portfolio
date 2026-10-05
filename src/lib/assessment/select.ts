@@ -47,7 +47,8 @@ export function buildPlan(exam: Exam, bank: Item[], cases: ExamCase[], seed: num
     const pool = sectionPool(bank, exam, s.kind);
     for (const rule of s.pick ?? []) {
       const candidates = pool.filter(
-        (i) => i.competency === rule.competency && !used.has(i.id) && (!rule.difficulty || rule.difficulty.includes(i.difficulty)),
+        (i) => i.competency === rule.competency && !used.has(i.id) && (!rule.difficulty || rule.difficulty.includes(i.difficulty)) &&
+          (!rule.types || rule.types.includes(i.type)),
       );
       if (candidates.length < rule.count)
         throw new BlueprintError(`${exam.id}/${s.id}: для «${rule.competency}» нужно ${rule.count}, в пуле ${candidates.length}`);

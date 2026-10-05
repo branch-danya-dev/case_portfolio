@@ -130,6 +130,8 @@ export interface PickRule {
   competency: CompetencyId;
   count: number;
   difficulty?: (1 | 2 | 3)[];
+  /** Только задания этих типов (например, http в практике интеграций). */
+  types?: ItemType[];
 }
 
 export interface ExamSection {
