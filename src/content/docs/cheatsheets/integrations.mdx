@@ -1,6 +1,6 @@
 ---
 title: "Шпаргалка: интеграции"
-description: Интеграции на одном-двух листах A4 — стили, REST и коды, проектирование API, SOAP, gRPC, GraphQL, брокеры, надёжность, webhooks, форматы, контракты, безопасность.
+description: Интеграции на одном-двух листах A4 — стили, REST и коды, проектирование API, SOAP, gRPC, GraphQL, брокеры, надёжность, webhooks, форматы, контракты.
 sidebar:
   order: 8
   label: Интеграции
@@ -85,12 +85,6 @@ JSON Schema: `type`, `required`, `enum`, `pattern`, `maxLength`, `additionalProp
 
 </section>
 
-<section>
-
-## Безопасность
-
-**OAuth 2.0** — авторизация: Authorization Code + PKCE (пользователь), Client Credentials (система); Implicit и Password устарели. **OIDC** — аутентификация, ID-токен. **JWT:** iss, sub, aud, exp; проверять подпись (не `none`), iss, aud, время, права; не шифрован — без секретов. **mTLS** — сертификат и у клиента; ротация! **SSO:** Kerberos (AD: KDC, TGT, сервисный билет, SPNEGO), SAML 2.0, OIDC.
-
-</section>
-
 </div>
+
+<p class="cheatsheet-meta">OAuth 2.0, JWT, mTLS и SSO — в <a href="/cheatsheets/security/">шпаргалке по безопасности</a>.</p>

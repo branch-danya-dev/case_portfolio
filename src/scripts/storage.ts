@@ -29,8 +29,14 @@ export function normalizeSlug(path: string): string {
   return path.replace(/^\/+|\/+$/g, '');
 }
 
+/** Страницы, переехавшие в другой раздел: старый адрес → новый (сохраняет отметки «Изучено»). */
+const RENAMED: Record<string, string> = {
+  'integrations/security-oauth': 'security/oauth',
+  'integrations/mtls-sso': 'security/mtls-sso',
+};
+
 export function getStudied(): string[] {
-  return load<string[]>(STUDIED_KEY, []);
+  return [...new Set(load<string[]>(STUDIED_KEY, []).map((s) => RENAMED[s] ?? s))];
 }
 
 export function setStudied(slug: string, value: boolean): void {

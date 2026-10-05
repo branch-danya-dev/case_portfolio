@@ -1,9 +1,9 @@
 ---
-title: "Безопасность API: OAuth 2.0, OIDC, JWT"
+title: "OAuth 2.0, OIDC, JWT"
 description: "Аутентификация и авторизация в интеграциях — OAuth 2.0 и его потоки (authorization code + PKCE, client credentials), OpenID Connect и ID-токен, JWT и его проверка, scopes; разбор схем безопасности IdM API."
 trackProgress: true
 sidebar:
-  order: 12
+  order: 5
   label: OAuth 2.0, OIDC, JWT
 ---
 
@@ -28,7 +28,7 @@ import Related from '../../../components/Related.astro';
 |---|---|
 | Пользователь входит в веб- или мобильное приложение | OAuth 2.0 Authorization Code + PKCE, с OpenID Connect для входа |
 | Система вызывает API от своего имени | OAuth 2.0 Client Credentials (часто + mTLS) |
-| Внутрикорпоративный вход без ввода пароля | SSO: Kerberos, SAML 2.0 или OIDC — см. [mTLS, SSO, Kerberos](/integrations/mtls-sso/) |
+| Внутрикорпоративный вход без ввода пароля | SSO: Kerberos, SAML 2.0 или OIDC — см. [mTLS, SSO, Kerberos](/security/mtls-sso/) |
 | Простой внутренний вызов с минимальными требованиями | Ключ API — только если это допускают требования ИБ |
 
 ## Как делать
@@ -150,8 +150,8 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3Nzby5iYW5rLmxvY2FsIi�
 
 ## Вопросы на собеседовании
 
-<InterviewQuestions topic="integrations" ids={['int-oauth', 'int-oidc', 'int-jwt', 'int-401-403-400-422']} />
+<InterviewQuestions topic="security" ids={['int-oauth', 'int-oidc', 'int-jwt', 'sec-token-lifecycle']} />
 
 ## Связанные темы
 
-<Related pages={['security/access-control', 'security/tokens-sessions', 'integrations/mtls-sso', 'integrations/rest', 'integrations/contracts', 'case/05-security/security-requirements']} />
+<Related pages={['security/access-control', 'security/tokens-sessions', 'security/mtls-sso', 'integrations/rest', 'integrations/contracts', 'case/05-security/security-requirements']} />

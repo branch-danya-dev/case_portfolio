@@ -621,7 +621,7 @@
   term: OAuth 2.0
   en: OAuth 2.0 (RFC 6749)
   definition: Протокол делегированной авторизации — клиент получает токен доступа к API у сервера авторизации, не зная пароля пользователя.
-  topic: integrations
+  topic: security
   seeAlso: [oidc, jwt]
   notToConfuse: OpenID Connect — аутентификация пользователя поверх OAuth 2.0.
   match: [OAuth]
@@ -630,7 +630,7 @@
   term: OpenID Connect
   en: OpenID Connect (OIDC)
   definition: Слой аутентификации поверх OAuth 2.0 — добавляет ID-токен с данными о пользователе, userinfo и discovery.
-  topic: integrations
+  topic: security
   seeAlso: [oauth2, jwt]
   match: [OIDC]
 
@@ -638,28 +638,28 @@
   term: JWT
   en: JSON Web Token (RFC 7519)
   definition: Компактный токен из заголовка, полезной нагрузки (claims) и подписи; обычно подписан, но не зашифрован.
-  topic: integrations
+  topic: security
   seeAlso: [oauth2]
 
 - id: mtls
   term: mTLS
   en: Mutual TLS
   definition: Взаимный TLS — сертификат предъявляет не только сервер, но и клиент; используется для аутентификации систем в интеграциях.
-  topic: integrations
+  topic: security
   seeAlso: [oauth2]
 
 - id: sso
   term: SSO
   en: Single Sign-On
   definition: Единый вход — пользователь аутентифицируется один раз и работает с несколькими системами; технологии — Kerberos, SAML 2.0, OpenID Connect.
-  topic: integrations
+  topic: security
   seeAlso: [kerberos, oidc]
 
 - id: kerberos
   term: Kerberos
   en: Kerberos
   definition: Протокол аутентификации по билетам (TGT и сервисные билеты от KDC); основа единого входа в домене Active Directory.
-  topic: integrations
+  topic: security
   seeAlso: [sso]
 
 - id: microservices
@@ -1269,7 +1269,7 @@
   term: TLS
   en: Transport Layer Security
   definition: Протокол шифрования соединения между клиентом и сервером; HTTPS — это HTTP поверх TLS. mTLS — вариант, где сертификат предъявляют обе стороны.
-  topic: integrations
+  topic: security
   seeAlso: [mtls, http]
 
 - id: rfc
@@ -1374,7 +1374,7 @@
   term: SAML
   en: Security Assertion Markup Language
   definition: XML-стандарт обмена данными об аутентификации между поставщиком удостоверений и приложением; распространённый способ SSO в корпоративных системах.
-  topic: integrations
+  topic: security
   seeAlso: [sso, oidc]
 
 - id: ldap
@@ -2053,3 +2053,35 @@
   topic: security
   match: [STRIDE]
   seeAlso: [threat-modeling]
+
+- id: privileged-account
+  term: Привилегированная учётная запись
+  en: Privileged account
+  definition: Учётная запись с правами изменять систему, права других пользователей, настройки безопасности или журнал — администраторы, сервисные учётные записи, доступ к БД продуктива. Выдаётся отдельно от рабочей, на время и через PAM.
+  topic: security
+  match: ['привилегированн* учётн* запис*', 'привилегированн* доступ*', '~privileged account']
+  seeAlso: [pam, jit-access, break-glass]
+
+- id: jit-access
+  term: Доступ на время
+  en: Just-in-time access, JIT
+  definition: Выдача прав по запросу на ограниченный срок (обычно часы) с согласованием и автоматическим отзывом вместо постоянных прав.
+  topic: security
+  match: ['~just-in-time', 'доступ* на время']
+  seeAlso: [privileged-account, pam]
+
+- id: break-glass
+  term: Аварийный доступ
+  en: Break-glass access
+  definition: Заранее подготовленная процедура получения привилегированного доступа без обычного согласования при аварии — с немедленным уведомлением ИБ, записью действий и обязательным разбором после.
+  topic: security
+  match: ['~break-glass', 'аварийн* доступ*']
+  seeAlso: [privileged-account]
+
+- id: privilege-creep
+  term: Накопление прав
+  en: Privilege creep, access creep
+  definition: Постепенный рост прав сотрудника сверх нужных, когда при переводах и разовых задачах новые права выдаются, а старые не отзываются. Его ловят процессом Mover и ресертификацией.
+  topic: security
+  match: ['накоплени* прав', '~privilege creep']
+  seeAlso: [recertification, jml]

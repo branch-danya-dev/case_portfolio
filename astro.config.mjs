@@ -20,6 +20,11 @@ export default defineConfig({
   // Сайт работает локально; site нужен только для абсолютных ссылок в sitemap.
   site: 'http://localhost:4321',
   trailingSlash: 'ignore',
+  // Страницы, переехавшие в другой раздел: старые адреса ведут на новые.
+  redirects: {
+    '/integrations/security-oauth': '/security/oauth/',
+    '/integrations/mtls-sso': '/security/mtls-sso/',
+  },
   integrations: [
     starlight({
       title: 'Справочник системного аналитика',
