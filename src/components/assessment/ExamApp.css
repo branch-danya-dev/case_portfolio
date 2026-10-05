@@ -539,3 +539,15 @@
 .exam-case__doc th:first-child {
   white-space: nowrap;
 }
+.exam-status {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.exam-status li[data-state='passed'] {
+  color: var(--sa-ok);
+}
+.exam-history h2 a {
+  color: inherit;
+}
