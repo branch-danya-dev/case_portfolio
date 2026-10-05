@@ -212,7 +212,7 @@ function Sql({ item, answer, onAnswer }: Props) {
       {run && !run.ok && <p className="exam-error">{run.error}</p>}
       {run?.ok && !run.table && <p className="exam-hint">Запрос выполнен, таблицы в результате нет.</p>}
       {run?.ok && run.table && (
-        <div className="exam-table-wrap">
+        <div className="exam-table-wrap" tabIndex={0} role="region" aria-label="Результат запроса">
           <table className="exam-table">
             <thead>
               <tr>

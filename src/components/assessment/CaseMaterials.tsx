@@ -26,7 +26,7 @@ export default function CaseMaterials({ data, highlight = [] }: { data: ExamCase
           </button>
         ))}
       </div>
-      <div className="exam-case__doc" role="tabpanel" dangerouslySetInnerHTML={{ __html: md(doc.body) }} />
+      <div className="exam-case__doc" role="tabpanel" tabIndex={0} aria-label={doc.title} dangerouslySetInnerHTML={{ __html: md(doc.body) }} />
     </details>
   );
 }

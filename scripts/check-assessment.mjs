@@ -142,6 +142,14 @@ async function checkContent(C) {
     if (it.type === 'match' && new Set(it.pairs.map((p) => p.right)).size !== it.pairs.length) fail(`${it.id}: одинаковые правые части`);
     if (it.type === 'text' && it.rubric.length < 3) fail(`${it.id}: рубрика короче 3 пунктов`);
   }
+  // Правильный вариант не должен выдавать себя длиной: доля заданий, где он заметно длиннее остальных, — не больше 10%.
+  const singles = all.filter((it) => it.type === 'single');
+  const longest = singles.filter((it) => {
+    const lens = it.options.map((o) => o.length);
+    const second = [...lens].sort((a, b) => b - a)[1];
+    return lens[it.answer] === Math.max(...lens) && lens[it.answer] > second * 1.3;
+  });
+  if (longest.length > singles.length * 0.1) fail(`правильный вариант заметно длиннее остальных в ${longest.length} из ${singles.length}: ${longest.map((i) => i.id).join(', ')}`);
   for (const c of C.CASES) for (const it of c.items) for (const m of it.materials ?? []) if (!c.materials.some((x) => x.id === m)) fail(`${it.id}: нет материала ${m}`);
 
   // Схемы экзаменов собираются для 2000 seed, обязательные компетенции покрыты

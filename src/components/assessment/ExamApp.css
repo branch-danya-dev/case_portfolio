@@ -551,3 +551,13 @@
 .exam-history h2 a {
   color: inherit;
 }
+.exam-item__prompt > * + *,
+.exam-explain > div > * + *,
+.exam-case__doc > * + * {
+  margin-top: 0.6rem;
+}
+/* Внутри панели документа прокручивается сама панель (она фокусируема), таблица — обычная */
+.exam-case__doc table {
+  display: table;
+  overflow: visible;
+}
