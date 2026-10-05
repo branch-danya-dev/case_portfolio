@@ -2085,3 +2085,62 @@
   topic: security
   match: ['накоплени* прав', '~privilege creep']
   seeAlso: [recertification, jml]
+
+# ── Инфраструктура и эксплуатация ───────────────────────────────
+
+- id: container
+  term: Контейнер (Docker)
+  en: Container
+  definition: Приложение, упакованное в образ вместе со всеми зависимостями и запущенное изолированно. Один образ запускается одинаково на любой среде; конфигурация и секреты передаются снаружи.
+  topic: software
+  match: ['~Docker', 'Docker-контейнер*']
+  seeAlso: [kubernetes, environment]
+  notToConfuse: Контейнер C4 — любая отдельно разворачиваемая часть системы, а не обязательно Docker-контейнер.
+
+- id: kubernetes
+  term: Kubernetes
+  en: Kubernetes, K8s
+  definition: Оркестратор контейнеров — запускает несколько экземпляров (подов) сервиса, перезапускает упавшие, распределяет нагрузку и выкладывает новые версии постепенно. Для требований важно, что экземпляров несколько и любой может перезапуститься.
+  topic: software
+  match: ['~Kubernetes', K8s, '~OpenShift']
+  seeAlso: [container, deployment]
+
+- id: merge-request
+  term: Merge request
+  en: Merge request, pull request
+  definition: Запрос на слияние изменений в основную ветку репозитория с ревью и обсуждением. В docs-as-code через него проходят изменения требований и контрактов.
+  topic: software
+  match: ['~merge request', '~pull request', 'MR']
+  seeAlso: [docs-as-code, ci-cd]
+
+- id: log-aggregation
+  term: Система логов
+  en: Log aggregation, ELK
+  definition: Централизованный сбор, хранение и поиск логов всех сервисов — Elasticsearch или OpenSearch с Kibana (стек ELK), Loki, Graylog. Позволяет найти все записи одной операции по traceId.
+  topic: software
+  match: ['~ELK', '~Kibana', '~OpenSearch']
+  seeAlso: [trace-id, metrics]
+
+- id: metrics
+  term: Метрика
+  en: Metric
+  definition: Числовой показатель во времени — число запросов, доля ошибок, задержка, длина очереди. Собирается системой метрик (например, Prometheus) и показывается на дашборде (например, Grafana); по метрикам срабатывают алерты.
+  topic: software
+  match: ['~Prometheus', '~Grafana']
+  seeAlso: [alert, log-aggregation]
+
+- id: distributed-tracing
+  term: Распределённая трассировка
+  en: Distributed tracing
+  definition: Запись пути одного запроса через все сервисы со временем каждого участка (Jaeger, OpenTelemetry). Показывает, где в цепочке ошибка или задержка.
+  topic: software
+  match: ['распределённ* трассировк*', '~Jaeger', '~OpenTelemetry']
+  seeAlso: [trace-id]
+
+- id: api-gateway
+  term: API-шлюз
+  en: API gateway
+  definition: Единая точка входа перед группой сервисов — маршрутизация, проверка токенов, ограничение частоты, журналирование. Ошибки 502 и 504 обычно приходят от шлюза, когда сервис не ответил.
+  topic: software
+  match: ['API-шлюз*', '~API gateway']
+  seeAlso: [rate-limit]

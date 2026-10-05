@@ -65,7 +65,7 @@ const software = defineCollection({
   loader: file('src/data/software.yaml'),
   schema: z.object({
     name: z.string(),
-    group: z.enum(['tasks-docs', 'modeling', 'api', 'data', 'brokers']),
+    group: z.enum(['tasks-docs', 'modeling', 'api', 'data', 'brokers', 'infra']),
     platforms: z.array(z.enum(['веб', 'десктоп', 'CLI', 'плагин', 'библиотека'])).default([]),
     license: z.enum(['открытый код', 'бесплатно', 'есть бесплатная версия', 'коммерческий']).optional(),
     what: z.string(),

@@ -7,7 +7,7 @@
 import { getCollection } from 'astro:content';
 
 interface Props {
-  group?: 'tasks-docs' | 'modeling' | 'api' | 'data' | 'brokers';
+  group?: 'tasks-docs' | 'modeling' | 'api' | 'data' | 'brokers' | 'infra';
 }
 const { group } = Astro.props;
 
@@ -17,6 +17,7 @@ const GROUPS = {
   api: 'API',
   data: 'Данные',
   brokers: 'Брокеры сообщений',
+  infra: 'Инфраструктура и эксплуатация',
 } as const;
 
 const all = await getCollection('software');

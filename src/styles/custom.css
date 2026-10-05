@@ -1086,3 +1086,8 @@ kbd,
 .exam-status a {
   color: var(--sl-color-text-accent);
 }
+
+/* Страницы с широкими таблицами (матрица стека): маркер <span class="wide-page" hidden /> в MDX */
+:root:has(.wide-page) {
+  --sl-content-width: 100%;
+}
