@@ -7,7 +7,7 @@
     "dev": "npm run prepare:assets && astro dev",
     "build": "npm run prepare:assets && astro build && node scripts/check-offline.mjs && node scripts/check-mermaid.mjs",
     "preview": "astro preview",
-    "prepare:assets": "node scripts/lint-mdx.mjs && node scripts/check-sql-tasks.mjs && node scripts/check-api-lab.mjs && node scripts/sync-case-files.mjs && node scripts/vendor-assets.mjs && node scripts/render-plantuml.mjs",
+    "prepare:assets": "node scripts/lint-mdx.mjs && node scripts/check-sql-tasks.mjs && node scripts/check-api-lab.mjs && node --no-warnings scripts/check-assessment.mjs && node scripts/sync-case-files.mjs && node scripts/vendor-assets.mjs && node scripts/render-plantuml.mjs",
     "import:case": "node scripts/import-case.mjs",
     "setup:plantuml": "node scripts/setup-plantuml.mjs",
     "render:puml": "node scripts/render-plantuml.mjs --force",
