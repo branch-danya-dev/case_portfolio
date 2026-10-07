@@ -80,7 +80,7 @@
 - id: product-owner
   term: Владелец продукта
   en: Product Owner (PO)
-  definition: Роль Scrum, отвечающая за ценность продукта — владеет бэклогом, определяет порядок работ и принимает результат.
+  definition: Ответственность Scrum за максимизацию ценности продукта и эффективное управление Product Backlog, включая цель продукта и порядок элементов. Не заменяет соблюдение DoD командой.
   topic: role
   seeAlso: [system-analyst]
   notToConfuse: Системный аналитик детализирует требования, но не определяет приоритеты.
@@ -113,14 +113,14 @@
 - id: dor
   term: DoR
   en: Definition of Ready
-  definition: Критерии готовности задачи к взятию в работу — описание, критерии приёмки, понятные зависимости, оценка.
+  definition: Договорённость команды о готовности задачи к началу работы — понятная цель, критерии, зависимости и достаточная детализация. Полезная практика, но не обязательный элемент Scrum.
   topic: role
   seeAlso: [dod]
 
 - id: dod
   term: DoD
   en: Definition of Done
-  definition: Критерии готовности задачи к закрытию — реализовано, проверено, протестировано, документация обновлена.
+  definition: Общее описание качества, которому должен соответствовать инкремент Scrum. Команда конкретизирует проверки, например тесты, ревью и актуализацию документации; статус Done сам по себе соответствие не доказывает.
   topic: role
   seeAlso: [dor]
 
@@ -800,7 +800,7 @@
 - id: agile
   term: Agile
   en: Agile
-  definition: Семейство гибких подходов (Scrum, Kanban и др.), основанных на Agile-манифесте 2001 года — короткие циклы, ранняя обратная связь, готовность к изменениям.
+  definition: Ценности и принципы адаптивной разработки из Agile-манифеста — ранняя поставка пользы, обратная связь и изменение решений по фактам. Не задаёт конкретных ролей, встреч и артефактов.
   topic: methodologies
   seeAlso: [scrum, kanban]
 
@@ -825,7 +825,63 @@
   definition: Постоянная работа по уточнению, декомпозиции и оценке элементов бэклога, чтобы они были готовы к взятию в спринт.
   topic: methodologies
   seeAlso: [dor, scrum]
-  match: [рефайнмент*, ~refinement]
+  match: [рефайнмент*, груминг*, ~refinement, ~grooming]
+
+- id: product-backlog
+  term: Бэклог продукта
+  en: Product Backlog
+  definition: Развивающийся упорядоченный список необходимой работы над продуктом. В Scrum за эффективное управление им отвечает Product Owner; обязательство артефакта — Product Goal.
+  topic: methodologies
+  seeAlso: [product-owner, sprint-backlog, refinement]
+  match: ['бэклог* продукт*', '~Product Backlog']
+
+- id: sprint-backlog
+  term: Бэклог спринта
+  en: Sprint Backlog
+  definition: Цель спринта, выбранные элементы Product Backlog и план их реализации. Developers создают и адаптируют этот план в течение спринта.
+  topic: methodologies
+  seeAlso: [sprint, product-backlog]
+  match: ['бэклог* спринт*', '~Sprint Backlog']
+
+- id: increment
+  term: Инкремент
+  en: Increment
+  definition: Проверенное, пригодное к использованию дополнение продукта, соответствующее Definition of Done и совместимое с предыдущими инкрементами. В одном спринте их может быть несколько.
+  topic: methodologies
+  seeAlso: [scrum, dod]
+  match: [инкремент*]
+
+- id: scrum-master
+  term: Скрам-мастер
+  en: Scrum Master
+  definition: Ответственность за установление Scrum и эффективность Scrum-команды; помогает самоорганизации, улучшению работы и устранению препятствий.
+  topic: methodologies
+  seeAlso: [scrum, product-owner]
+  match: ['~Scrum Master', скрам-мастер*]
+
+- id: ticket
+  term: Тикет
+  en: Ticket
+  definition: Запись о единице работы в трекере — цель, описание, критерии, состояние, ответственный и связи. Типы и поля определяет настройка инструмента и договорённости команды.
+  topic: methodologies
+  seeAlso: [product-backlog, kanban]
+  match: [тикет*]
+
+- id: definition-of-workflow
+  term: Определение рабочего процесса
+  en: Definition of Workflow (DoW)
+  definition: Явная договорённость Kanban о единицах работы, начале и завершении, состояниях, контроле WIP, правилах движения и SLE.
+  topic: methodologies
+  seeAlso: [kanban, wip, sle]
+  match: [DoW]
+
+- id: sle
+  term: Ожидаемый уровень обслуживания
+  en: Service Level Expectation (SLE)
+  definition: Прогноз времени прохождения работы с указанной вероятностью, основанный на истории времени цикла или явно отмеченной предварительной оценке. Не является безусловной гарантией срока.
+  topic: methodologies
+  seeAlso: [kanban, definition-of-workflow]
+  match: [SLE]
 
 - id: kanban
   term: Kanban
