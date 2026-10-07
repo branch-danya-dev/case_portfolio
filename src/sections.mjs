@@ -21,7 +21,7 @@ export const sections = [
   { id: 'architecture', label: 'Архитектура для аналитика', description: 'Монолит и микросервисы, кэширование, НФТ и ISO/IEC 25010, CAP, ADR', icon: 'server', ready: true, kind: 'topic' },
   { id: 'security', label: 'Безопасность', description: 'Аутентификация и авторизация, RBAC и ABAC, привилегированный доступ, OAuth 2.0 и JWT, mTLS и SSO, токены и сессии, шифрование, секреты, ПДн, журнал аудита, моделирование угроз, ограничение частоты', icon: 'padlock', ready: true, kind: 'topic' },
   { id: 'documentation', label: 'Документирование', description: 'ТЗ по ГОСТ 34, шаблоны, docs-as-code, практики Confluence', icon: 'open-book', ready: true, kind: 'topic' },
-  { id: 'methodologies', label: 'Методологии', description: 'Waterfall, Scrum, Kanban, гибриды и место аналитика в каждой', icon: 'clock', ready: true, kind: 'topic' },
+  { id: 'methodologies', label: 'Методологии', description: 'Agile, этапы Waterfall, спринт Scrum, Kanban, роли, артефакты и практика досок', icon: 'clock', ready: true, kind: 'topic' },
   { id: 'testing', label: 'Тестирование для аналитика', description: 'Виды тестирования, тест-дизайн, ПМИ, UAT', icon: 'approve-check', ready: true, kind: 'topic' },
   { id: 'release', label: 'Релиз и продуктив', description: 'Среды и секреты, совместимость и порядок выкладки, миграции БД, фича-флаги и откат, go/no-go, smoke и мониторинг после релиза', icon: 'cloud-download', ready: true, kind: 'topic' },
   { id: 'operations', label: 'Эксплуатация', description: 'Сопровождение и роль аналитика, разбор инцидента, анализ корневых причин, мониторинг, логи и runbook', icon: 'setting', ready: true, kind: 'topic' },
